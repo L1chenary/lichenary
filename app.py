@@ -11,7 +11,15 @@ app = Flask(__name__)
 app.secret_key = 'lichena-foarte-secret-key'
 
 # Configurare DB SQLite
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///lichenary.db'
+
+db_url = os.environ.get("DATABASE_URL")
+if db_url:
+    # Dacă ești pe Render și ai DATABASE_URL, folosește PostgreSQL
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_url.replace("postgres://", "postgresql://")
+else:
+    # Altfel, local rămâi cu SQLite
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///lichenary.db'
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Configurare folder de upload
