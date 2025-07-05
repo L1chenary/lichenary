@@ -370,6 +370,58 @@ def approve_observation(obs_id):
     else:
         flash('Observație inexistentă.', 'error')
     return redirect(url_for('admin_observations'))
+@app.route('/admin/observations/<int:obs_id>/edit', methods=['GET', 'POST'])
+@login_required
+def edit_observation(obs_id):
+    if current_user.username != 'admin':
+        flash('Nu ai permisiunea să accesezi această pagină.', 'error')
+        return redirect(url_for('dashboard'))
+
+    observation = Observation.query.get_or_404(obs_id)
+
+    if request.method == 'POST':
+        date_time_str = request.form.get('date_time')
+        location = request.form.get('location').strip()
+        latitude = request.form.get('latitude')
+        longitude = request.form.get('longitude')
+        species = request.form.get('species').strip() if request.form.get('species') else None
+        pollution_level_str = request.form.get('pollution_level')
+
+        if not date_time_str or not location or not latitude or not longitude:
+            flash('Completează toate câmpurile obligatorii.', 'error')
+            return redirect(request.url)
+
+        try:
+            date_time = datetime.strptime(date_time_str, "%Y-%m-%dT%H:%M")
+            latitude = float(latitude)
+            longitude = float(longitude)
+        except ValueError:
+            flash('Datele introduse sunt incorecte.', 'error')
+            return redirect(request.url)
+
+        pollution_level = None
+        if pollution_level_str:
+            try:
+                pollution_level = int(pollution_level_str)
+                if pollution_level < 1 or pollution_level > 10:
+                    raise ValueError()
+            except ValueError:
+                flash('Nivelul de poluare trebuie să fie un număr între 1 și 10.', 'error')
+                return redirect(request.url)
+
+        observation.date_time = date_time
+        observation.location = location
+        observation.latitude = latitude
+        observation.longitude = longitude
+        observation.species = species
+        observation.pollution_level = pollution_level
+
+        db.session.commit()
+        flash('Observația a fost actualizată cu succes.')
+        return redirect(url_for('admin_observations'))
+
+    return render_template('admin_edit_observation.html', observation=observation)
+
 
 if __name__ == '__main__':
     with app.app_context():
