@@ -8,6 +8,11 @@ from werkzeug.utils import secure_filename
 
 # Configurare aplicație
 app = Flask(__name__)
+# Creează tabelele o singură dată când aplicația pornește pe Render
+if os.environ.get("RENDER"):
+    with app.app_context():
+        create_tables_and_admin()
+
 app.secret_key = 'lichena-foarte-secret-key'
 
 # Configurare DB SQLite
