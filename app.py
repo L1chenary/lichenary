@@ -421,6 +421,23 @@ def edit_observation(obs_id):
         return redirect(url_for('admin_observations'))
 
     return render_template('admin_edit_observation.html', observation=observation)
+@app.route('/admin/observations/disapprove/<int:obs_id>', methods=['POST'])
+@login_required
+def disapprove_observation(obs_id):
+    obs = Observation.query.get_or_404(obs_id)
+    
+    # Schimbă statusul observației în "pending"
+    obs.status = 'pending'
+    
+    # Salvează modificările în baza de date
+    db.session.commit()
+    
+    # Trimite un mesaj flash (opțional, dar recomandat)
+    flash('Observația a fost dezaprobată cu succes.', 'success')
+    
+    # Redirecționează către lista observațiilor aprobate
+    return redirect(url_for('admin_approved_observations'))
+
 
 
 if __name__ == '__main__':
