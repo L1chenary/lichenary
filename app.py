@@ -427,7 +427,8 @@ def disapprove_observation(obs_id):
     obs = Observation.query.get_or_404(obs_id)
     
     # Schimbă statusul observației în "pending"
-    obs.status = 'pending'
+    obs.is_approved = False
+
     
     # Salvează modificările în baza de date
     db.session.commit()
