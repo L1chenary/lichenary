@@ -8,15 +8,10 @@ from werkzeug.utils import secure_filename
 
 # Configurare aplicație
 app = Flask(__name__)
-# Creează tabelele o singură dată când aplicația pornește pe Render
-if os.environ.get("RENDER"):
-    with app.app_context():
-        create_tables_and_admin()
 
 app.secret_key = 'lichena-foarte-secret-key'
 
 # Configurare DB SQLite
-
 db_url = os.environ.get("DATABASE_URL")
 if db_url:
     # Dacă ești pe Render și ai DATABASE_URL, folosește PostgreSQL
@@ -71,6 +66,22 @@ class Observation(db.Model):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+# Definim funcția create_tables_and_admin aici, înainte să o apelăm
+def create_tables_and_admin():
+    db.create_all()
+    admin = User.query.filter_by(username='admin').first()
+    if not admin:
+        admin = User(username='admin', email='admin@example.com', is_approved=True)
+        admin.set_password('parola123')  # Schimbă parola după ce intri prima dată!
+        db.session.add(admin)
+        db.session.commit()
+        print("Admin creat!")
+
+# Creează tabelele o singură dată când aplicația pornește pe Render
+if os.environ.get("RENDER"):
+    with app.app_context():
+        create_tables_and_admin()
+
 # Rute (la fel ca înainte, dar login verifică acum is_approved)
 
 @app.route('/')
@@ -96,6 +107,7 @@ def harta():
 @app.route('/contact')
 def contact():
     return render_template('contact.html')
+
 # Rute noi pentru subcapitolele specificate
 
 @app.route('/despre/proiect_si_rol')
@@ -133,7 +145,6 @@ def participa_voluntariez():
 @app.route('/participa/ambasador')
 def participa_ambasador():
     return render_template('participa_ambasador.html')
-
 
 # Înregistrare
 @app.route('/register', methods=['GET', 'POST'])
@@ -334,6 +345,7 @@ def admin_observations():
         return redirect(url_for('dashboard'))
     observations = Observation.query.filter_by(is_approved=False).order_by(Observation.date_time.desc()).all()
     return render_template('admin_observations.html', observations=observations)
+
 # Admin - vizualizare observații aprobate
 @app.route('/admin/observations/approved')
 @login_required
@@ -350,74 +362,14 @@ def approve_observation(obs_id):
     if current_user.username != 'admin':
         flash('Nu ai permisiunea să faci această acțiune.', 'error')
         return redirect(url_for('dashboard'))
-    obs = Observation.query.get(obs_id)
-    if obs:
-        obs.is_approved = True
+    observation = Observation.query.get(obs_id)
+    if observation:
+        observation.is_approved = True
         db.session.commit()
-        flash(f'Observația {obs.id} a fost aprobată.')
+        flash('Observație aprobată cu succes.')
     else:
         flash('Observație inexistentă.', 'error')
     return redirect(url_for('admin_observations'))
-
-@app.route('/admin/observations/disapprove/<int:obs_id>', methods=['POST'])
-@login_required
-def disapprove_observation(obs_id):
-    if current_user.username != 'admin':
-        flash('Nu ai permisiunea să faci această acțiune.', 'error')
-        return redirect(url_for('dashboard'))
-    obs = Observation.query.get(obs_id)
-    if obs:
-        obs.is_approved = False
-        db.session.commit()
-        flash(f'Observația {obs.id} a fost dezaprobată.')
-    else:
-        flash('Observație inexistentă.', 'error')
-    return redirect(url_for('admin_observations'))
-
-@app.route('/admin/observations/edit/<int:obs_id>', methods=['GET', 'POST'])
-@login_required
-def edit_observation(obs_id):
-    if current_user.username != 'admin':
-        flash('Nu ai permisiunea să editezi această observație.', 'error')
-        return redirect(url_for('dashboard'))
-
-    obs = Observation.query.get_or_404(obs_id)
-
-    if obs.is_approved:
-        flash('Nu poți edita observații deja aprobate.', 'error')
-        return redirect(url_for('admin_observations'))
-
-    if request.method == 'POST':
-        obs.location = request.form.get('location', '').strip()
-        obs.latitude = float(request.form.get('latitude', obs.latitude))
-        obs.longitude = float(request.form.get('longitude', obs.longitude))
-        obs.species = request.form.get('species', '').strip()
-        pollution_level_str = request.form.get('pollution_level')
-
-        try:
-            obs.pollution_level = int(pollution_level_str) if pollution_level_str else None
-        except ValueError:
-            flash('Nivelul de poluare trebuie să fie un număr întreg.', 'error')
-            return redirect(request.url)
-
-        db.session.commit()
-        flash(f'Observația {obs.id} a fost actualizată.')
-        return redirect(url_for('admin_observations'))
-
-    return render_template('admin_edit_observation.html', observation=obs)
-
-
-
-# Creare tabele și admin la start, apel manual
-def create_tables_and_admin():
-    db.create_all()
-    admin = User.query.filter_by(username='admin').first()
-    if not admin:
-        admin = User(username='admin', email='admin@example.com', is_approved=True)
-        admin.set_password('parola123')  # Schimbă parola după ce intri prima dată!
-        db.session.add(admin)
-        db.session.commit()
-        print("Admin creat!")
 
 if __name__ == '__main__':
     with app.app_context():
