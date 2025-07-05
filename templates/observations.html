@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Observațiile mele – Lichenary</title>
+  <style>
+    /* Reset & font */
+    html, body {
+      margin: 0; padding: 0; height: 100%;
+      font-family: Arial, sans-serif;
+      background-color: #1f2f1f;
+      position: relative;
+      overflow-x: hidden;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Canvas pentru nori */
+    #cloud-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Header */
+    header {
+      background-color: rgba(17, 61, 60, 0.85);
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+      position: relative;
+    }
+    .logo {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+    }
+    .menu-toggle {
+      display: none;
+      font-size: 1.8em;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+    nav {
+      display: flex;
+      gap: 10px;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+    }
+    nav a:hover {
+      background-color: #1d5957;
+    }
+    @media (max-width: 768px) {
+      .menu-toggle { display: block; }
+      nav {
+        flex-direction: column;
+        width: 100%;
+        display: none;
+        background-color: rgba(17, 61, 60, 0.95);
+        padding: 10px 0;
+        margin-top: 10px;
+        z-index: 9;
+      }
+      nav.show { display: flex; }
+      nav a {
+        padding: 10px;
+        width: 100%;
+        text-align: center;
+        border-top: 1px solid rgba(255,255,255,0.1);
+      }
+    }
+
+    /* Main content */
+    main {
+      max-width: 900px;
+      margin: 40px auto;
+      background: rgba(255,255,255,0.15);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      backdrop-filter: blur(10px);
+      position: relative;
+      z-index: 10;
+      flex: 1;
+    }
+    main h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%; border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid rgba(255,255,255,0.2);
+      text-align: center;
+      color: white;
+    }
+    th {
+      background-color: #1d5957;
+    }
+    img {
+      max-width: 150px;
+      border-radius: 4px;
+    }
+    .button-link {
+      display: inline-block;
+      padding: 10px 20px;
+      background: #1d5957;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: background 0.3s;
+    }
+    .button-link:hover {
+      background: #14614d;
+    }
+
+    /* Flash messages if any */
+    .flash-message {
+      margin-bottom: 20px;
+      padding: 12px;
+      border-radius: 6px;
+      text-align: center;
+      font-weight: bold;
+      color: black;
+    }
+    .error {
+      background-color: #f8d7da;
+      border: 1px solid #f5c6cb;
+    }
+    .success {
+      background-color: #d4edda;
+      border: 1px solid #c3e6cb;
+    }
+
+    /* Footer */
+    footer {
+      padding: 15px;
+      text-align: center;
+      background-color: rgba(17, 61, 60, 0.85);
+      color: white;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="cloud-canvas"></canvas>
+
+<header>
+  <div class="logo" onclick="window.location='/'">Lichenary</div>
+  <button class="menu-toggle" onclick="document.querySelector('nav').classList.toggle('show')">☰</button>
+  <nav>
+    <a href="{{ url_for('home') }}">Acasă</a>
+    <a href="{{ url_for('despre') }}">Despre</a>
+    <a href="{{ url_for('participa') }}">Cum Participi</a>
+    <a href="{{ url_for('galerie') }}">Galerie</a>
+    <a href="{{ url_for('harta') }}">Hartă</a>
+    <a href="{{ url_for('contact') }}">Contact</a>
+    {% if current_user.is_authenticated %}
+      <a href="{{ url_for('dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('logout') }}">Logout</a>
+    {% else %}
+      <a href="{{ url_for('login') }}">Login</a>
+      <a href="{{ url_for('register') }}">Înregistrare</a>
+    {% endif %}
+  </nav>
+</header>
+
+<main>
+  <h2>Observațiile mele</h2>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="flash-message {{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  {% if observations %}
+    <table>
+      <thead>
+        <tr>
+          <th>Poză</th>
+          <th>Data și ora</th>
+          <th>Locația</th>
+          <th>Specie</th>
+          <th>Nivel poluare</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for obs in observations %}
+          <tr>
+            <td><img src="{{ url_for('static', filename='uploads/' + obs.image_filename) }}" alt="Lichen"></td>
+            <td>{{ obs.date_time.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td>{{ obs.location }}</td>
+            <td>{{ obs.species if obs.species else 'Necompletat' }}</td>
+            <td>{{ obs.pollution_level if obs.pollution_level is not none else 'Necompletat' }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>Nu ai încărcat nicio observație până acum.</p>
+  {% endif %}
+
+  <a href="{{ url_for('upload_observation') }}" class="button-link">Încarcă o nouă observație</a>
+</main>
+
+<footer>
+  &copy; 2025 Lichenary • Toate drepturile rezervate
+</footer>
+
+<script>
+  // Canvas norisori
+  const canvas = document.getElementById('cloud-canvas');
+  const ctx = canvas.getContext('2d');
+  let w, h;
+  function resize() {
+    w = window.innerWidth;
+    h = window.innerHeight;
+    canvas.width = w;
+    canvas.height = h;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  class Cloud {
+    constructor(x, y, size, color, speed) {
+      this.x = x; this.y = y; this.size = size;
+      this.color = color; this.speed = speed;
+    }
+    draw(ctx) {
+      const g = ctx.createRadialGradient(this.x, this.y, this.size * 0.3, this.x, this.y, this.size);
+      g.addColorStop(0, this.color);
+      g.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+    update() {
+      this.x += this.speed;
+      if (this.x - this.size > w) {
+        this.x = -this.size;
+        this.y = Math.random() * h * 0.8 + h * 0.1;
+      }
+    }
+  }
+
+  const clouds = [];
+  const colors = ['rgba(180,220,180,0.3)', 'rgba(150,190,150,0.25)', 'rgba(120,160,120,0.2)'];
+  for (let i = 0; i < 20; i++) {
+    clouds.push(new Cloud(
+      Math.random() * w,
+      Math.random() * h * 0.8 + h * 0.1,
+      60 + Math.random() * 50,
+      colors[Math.floor(Math.random() * colors.length)],
+      0.2 + Math.random() * 0.2
+    ));
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, w, h);
+    clouds.forEach(c => { c.draw(ctx); c.update(); });
+    requestAnimationFrame(animate);
+  }
+  animate();
+</script>
+
+</body>
+</html>
+

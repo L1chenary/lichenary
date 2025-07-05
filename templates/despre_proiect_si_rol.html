@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ce este proiectul – Lichenary</title>
+  <style>
+    html, body {
+      margin: 0; padding: 0;
+      height: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #1f2f1f;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    #cloud-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    header {
+      background-color: rgba(17, 61, 60, 0.85);
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+      position: relative;
+    }
+
+    .logo {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+    }
+
+    .menu-toggle {
+      display: none;
+      font-size: 1.8em;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+
+    nav.main-nav {
+      display: flex;
+      gap: 10px;
+    }
+
+    nav.main-nav a {
+      color: white;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+    }
+
+    nav.main-nav a:hover {
+      background-color: #1d5957;
+    }
+
+    @media (max-width: 768px) {
+      .menu-toggle { display: block; }
+      nav.main-nav {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background-color: rgba(17, 61, 60, 0.95);
+        padding: 10px 0;
+        margin-top: 10px;
+      }
+      nav.main-nav.show { display: flex; }
+      nav.main-nav a {
+        padding: 10px;
+        width: 100%;
+        text-align: center;
+        border-top: 1px solid rgba(255,255,255,0.1);
+      }
+    }
+
+    main {
+      position: relative;
+      z-index: 10;
+      max-width: 1000px;
+      margin: 60px auto 30px;
+      padding: 20px;
+    }
+
+    .section {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 25px;
+      margin-bottom: 25px;
+      border-radius: 10px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 0 12px rgba(0,0,0,0.25);
+    }
+
+    .section h2, .section h3 {
+      margin-top: 0;
+      font-size: 1.6em;
+    }
+
+    .section p, .section ul {
+      font-size: 1.05em;
+      line-height: 1.6;
+    }
+
+    .section ul {
+      padding-left: 20px;
+    }
+
+    .section ul li {
+      margin-bottom: 8px;
+    }
+
+    footer {
+      background-color: rgba(17, 61, 60, 0.85);
+      color: white;
+      text-align: center;
+      padding: 15px;
+      position: relative;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="cloud-canvas"></canvas>
+
+<header>
+  <div class="logo" onclick="window.location='/'">Lichenary</div>
+  <button class="menu-toggle" onclick="document.querySelector('nav.main-nav').classList.toggle('show')">☰</button>
+  <nav class="main-nav">
+  <a href="{{ url_for('home') }}">Acasă</a>
+  <a href="{{ url_for('despre') }}">Despre</a>
+  <a href="{{ url_for('participa') }}">Cum Participi</a>
+  <a href="{{ url_for('galerie') }}">Galerie</a>
+  <a href="{{ url_for('harta') }}">Hartă</a>
+  <a href="{{ url_for('contact') }}">Contact</a>
+  {% if current_user.is_authenticated %}
+    <a href="{{ url_for('dashboard') }}">Dashboard</a>
+    <a href="{{ url_for('logout') }}">Logout</a>
+  {% else %}
+    <a href="{{ url_for('login') }}">Login</a>
+    <a href="{{ url_for('register') }}">Înregistrare</a>
+  {% endif %}
+</nav>
+
+</header>
+
+<main>
+  <div class="section">
+    <h2>📘 Despre proiect</h2>
+    <p><strong>Lichenary</strong> este un proiect educațional, științific și ecologic, care își propune să implice tinerii într-o explorare activă a mediului. Ideea centrală este simplă și eficientă: folosirea lichenilor ca indicatori naturali ai calității aerului.</p>
+  </div>
+
+  <div class="section">
+    <h3>🎯 Rolul proiectului</h3>
+    <p>Lichenary este o formă de <em>știință cetățenească</em>, în care datele nu sunt colectate în laboratoare, ci de către comunitate – în special de tineri, elevi, studenți sau voluntari dornici să înțeleagă și să protejeze mediul înconjurător.</p>
+    <p>Proiectul transformă orașul într-un laborator viu, iar participanții devin detectivi ai naturii. Prin observații, învățăm să citim mediul, să îl înțelegem și să transformăm experiența în informație utilă pentru toți.</p>
+  </div>
+
+  <div class="section">
+    <h3>🧭 Obiectivele proiectului</h3>
+    <strong>Faza 1: Observare și cartografiere</strong>
+    <ul>
+      <li>📍 Identificăm și documentăm specii de licheni din diferite zone.</li>
+      <li>📸 Realizăm fotografii și descrieri, toate stocate într-o bază de date comună.</li>
+      <li>🗺️ Construim o hartă colaborativă a calității aerului pe baza prezenței lichenilor.</li>
+    </ul>
+    <strong>Faza 2: Remediere ecologică</strong>
+    <ul>
+      <li>📊 Analizăm datele pentru a identifica zonele afectate de poluare.</li>
+      <li>🧠 Propunem soluții simple și creative pentru reducerea poluării.</li>
+      <li>🌱 Implementăm aceste soluții împreună cu voluntari locali.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>🔍 De ce Lichenary?</h3>
+    <p>Pentru că nu ai nevoie de laboratoare scumpe sau de diplome ca să schimbi lumea.</p>
+    <p>Ai nevoie doar de ochi curioși, atenție la detalii și dorința sinceră de a face o diferență.</p>
+    <p>Lichenary este mai mult decât un proiect – este o mișcare care oferă tinerilor voce și un scop. Fiecare plimbare pe stradă devine o misiune științifică pentru un aer mai curat.</p>
+  </div>
+</main>
+
+<footer>
+  © 2025 Lichenary • Toate drepturile rezervate
+</footer>
+
+<script>
+  const canvas = document.getElementById('cloud-canvas');
+  const ctx = canvas.getContext('2d');
+  let width, height;
+
+  function resize() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+
+  class Cloud {
+    constructor(x, y, size, color, speed) {
+      this.x = x;
+      this.y = y;
+      this.size = size;
+      this.color = color;
+      this.speed = speed;
+    }
+    draw(ctx) {
+      let gradient = ctx.createRadialGradient(this.x, this.y, this.size * 0.3, this.x, this.y, this.size);
+      gradient.addColorStop(0, this.color);
+      gradient.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    update() {
+      this.x += this.speed;
+      if (this.x - this.size > width) {
+        this.x = -this.size;
+        this.y = Math.random() * height * 0.8 + height * 0.1;
+      }
+    }
+  }
+
+  const clouds = [];
+  const colors = ['rgba(180,220,180,0.3)', 'rgba(150,190,150,0.25)', 'rgba(120,160,120,0.2)'];
+
+  colors.forEach(color => {
+    for (let i = 0; i < 7; i++) {
+      clouds.push(new Cloud(Math.random() * width, Math.random() * height, 60 + Math.random() * 50, color, 0.2 + Math.random() * 0.2));
+    }
+  });
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    clouds.forEach(cloud => {
+      cloud.draw(ctx);
+      cloud.update();
+    });
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+</script>
+
+</body>
+</html>

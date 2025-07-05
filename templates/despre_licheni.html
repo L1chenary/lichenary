@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Despre licheni – Lichenary</title>
+  <style>
+    html, body {
+      margin: 0; padding: 0;
+      height: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #1f2f1f;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    #cloud-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    header {
+      background-color: rgba(17, 61, 60, 0.85);
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+      position: relative;
+    }
+
+    .logo {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+    }
+
+    .menu-toggle {
+      display: none;
+      font-size: 1.8em;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+
+    nav.main-nav {
+      display: flex;
+      gap: 10px;
+    }
+
+    nav.main-nav a {
+      color: white;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+    }
+
+    nav.main-nav a:hover {
+      background-color: #1d5957;
+    }
+
+    @media (max-width: 768px) {
+      .menu-toggle { display: block; }
+      nav.main-nav {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background-color: rgba(17, 61, 60, 0.95);
+        padding: 10px 0;
+        margin-top: 10px;
+      }
+      nav.main-nav.show { display: flex; }
+      nav.main-nav a {
+        padding: 10px;
+        width: 100%;
+        text-align: center;
+        border-top: 1px solid rgba(255,255,255,0.1);
+      }
+    }
+
+    main {
+      position: relative;
+      z-index: 10;
+      max-width: 900px;
+      margin: 60px auto 30px;
+      padding: 20px;
+    }
+
+    .section {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 25px;
+      margin-bottom: 25px;
+      border-radius: 10px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 0 12px rgba(0,0,0,0.25);
+    }
+
+    .section h2, .section h3 {
+      margin-top: 0;
+      font-size: 1.5em;
+      margin-bottom: 10px;
+    }
+
+    .section p, .section ul {
+      font-size: 1.05em;
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+
+    .section ul {
+      padding-left: 20px;
+    }
+
+    .section ul li {
+      margin-bottom: 8px;
+    }
+
+    footer {
+      background-color: rgba(17, 61, 60, 0.85);
+      color: white;
+      text-align: center;
+      padding: 15px;
+      position: relative;
+      z-index: 10;
+    }
+
+  </style>
+</head>
+<body>
+
+<canvas id="cloud-canvas"></canvas>
+
+<header>
+  <div class="logo" onclick="window.location='/'">Lichenary</div>
+  <button class="menu-toggle" onclick="document.querySelector('nav.main-nav').classList.toggle('show')">☰</button>
+  <nav class="main-nav">
+  <a href="{{ url_for('home') }}">Acasă</a>
+  <a href="{{ url_for('despre') }}">Despre</a>
+  <a href="{{ url_for('participa') }}">Cum Participi</a>
+  <a href="{{ url_for('galerie') }}">Galerie</a>
+  <a href="{{ url_for('harta') }}">Hartă</a>
+  <a href="{{ url_for('contact') }}">Contact</a>
+  {% if current_user.is_authenticated %}
+    <a href="{{ url_for('dashboard') }}">Dashboard</a>
+    <a href="{{ url_for('logout') }}">Logout</a>
+  {% else %}
+    <a href="{{ url_for('login') }}">Login</a>
+    <a href="{{ url_for('register') }}">Înregistrare</a>
+  {% endif %}
+</nav>
+
+</header>
+
+<main>
+  <div class="section">
+    <h2>🌿 Ce sunt lichenii?</h2>
+    <p>Lichenii sunt un exemplu spectaculos de cooperare în natură — două organisme complet diferite care trăiesc împreună, ajutându-se reciproc pentru a supraviețui în cele mai dure condiții de pe Pământ. Sunt formați prin simbioza dintre:</p>
+    <ul>
+      <li>o ciupercă (care oferă structura, protecția și mediul de viață),</li>
+      <li>și o algă verde sau cianobacterie (care face fotosinteză și produce hrana).</li>
+    </ul>
+    <p>Această asociere nu e doar o simplă „colocuire”, ci o relație profund integrată. Împreună, formează un organism complet nou, cu caracteristici pe care niciunul dintre parteneri nu le-ar putea avea de unul singur.</p>
+    <p>Lichenii nu sunt nici plante, nici animale, nici fungi simpli — sunt un regn aparte, o poveste vie despre adaptare și echilibru. Au apărut acum peste 400 de milioane de ani și au reușit să colonizeze locuri unde puține alte forme de viață pot exista: ghețari, stânci uscate, acoperișuri abandonate sau scoarța arborilor din pădurile orașelor.</p>
+  </div>
+
+  <div class="section">
+    <h2>🌬️ De ce sunt lichenii importanți pentru aer?</h2>
+    <p>Lichenii nu au rădăcini. Nu se hrănesc din sol. Nu absorb apă prin tulpini sau frunze. Tot ceea ce le trebuie pentru viață — apa, lumina, mineralele — provin direct din atmosferă.</p>
+    <p>Această calitate le oferă o sensibilitate unică: sunt în contact permanent și direct cu aerul. Dacă aerul este curat, trăiesc, cresc și se înmulțesc. Dacă aerul este poluat, cu gaze toxice, metale grele sau praf industrial, încep să sufere — își schimbă culoarea, se usucă sau dispar complet.</p>
+    <p>Mai mult, diferite specii de licheni reacționează diferit la diferite tipuri de poluanți. Unele sunt sensibile la dioxidul de sulf, altele la oxizii de azot sau metalele grele. Astfel, doar privind ce specii se găsesc într-o zonă, putem înțelege calitatea aerului de acolo.</p>
+    <p>Lichenii devin astfel niște „senzori biologici” naturali — 100% organici, complet gratuit, și extrem de preciși.</p>
+  </div>
+
+  <div class="section">
+    <h2>📍 De ce folosim lichenii în Lichenary?</h2>
+    <p>Proiectul Lichenary are o misiune clară: să transformăm tinerii în exploratori ai aerului. Vrem ca fiecare participant să învețe să observe natura din jur, să identifice semnele invizibile ale poluării și să contribuie activ la înțelegerea mediului.</p>
+    <p>Folosim lichenii pentru că:</p>
+    <ul>
+      <li>ne ajută să măsurăm calitatea aerului fără aparate complicate;</li>
+      <li>pot fi identificați cu ochiul liber, cu puțină instruire;</li>
+      <li>oferă date relevante din orice spațiu: oraș, sat, pădure, curte de liceu;</li>
+      <li>ne permit să construim o hartă vie a aerului, în timp real, cu ajutorul comunității.</li>
+    </ul>
+    <p>În plus, sunt spectaculoși: fiecare specie are o formă, o culoare și o textură diferită, ca niște bijuterii ascunse pe scoarța arborilor.</p>
+  </div>
+
+  <div class="section">
+    <h2>🔍 Ce tipuri de licheni analizăm?</h2>
+    <p>În Lichenary, ne concentrăm pe trei grupe principale de licheni, în funcție de forma lor și de sensibilitatea la poluare:</p>
+    <ol>
+      <li><strong>Crustacei (crustoși)</strong>
+        <ul>
+          <li>Par lipiți complet de substrat, ca o crustă.</li>
+          <li>Nu pot fi separați fără să se rupă.</li>
+          <li>Toleranți la poluare.</li>
+          <li>Semnalizează aer poluat sau mediu.</li>
+        </ul>
+      </li>
+      <li><strong>Foliacei (foioși)</strong>
+        <ul>
+          <li>Au frunzulițe mici, vizibile, parțial desprinse de substrat.</li>
+          <li>Sensibili moderat la poluare.</li>
+          <li>Prezența lor semnalează aer de calitate acceptabilă.</li>
+        </ul>
+      </li>
+      <li><strong>Fruticuloși (arborescenți)</strong>
+        <ul>
+          <li>Arată ca niște tufe sau corali.</li>
+          <li>Foarte sensibili la poluare.</li>
+          <li>Prezența lor semnalează aer foarte curat.</li>
+        </ul>
+      </li>
+    </ol>
+  </div>
+
+  <div class="section">
+    <h2>🧭 Cum îi identificăm?</h2>
+    <p>Poți găsi licheni:</p>
+    <ul>
+      <li>pe scoarța arborilor (preferabil în parcuri sau păduri urbane),</li>
+      <li>pe stânci și pietre,</li>
+      <li>pe ziduri vechi, acoperișuri sau monumente,</li>
+      <li>în locuri umede, umbroase și nepoluate.</li>
+    </ul>
+    <p>De cele mai multe ori, lichenii se dezvoltă mai bine pe partea nordică a arborilor, unde umiditatea se păstrează mai mult.</p>
+    <p>Fiecare echipă sau voluntar din proiect va învăța cum să fotografieze lichenii, cum să observe forma, culoarea și poziția lor, iar apoi să trimită datele în platformă.</p>
+  </div>
+
+  <div class="section">
+    <h2>🧬 Ce putem face cu toate aceste informații?</h2>
+    <p>Datele colectate de participanți sunt adunate într-o bază de date colaborativă. Cu ele, putem:</p>
+    <ul>
+      <li>realiza o hartă a poluării la nivel local, regional sau național;</li>
+      <li>compara zone verzi cu zone industriale sau traficate;</li>
+      <li>urmări schimbările în timp, dacă situația aerului se îmbunătățește sau se degradează;</li>
+      <li>decide unde să intervenim în Faza 2 a proiectului, cu soluții de tip GreenWeave.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>💬 În concluzie</h2>
+    <p>Lichenii nu vorbesc, dar ne transmit mesaje clare.<br />
+    Prin prezența lor, ne spun când aerul e curat și când nu.<br />
+    Prin dispariția lor, trag un semnal de alarmă.<br />
+    Prin studierea lor, învățăm să ascultăm natura.</p>
+    <p><strong>Lichenii sunt mesagerii invizibili ai aerului.<br />
+    Și prin Lichenary, îi vom face auziți.</strong></p>
+  </div>
+</main>
+
+<footer>
+  © 2025 Lichenary • Toate drepturile rezervate
+</footer>
+
+<script>
+  const canvas = document.getElementById('cloud-canvas');
+  const ctx = canvas.getContext('2d');
+  let width, height;
+
+  function resize() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+
+  class Cloud {
+    constructor(x, y, size, color, speed) {
+      this.x = x;
+      this.y = y;
+      this.size = size;
+      this.color = color;
+      this.speed = speed;
+    }
+    draw(ctx) {
+      let gradient = ctx.createRadialGradient(this.x, this.y, this.size * 0.3, this.x, this.y, this.size);
+      gradient.addColorStop(0, this.color);
+      gradient.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    update() {
+      this.x += this.speed;
+      if (this.x - this.size > width) {
+        this.x = -this.size;
+        this.y = Math.random() * height * 0.8 + height * 0.1;
+      }
+    }
+  }
+
+  const clouds = [];
+  const colors = ['rgba(180,220,180,0.3)', 'rgba(150,190,150,0.25)', 'rgba(120,160,120,0.2)'];
+
+  colors.forEach(color => {
+    for (let i = 0; i < 7; i++) {
+      clouds.push(new Cloud(Math.random() * width, Math.random() * height, 60 + Math.random() * 50, color, 0.2 + Math.random() * 0.2));
+    }
+  });
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    clouds.forEach(cloud => {
+      cloud.draw(ctx);
+      cloud.update();
+    });
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <title>Observații aprobate</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f9fc;
+            margin: 0; padding: 0;
+        }
+        main {
+            max-width: 1000px;
+            margin: 30px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 0 10px #aaa;
+        }
+        h2 {
+            margin-top: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background-color: #2980b9;
+            color: white;
+        }
+        img {
+            max-width: 150px;
+            border-radius: 4px;
+        }
+        form {
+            display: inline-block;
+        }
+        button {
+            padding: 6px 12px;
+            background-color: #c0392b;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #922b21;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <h2>Observații aprobate</h2>
+    {% if observations %}
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Imagine</th>
+                <th>Locație</th>
+                <th>Specie</th>
+                <th>Poluare</th>
+                <th>Acțiuni</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for obs in observations %}
+            <tr>
+                <td>{{ obs.id }}</td>
+                <td>
+                    <img src="{{ url_for('uploaded_file', filename=obs.image_filename) }}" alt="observatie">
+                </td>
+                <td>{{ obs.location }}</td>
+                <td>{{ obs.species if obs.species else 'Necompletat' }}</td>
+                <td>{{ obs.pollution_level if obs.pollution_level is not none else 'Necompletat' }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('disapprove_observation', obs_id=obs.id) }}">
+
+                        <button type="submit">Dezaprobă</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Nu există observații aprobate.</p>
+    {% endif %}
+</main>
+</body>
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cum participi – Lichenary</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      background: #1f2f1f;
+      color: white;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #cloud-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    header {
+      background: rgba(17, 61, 60, 0.85);
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 10;
+      position: relative;
+    }
+
+    .logo {
+      font-size: 1.5em;
+      font-weight: bold;
+      cursor: pointer;
+      color: white;
+    }
+
+    .menu-toggle {
+      display: none;
+      font-size: 1.8em;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+
+    nav.main-nav {
+      display: flex;
+      gap: 10px;
+    }
+
+    nav.main-nav a {
+      color: white;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+    }
+
+    nav.main-nav a:hover {
+      background: #1d5957;
+    }
+
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+
+      nav.main-nav {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background: rgba(17, 61, 60, 0.95);
+        padding: 10px 0;
+        margin-top: 10px;
+      }
+
+      nav.main-nav.show {
+        display: flex;
+      }
+
+      nav.main-nav a {
+        padding: 10px;
+        width: 100%;
+        text-align: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+    }
+
+    main {
+      flex: 1;
+      position: relative;
+      z-index: 10;
+      padding: 20px;
+      max-width: 1000px;
+      margin: 60px auto;
+      width: 100%;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 20px;
+      border-radius: 8px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card a {
+      color: white;
+      text-decoration: none;
+      display: block;
+      height: 100%;
+    }
+
+    footer {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 15px;
+      background: rgba(17, 61, 60, 0.85);
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="cloud-canvas"></canvas>
+
+<header>
+  <div class="logo" onclick="window.location='/'">Lichenary</div>
+  <button class="menu-toggle" onclick="document.querySelector('nav').classList.toggle('show')">☰</button>
+  <nav class="main-nav">
+  <a href="{{ url_for('home') }}">Acasă</a>
+  <a href="{{ url_for('despre') }}">Despre</a>
+  <a href="{{ url_for('participa') }}">Cum Participi</a>
+  <a href="{{ url_for('galerie') }}">Galerie</a>
+  <a href="{{ url_for('harta') }}">Hartă</a>
+  <a href="{{ url_for('contact') }}">Contact</a>
+  {% if current_user.is_authenticated %}
+    <a href="{{ url_for('dashboard') }}">Dashboard</a>
+    <a href="{{ url_for('logout') }}">Logout</a>
+  {% else %}
+    <a href="{{ url_for('login') }}">Login</a>
+    <a href="{{ url_for('register') }}">Înregistrare</a>
+  {% endif %}
+</nav>
+
+</header>
+
+<main>
+  <div class="cards">
+    <div class="card">
+      <a href="{{ url_for('participa_voluntariez') }}">
+        <h3>Voluntariez</h3>
+        <p>Informații despre cum poți deveni voluntar, pași, responsabilități...</p>
+      </a>
+    </div>
+    <div class="card">
+      <a href="{{ url_for('participa_ambasador') }}">
+        <h3>Devin ambasador</h3>
+        <p>Ce presupune rolul de ambasador, avantaje, ce vei face...</p>
+      </a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  © 2025 Lichenary • Toate drepturile rezervate
+</footer>
+
+<script>
+  const c = document.getElementById('cloud-canvas'), ctx = c.getContext('2d');
+  let w,h;
+  function rez(){ w=innerWidth; h=innerHeight; c.width=w; c.height=h;}
+  addEventListener('resize', rez); rez();
+
+  class Cloud {
+    constructor(x,y,s,col,spd){
+      Object.assign(this,{x,y,s,col,spd});
+    }
+    draw(ctx){
+      const g=ctx.createRadialGradient(this.x,this.y,this.s*0.3,this.x,this.y,this.s);
+      g.addColorStop(0,this.col); g.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=g;
+      ctx.beginPath(); ctx.arc(this.x,this.y,this.s,0,2*Math.PI); ctx.fill();
+    }
+    update(){
+      this.x+=this.spd;
+      if(this.x-this.s>w){
+        this.x=-this.s;
+        this.y=Math.random()*h*0.8+h*0.1;
+      }
+    }
+  }
+
+  const clouds=[];
+  ['rgba(180,220,180,0.3)','rgba(150,190,150,0.25)','rgba(120,160,120,0.2)'].forEach(col=>{
+    for(let i=0;i<7;i++)
+      clouds.push(new Cloud(Math.random()*w,Math.random()*h*0.8+h*0.1,60+Math.random()*50,col,0.2+Math.random()*0.2));
+  });
+
+  function anim(){
+    ctx.clearRect(0,0,w,h);
+    clouds.forEach(c=>{c.draw(ctx); c.update()});
+    requestAnimationFrame(anim);
+  }
+  anim();
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Încarcă observație licheni</title>
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      background-color: #1f2f1f;
+      color: white;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #cloud-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    header {
+      background-color: rgba(17, 61, 60, 0.85);
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 10;
+    }
+
+    .logo {
+      font-size: 1.5em;
+      font-weight: bold;
+      cursor: pointer;
+      color: white;
+    }
+
+    .menu-toggle {
+      display: none;
+      font-size: 1.8em;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+    }
+
+    nav a:hover {
+      background-color: #1d5957;
+    }
+
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+
+      nav {
+        flex-direction: column;
+        width: 100%;
+        display: none;
+        background-color: rgba(17, 61, 60, 0.95);
+        padding: 10px 0;
+      }
+
+      nav.show {
+        display: flex;
+      }
+
+      nav a {
+        padding: 10px;
+        width: 100%;
+        text-align: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+    }
+
+    main {
+      max-width: 800px;
+      width: 90%;
+      margin: 40px auto;
+      background: rgba(255, 255, 255, 0.12);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(10px);
+      position: relative;
+      z-index: 10;
+      flex-grow: 1;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+    }
+
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="file"],
+    input[type="datetime-local"],
+    input[type="number"] {
+      width: 100%;
+      padding: 0.6rem;
+      margin-top: 0.3rem;
+      border: 1px solid rgba(255,255,255,0.5);
+      border-radius: 6px;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      box-sizing: border-box;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #1d5957;
+      background: rgba(255,255,255,0.2);
+    }
+
+    button {
+      margin-top: 1.5rem;
+      width: 100%;
+      background: #1d5957;
+      color: white;
+      border: none;
+      padding: 0.8rem;
+      font-size: 1.1rem;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #14614d;
+    }
+
+    .flash-message {
+      background-color: #f8d7da;
+      color: black;
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #f5c2c7;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: rgba(17, 61, 60, 0.85);
+      color: white;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="cloud-canvas"></canvas>
+
+<header>
+  <div class="logo" onclick="window.location='/'">Lichenary</div>
+  <button class="menu-toggle" onclick="document.querySelector('nav').classList.toggle('show')">☰</button>
+  <nav>
+    <a href="{{ url_for('home') }}">Acasă</a>
+    <a href="{{ url_for('despre') }}">Despre</a>
+    <a href="{{ url_for('participa') }}">Cum Participi</a>
+    <a href="{{ url_for('galerie') }}">Galerie</a>
+    <a href="{{ url_for('harta') }}">Hartă</a>
+    <a href="{{ url_for('contact') }}">Contact</a>
+    {% if current_user.is_authenticated %}
+      <a href="{{ url_for('dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('logout') }}">Logout</a>
+    {% else %}
+      <a href="{{ url_for('login') }}">Login</a>
+    {% endif %}
+  </nav>
+</header>
+
+<main>
+  <h2>Încarcă observație licheni</h2>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="flash-message">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <form method="POST" enctype="multipart/form-data">
+    <label for="photo">Poză cu lichenul:</label>
+    <input type="file" id="photo" name="photo" accept="image/*" required>
+
+    <label for="date_time">Data și ora:</label>
+    <input type="datetime-local" id="date_time" name="date_time" required>
+
+    <label for="location">Locația:</label>
+    <input type="text" id="location" name="location" required>
+
+    <label for="latitude">Latitudine:</label>
+    <input type="text" id="latitude" name="latitude" required>
+
+    <label for="longitude">Longitudine:</label>
+    <input type="text" id="longitude" name="longitude" required>
+
+    <label for="species">Specie de lichen:</label>
+    <input type="text" id="species" name="species" placeholder="Introdu specia (ex: Xanthoria parietina)">
+
+    <label for="pollution_level">Nivel poluare (1-10):</label>
+    <input type="number" id="pollution_level" name="pollution_level" min="1" max="10" placeholder="1-10">
+
+    <button type="submit">Încarcă</button>
+  </form>
+</main>
+
+<footer>
+  &copy; 2025 Lichenary. Toate drepturile rezervate.
+</footer>
+
+<script>
+  const canvas = document.getElementById('cloud-canvas');
+  const ctx = canvas.getContext('2d');
+  let width, height;
+
+  function resize() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  class Cloud {
+    constructor(x, y, size, color, speed) {
+      this.x = x;
+      this.y = y;
+      this.size = size;
+      this.color = color;
+      this.speed = speed;
+    }
+
+    draw(ctx) {
+      let gradient = ctx.createRadialGradient(this.x, this.y, this.size * 0.3, this.x, this.y, this.size);
+      gradient.addColorStop(0, this.color);
+      gradient.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    update() {
+      this.x += this.speed;
+      if (this.x - this.size > width) {
+        this.x = -this.size;
+        this.y = Math.random() * height * 0.8 + height * 0.1;
+      }
+    }
+  }
+
+  const clouds = [];
+  const cloudColors = ['rgba(180,220,180,0.3)', 'rgba(150,190,150,0.25)', 'rgba(120,160,120,0.2)'];
+
+  for (let i = 0; i < 20; i++) {
+    clouds.push(new Cloud(
+      Math.random() * width,
+      Math.random() * height * 0.8 + height * 0.1,
+      60 + Math.random() * 50,
+      cloudColors[Math.floor(Math.random() * cloudColors.length)],
+      0.2 + Math.random() * 0.2
+    ));
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    clouds.forEach(cloud => {
+      cloud.draw(ctx);
+      cloud.update();
+    });
+    requestAnimationFrame(animate);
+  }
+  animate();
+</script>
+
+</body>
+</html>

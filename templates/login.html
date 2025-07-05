@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Login - Licheni</title>
+
+<style>
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    font-family: Arial, sans-serif;
+    background-color: #1f2f1f;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  #cloud-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  header {
+    background-color: rgba(17, 61, 60, 0.85);
+    padding: 15px 20px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 20;
+  }
+
+  .logo {
+    font-size: 1.5em;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+  }
+
+  nav {
+    display: flex;
+    gap: 10px;
+    z-index: 20;
+  }
+
+  nav a {
+    color: white;
+    text-decoration: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+  }
+
+  nav a:hover {
+    background-color: #1d5957;
+  }
+
+  /* Burger menu button */
+  .burger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    gap: 5px;
+    z-index: 30;
+  }
+
+  .burger div {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    border-radius: 2px;
+  }
+
+  @media (max-width: 768px) {
+    nav {
+      display: none;
+      flex-direction: column;
+      width: 100%;
+      background-color: rgba(17, 61, 60, 0.9);
+      position: absolute;
+      top: 56px;
+      left: 0;
+      padding: 10px 20px;
+      border-radius: 0 0 8px 8px;
+      box-sizing: border-box;
+      z-index: 20;
+    }
+    nav.show {
+      display: flex;
+    }
+
+    body.menu-open main {
+      margin-top: 250px; /* ajustează dacă meniul este mai înalt */
+      transition: margin-top 0.3s ease;
+    }
+
+    .burger {
+      display: flex;
+    }
+  }
+
+  main {
+    max-width: 400px;
+    margin: 2rem auto;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    color: white;
+    position: relative;
+    z-index: 10;
+    backdrop-filter: blur(10px);
+  }
+
+  h1 {
+    color: white;
+    margin-bottom: 1rem;
+  }
+
+  label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: bold;
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    width: 100%;
+    padding: 0.6rem;
+    margin-top: 0.3rem;
+    border: none;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 1rem;
+  }
+
+  button {
+    margin-top: 1.5rem;
+    width: 100%;
+    background: #1d5957;
+    color: white;
+    border: none;
+    padding: 0.8rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+  }
+
+  button:hover {
+    background: #14443f;
+  }
+
+  .flash-message {
+    margin-top: 1rem;
+    padding: 10px;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  .error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+  }
+
+  .success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+  }
+
+  nav.form-nav {
+    margin-top: 1rem;
+    text-align: center;
+  }
+
+  nav.form-nav a {
+    color: #a7d3a7;
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  nav.form-nav a:hover {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="cloud-canvas"></canvas>
+
+<header>
+  <div class="logo" onclick="window.location='/'">Lichenary</div>
+
+  <div id="burger" class="burger" aria-label="Meniu">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+  <nav id="nav-links">
+    <a href="{{ url_for('home') }}">Acasă</a>
+    <a href="{{ url_for('despre') }}">Despre</a>
+    <a href="{{ url_for('participa') }}">Cum Participi</a>
+    <a href="{{ url_for('galerie') }}">Galerie</a>
+    <a href="{{ url_for('harta') }}">Hartă</a>
+    <a href="{{ url_for('contact') }}">Contact</a>
+    {% if current_user.is_authenticated %}
+      <a href="{{ url_for('dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('logout') }}">Logout</a>
+    {% else %}
+      <a href="{{ url_for('login') }}">Login</a>
+      <a href="{{ url_for('register') }}">Înregistrare</a>
+    {% endif %}
+  </nav>
+</header>
+
+<main>
+  <h1>Autentificare Voluntar</h1>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="flash-message {{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <form method="POST" action="{{ url_for('login') }}">
+    <label for="username">Nume utilizator</label>
+    <input type="text" id="username" name="username" required autocomplete="username" />
+
+    <label for="password">Parolă</label>
+    <input type="password" id="password" name="password" required autocomplete="current-password" />
+
+    <button type="submit">Autentifică-te</button>
+  </form>
+
+  <nav class="form-nav">
+    Nu ai cont? <a href="{{ url_for('register') }}">Înregistrează-te aici</a>.
+  </nav>
+</main>
+
+<script>
+  // --- Burger menu toggle ---
+  const burger = document.getElementById('burger');
+  const navLinks = document.getElementById('nav-links');
+
+  burger.addEventListener('click', () => {
+    navLinks.classList.toggle('show');
+    document.body.classList.toggle('menu-open');
+  });
+</script>
+
+<script>
+  // --- Simple moving cloud effect on canvas ---
+  const canvas = document.getElementById('cloud-canvas');
+  const ctx = canvas.getContext('2d');
+  let width, height;
+
+  function resize() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  class Cloud {
+    constructor(x, y, size, color, speed) {
+      this.x = x;
+      this.y = y;
+      this.size = size;
+      this.color = color;
+      this.speed = speed;
+    }
+    draw(ctx) {
+      let gradient = ctx.createRadialGradient(this.x, this.y, this.size*0.3, this.x, this.y, this.size);
+      gradient.addColorStop(0, this.color);
+      gradient.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    update() {
+      this.x += this.speed;
+      if(this.x - this.size > width) {
+        this.x = -this.size;
+        this.y = Math.random() * height * 0.8 + height * 0.1;
+      }
+    }
+  }
+
+  const clouds = [];
+  const cloudColors = ['rgba(180,220,180,0.3)', 'rgba(150,190,150,0.25)', 'rgba(120,160,120,0.2)'];
+
+  for(let i=0; i<20; i++) {
+    clouds.push(new Cloud(
+      Math.random() * width,
+      Math.random() * height * 0.8 + height * 0.1,
+      60 + Math.random() * 50,
+      cloudColors[Math.floor(Math.random()*cloudColors.length)],
+      0.2 + Math.random() * 0.2
+    ));
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    clouds.forEach(cloud => {
+      cloud.draw(ctx);
+      cloud.update();
+    });
+    requestAnimationFrame(animate);
+  }
+  animate();
+</script>
+
+</body>
+</html>
+

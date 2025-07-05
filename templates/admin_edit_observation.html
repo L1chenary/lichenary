@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <title>Editează observația</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f9fc;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #2c3e50;
+            padding: 15px 20px;
+            color: #ecf0f1;
+        }
+        main {
+            max-width: 800px;
+            margin: 30px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 0 10px #aaa;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 25px;
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #1c5980;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Editează observația #{{ observation.id }}</h1>
+</header>
+
+<main>
+    <form method="POST">
+        <label for="location">Locația:</label>
+        <input type="text" id="location" name="location" value="{{ observation.location }}" required>
+
+        <label for="latitude">Latitudine:</label>
+        <input type="text" id="latitude" name="latitude" value="{{ observation.latitude }}" required>
+
+        <label for="longitude">Longitudine:</label>
+        <input type="text" id="longitude" name="longitude" value="{{ observation.longitude }}" required>
+
+        <label for="species">Specie:</label>
+        <input type="text" id="species" name="species" value="{{ observation.species or '' }}">
+
+        <label for="pollution_level">Nivel poluare (1-10):</label>
+        <input type="number" id="pollution_level" name="pollution_level" value="{{ observation.pollution_level or '' }}" min="1" max="10">
+
+        <button type="submit">Salvează modificările</button>
+    </form>
+</main>
+</body>
+</html>

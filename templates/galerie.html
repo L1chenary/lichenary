@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Galerie – Lichenary</title>
+  <style>
+    html, body {
+      margin:0; padding:0;
+      height:100%;
+      display:flex; flex-direction:column;
+      font-family:'Segoe UI', Tahoma, Verdana, sans-serif;
+      background:linear-gradient(135deg, #1f2f1f, #2e4a4a);
+      color:white; overflow-x:hidden;
+    }
+    #cloud-canvas {
+      position:fixed; top:0; left:0;
+      width:100vw; height:100vh;
+      z-index:0; pointer-events:none;
+    }
+    header {
+      background:rgba(17,61,60,0.85);
+      padding:15px 20px;
+      display:flex; justify-content:space-between; align-items:center;
+      z-index:10;
+    }
+    .logo {
+      font-size:1.8em; font-weight:bold; color:white; cursor:pointer;
+    }
+    .menu-toggle {
+      display:none; font-size:1.8em; background:none; border:none; color:white; cursor:pointer;
+    }
+    nav.main-nav {
+      display:flex; gap:15px;
+    }
+    nav.main-nav a {
+      color:white; text-decoration:none;
+      padding:8px 12px; border-radius:4px;
+    }
+    nav.main-nav a:hover {
+      background:#14614d;
+    }
+    @media(max-width:768px) {
+      .menu-toggle { display:block; }
+      nav.main-nav {
+        display:none; flex-direction:column;
+        width:100%; background:rgba(17,61,60,0.95);
+        margin-top:10px;
+      }
+      nav.main-nav.show { display:flex; }
+      nav.main-nav a {
+        width:100%;
+        text-align:center;
+        border-top:1px solid rgba(255,255,255,0.1);
+      }
+    }
+    main {
+      flex:1;
+      position:relative;
+      z-index:10;
+      padding:40px 20px;
+      max-width:1000px;
+      margin:0 auto;
+      text-align:center;
+    }
+    h1 {
+      font-size:2.5em;
+      margin-bottom:20px;
+      text-shadow:0 2px 5px rgba(0,0,0,0.5);
+    }
+    .gallery-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(200px,1fr));
+      gap:15px;
+    }
+    .gallery-item {
+      position:relative;
+      overflow:hidden;
+      border-radius:8px;
+      background:rgba(255,255,255,0.1);
+      box-shadow:0 0 10px rgba(0,0,0,0.3);
+    }
+    .gallery-item img {
+      width:100%;
+      display:block;
+      transition:transform 0.3s;
+    }
+    .gallery-item:hover img {
+      transform:scale(1.05);
+    }
+    .gallery-item span {
+      position:absolute;
+      bottom:0; left:0;
+      width:100%;
+      padding:8px;
+      background:rgba(0,0,0,0.6);
+      font-size:0.9em;
+      color:#fff;
+      text-align:left;
+    }
+    footer {
+      background:rgba(17,61,60,0.85);
+      padding:15px;
+      text-align:center;
+      z-index:10;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="cloud-canvas"></canvas>
+
+<header>
+  <div class="logo" onclick="location='{{ url_for('home') }}'">Lichenary</div>
+  <button class="menu-toggle" onclick="nav.classList.toggle('show')">☰</button>
+  <nav class="main-nav" id="nav">
+    <a href="{{ url_for('home') }}">Acasă</a>
+    <a href="{{ url_for('despre') }}">Despre</a>
+    <a href="{{ url_for('participa') }}">Cum Participi</a>
+    <a href="{{ url_for('galerie') }}">Galerie</a>
+    <a href="{{ url_for('harta') }}">Hartă</a>
+    <a href="{{ url_for('contact') }}">Contact</a>
+    {% if current_user.is_authenticated %}
+      <a href="{{ url_for('dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('logout') }}">Logout</a>
+    {% else %}
+      <a href="{{ url_for('login') }}">Login</a>
+      <a href="{{ url_for('register') }}">Înregistrare</a>
+    {% endif %}
+  </nav>
+</header>
+
+<main>
+  <h1>📸 Galerie Lichenary</h1>
+  <div class="gallery-grid">
+    {% for img in images %}
+    <div class="gallery-item">
+      <img src="{{ url_for('static', filename='uploads/' + img.image_filename) }}" alt="Lichen observation">
+      <span>{{ img.species or 'Necunoscut' }} – {{ img.date_time.strftime('%Y‑%m‑%d') }}</span>
+    </div>
+    {% endfor %}
+  </div>
+</main>
+
+<footer>
+  © 2025 Lichenary • Toate drepturile rezervate
+</footer>
+
+<script>
+  const canvas = document.getElementById('cloud-canvas'),
+        ctx = canvas.getContext('2d'),
+        nav = document.getElementById('nav');
+  let w,h;
+  function resize(){
+    w=innerWidth; h=innerHeight;
+    canvas.width=w; canvas.height=h;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+  class Cloud{
+    constructor(x,y,s,c,spd){Object.assign(this,{x,y,s,c,spd});}
+    draw(ctx){
+      const g=ctx.createRadialGradient(this.x,this.y,this.s*0.3,this.x,this.y,this.s);
+      g.addColorStop(0,this.c);
+      g.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=g;
+      ctx.beginPath(); ctx.arc(this.x,this.y,this.s,0,Math.PI*2); ctx.fill();
+    }
+    update(){
+      this.x+=this.spd;
+      if(this.x - this.s > w){
+        this.x=-this.s;
+        this.y=Math.random()*h*0.8 + h*0.1;
+      }
+    }
+  }
+  const clouds=[];
+  ['rgba(180,220,180,0.3)','rgba(150,190,150,0.25)','rgba(120,160,120,0.2)']
+  .forEach(c=>{ for(let i=0;i<12;i++){
+      clouds.push(new Cloud(Math.random()*w,Math.random()*h,60+Math.random()*50,c,0.2+Math.random()*0.2));
+  }});
+  function animate(){
+    ctx.clearRect(0,0,w,h);
+    clouds.forEach(c=>{ c.draw(ctx); c.update(); });
+    requestAnimationFrame(animate);
+  }
+  animate();
+</script>
+
+</body>
+</html>

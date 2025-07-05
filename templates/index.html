@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bine ai venit – Lichenary</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1f2f1f, #2e4a4a);
+      color: white;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    #cloud-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+    header {
+      background: rgba(17,61,60,0.85);
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 10;
+    }
+    .logo { font-size:1.8em;color:white;font-weight:bold;cursor:pointer; }
+    .menu-toggle {
+      display:none;font-size:1.8em;background:none;border:none;color:white;cursor:pointer;
+    }
+    nav.main-nav { display:flex; gap:15px; }
+    nav.main-nav a {
+      color:white;text-decoration:none;padding:8px 12px;border-radius:4px;
+    }
+    nav.main-nav a:hover { background:#14614d; }
+    @media(max-width:768px) {
+      .menu-toggle { display:block; }
+      nav.main-nav {
+        display:none;flex-direction:column;
+        width:100%;background:rgba(17,61,60,0.95);
+        margin-top:10px;
+      }
+      nav.main-nav.show { display:flex; }
+      nav.main-nav a { width:100%;text-align:center;border-top:1px solid rgba(255,255,255,0.1); }
+    }
+    main {
+      flex:1;
+      position:relative;
+      z-index:10;
+      padding:40px 20px;
+      max-width:1000px;
+      margin:0 auto;
+      text-align:center;
+    }
+    .title { font-size:2.8em; margin-bottom:10px; }
+    .subtitle { font-size:1.4em; margin-bottom:30px; opacity:0.9; }
+    .btn-group { margin:30px 0; display:flex; justify-content:center; gap:20px; flex-wrap:wrap; }
+    .btn {
+      padding:15px 25px;
+      background:#29a19c;
+      color:white;
+      text-decoration:none;
+      font-size:1.1em;
+      border-radius:8px;
+      box-shadow:0 5px 15px rgba(0,0,0,0.3);
+      transition:transform 0.2s, background 0.2s;
+    }
+    .btn:hover { transform:translateY(-3px); background:#1e7d79; }
+    .section {
+      background: rgba(255,255,255,0.1);
+      padding:30px;
+      margin:40px 0;
+      border-radius:12px;
+      backdrop-filter:blur(6px);
+      box-shadow:0 0 15px rgba(0,0,0,0.3);
+      text-align:left;
+    }
+    .section h3 { font-size:1.6em; margin-bottom:10px; }
+    .section p { font-size:1.1em; line-height:1.6; }
+    footer {
+      background: rgba(17,61,60,0.85);
+      text-align:center;
+      padding:15px;
+      position:relative;
+      z-index:10;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="cloud-canvas"></canvas>
+
+<header>
+  <div class="logo" onclick="location='{{ url_for('home') }}'">Lichenary</div>
+  <button class="menu-toggle" onclick="nav.classList.toggle('show')">☰</button>
+  <nav class="main-nav" id="nav">
+    <a href="{{ url_for('home') }}">Acasă</a>
+    <a href="{{ url_for('despre') }}">Despre</a>
+    <a href="{{ url_for('participa') }}">Cum Participi</a>
+    <a href="{{ url_for('galerie') }}">Galerie</a>
+    <a href="{{ url_for('harta') }}">Hartă</a>
+    <a href="{{ url_for('contact') }}">Contact</a>
+    {% if current_user.is_authenticated %}
+      <a href="{{ url_for('dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('logout') }}">Logout</a>
+    {% else %}
+      <a href="{{ url_for('login') }}">Login</a>
+      <a href="{{ url_for('register') }}">Înregistrare</a>
+    {% endif %}
+  </nav>
+</header>
+
+<main>
+  <div class="title">🌿 Bine ai venit la Lichenary</div>
+  <div class="subtitle">
+    Natura vorbește. Tu o asculți. Noi o înțelegem.
+  </div>
+
+  <div class="btn-group">
+    <a href="{{ url_for('despre') }}" class="btn">Despre proiect</a>
+    <a href="{{ url_for('participa') }}" class="btn">Cum participi</a>
+    <a href="{{ url_for('galerie') }}" class="btn">Galerie & Hartă</a>
+  </div>
+
+  <div class="section">
+    <h3>🌍 Ce este Lichenary?</h3>
+    <p>
+      Lichenary este un proiect de știință-cetățean și o comunitate de tineri, elevi și curioși
+      care monitorizează calitatea aerului… fără laboratoare, fără doctorate — doar cu atenție,
+      curiozitate și o lupă.
+    </p>
+    <p>
+      Observăm specii de licheni din natură și le transformăm în date care conturează o hartă vie
+      a sănătății aerului. Ecologie, educație și activism — toate într-un singur gest: observarea.
+    </p>
+  </div>
+
+  <div class="section">
+    <h3>👣 De ce facem asta?</h3>
+    <p>Pentru că aerul respirat ne modelează sănătatea, sănătatea comunității și viitorul nostru.</p>
+    <p>Lichenii ne oferă o punte către invizibil: ei simt schimbările aerului înaintea noastră și ne vorbesc prin dispariție.</p>
+    <p><strong>Prin Lichenary:</strong></p>
+    <ul>
+      <li>Deschidem ochii tinerilor spre știința din jur</li>
+      <li>Construim o rețea globală de voluntari pentru cartarea aerului</li>
+      <li>Reunim comunități în jurul protecției mediului</li>
+      <li>Ne implicăm activ — nu doar observăm</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>💫 Viziunea noastră</h3>
+    <p>
+      O lume în care oricine poate deveni cercetător, în care natura devine partener de dialog,
+      și unde aerul nu mai este un necunoscut.
+    </p>
+    <p>Schimbarea începe cu o fotografie. Cu o simplă observație. Cu tine.</p>
+  </div>
+</main>
+
+<footer>© 2025 Lichenary • Toate drepturile rezervate</footer>
+
+<script>
+  const canvas = document.getElementById('cloud-canvas'),
+        ctx = canvas.getContext('2d');
+  let w,h;
+  function resize(){ w=innerWidth;h=innerHeight;canvas.width=w;canvas.height=h; }
+  window.addEventListener('resize', resize);
+  resize();
+
+  class Cloud {
+    constructor(x,y,s,c,spd){Object.assign(this,{x,y,s,c,spd});}
+    draw(ctx){
+      const g = ctx.createRadialGradient(this.x,this.y,this.s*0.3,this.x,this.y,this.s);
+      g.addColorStop(0,this.c); g.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=g; ctx.beginPath(); ctx.arc(this.x,this.y,this.s,0,2*Math.PI); ctx.fill();
+    }
+    update(){ this.x+=this.spd; if(this.x-this.s>w){this.x=-this.s; this.y=Math.random()*h*0.8+h*0.1;} }
+  }
+  const clouds = [];
+  ['rgba(180,220,180,0.3)','rgba(150,190,150,0.25)','rgba(120,160,120,0.2)']
+    .forEach(c=>{ for(let i=0;i<15;i++) clouds.push(new Cloud(Math.random()*w,Math.random()*h,60+Math.random()*50,c,0.2+Math.random()*0.2)); });
+  function animate(){ ctx.clearRect(0,0,w,h); clouds.forEach(c=>{c.draw(ctx);c.update();}); requestAnimationFrame(animate); }
+  animate();
+
+  const nav = document.getElementById('nav');
+</script>
+
+</body>
+</html>

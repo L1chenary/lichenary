@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact – Lichenary</title>
+  <style>
+    html, body {
+      margin: 0; padding: 0;
+      height: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #1f2f1f;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    #cloud-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    header {
+      background-color: rgba(17, 61, 60, 0.85);
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+      position: relative;
+    }
+
+    .logo {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+    }
+
+    .menu-toggle {
+      display: none;
+      font-size: 1.8em;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+
+    nav.main-nav {
+      display: flex;
+      gap: 10px;
+    }
+
+    nav.main-nav a {
+      color: white;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+    }
+
+    nav.main-nav a:hover {
+      background-color: #1d5957;
+    }
+
+    @media (max-width: 768px) {
+      .menu-toggle { display: block; }
+      nav.main-nav {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background-color: rgba(17, 61, 60, 0.95);
+        padding: 10px 0;
+        margin-top: 10px;
+      }
+      nav.main-nav.show { display: flex; }
+      nav.main-nav a {
+        padding: 10px;
+        width: 100%;
+        text-align: center;
+        border-top: 1px solid rgba(255,255,255,0.1);
+      }
+    }
+
+    main {
+      position: relative;
+      z-index: 10;
+      max-width: 800px;
+      margin: 60px auto 30px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.2em;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1.1em;
+      margin-bottom: 25px;
+      line-height: 1.6;
+    }
+
+    form {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 25px;
+      border-radius: 10px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 0 12px rgba(0,0,0,0.25);
+    }
+
+    form input, form textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1em;
+    }
+
+    form button {
+      background-color: #1d5957;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 6px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+
+    form button:hover {
+      background-color: #218b87;
+    }
+
+    .contact-info {
+      margin-top: 40px;
+      font-size: 0.95em;
+      line-height: 1.8;
+    }
+
+    footer {
+      background-color: rgba(17, 61, 60, 0.85);
+      color: white;
+      text-align: center;
+      padding: 15px;
+      position: relative;
+      z-index: 10;
+    }
+
+  </style>
+</head>
+<body>
+
+<canvas id="cloud-canvas"></canvas>
+
+<header>
+  <div class="logo" onclick="window.location='{{ url_for('home') }}'">Lichenary</div>
+  <button class="menu-toggle" onclick="document.querySelector('nav.main-nav').classList.toggle('show')">☰</button>
+  <nav class="main-nav">
+    <a href="{{ url_for('home') }}">Acasă</a>
+    <a href="{{ url_for('despre') }}">Despre</a>
+    <a href="{{ url_for('participa') }}">Cum Participi</a>
+    <a href="{{ url_for('galerie') }}">Galerie</a>
+    <a href="{{ url_for('harta') }}">Hartă</a>
+    <a href="{{ url_for('contact') }}">Contact</a>
+    {% if current_user.is_authenticated %}
+      <a href="{{ url_for('dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('logout') }}">Logout</a>
+    {% else %}
+      <a href="{{ url_for('login') }}">Login</a>
+      <a href="{{ url_for('register') }}">Înregistrare</a>
+    {% endif %}
+  </nav>
+</header>
+
+<main>
+  <h1>📬 Contactează-ne</h1>
+  <p>Ai întrebări? Sugestii? Vrei să colaborezi cu noi? Scrie-ne!</p>
+
+  <form method="post" action="{{ url_for('contact') }}">
+    <input type="text" name="nume" placeholder="Numele tău" required />
+    <input type="email" name="email" placeholder="Emailul tău" required />
+    <textarea name="mesaj" rows="5" placeholder="Mesajul tău..." required></textarea>
+    <button type="submit">Trimite mesajul</button>
+  </form>
+
+  <div class="contact-info">
+    <p>📱 Instagram: <a href="https://instagram.com/lichenary.ro" target="_blank" style="color:#9ff;">@lichenary.ro</a></p>
+  </div>
+</main>
+
+<footer>
+  © 2025 Lichenary • Toate drepturile rezervate
+</footer>
+
+<script>
+  const canvas = document.getElementById('cloud-canvas');
+  const ctx = canvas.getContext('2d');
+  let width, height;
+
+  function resize() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+
+  class Cloud {
+    constructor(x, y, size, color, speed) {
+      this.x = x;
+      this.y = y;
+      this.size = size;
+      this.color = color;
+      this.speed = speed;
+    }
+    draw(ctx) {
+      let gradient = ctx.createRadialGradient(this.x, this.y, this.size * 0.3, this.x, this.y, this.size);
+      gradient.addColorStop(0, this.color);
+      gradient.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    update() {
+      this.x += this.speed;
+      if (this.x - this.size > width) {
+        this.x = -this.size;
+        this.y = Math.random() * height * 0.8 + height * 0.1;
+      }
+    }
+  }
+
+  const clouds = [];
+  const colors = ['rgba(180,220,180,0.3)', 'rgba(150,190,150,0.25)', 'rgba(120,160,120,0.2)'];
+
+  colors.forEach(color => {
+    for (let i = 0; i < 8; i++) {
+      clouds.push(new Cloud(Math.random() * width, Math.random() * height, 60 + Math.random() * 50, color, 0.15 + Math.random() * 0.2));
+    }
+  });
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    clouds.forEach(cloud => {
+      cloud.draw(ctx);
+      cloud.update();
+    });
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+</script>
+
+</body>
+</html>
