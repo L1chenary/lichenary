@@ -189,13 +189,22 @@
     z-index: 10;
   }
   nav.bottom-nav a {
-    color: #1d5957;
     font-weight: bold;
   }
-  nav.bottom-nav a:hover {
-    text-decoration: underline;
+  /* Stil buton pentru link-ul "Autentifică-te aici" */
+  nav.bottom-nav a.button-style {
+    display: inline-block;
+    background: #1d5957;
+    color: white !important;
+    padding: 0.8rem 1.5rem;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background 0.3s ease;
   }
-
+  nav.bottom-nav a.button-style:hover {
+    background: #14614d;
+    color: white !important;
+  }
 </style>
 </head>
 <body>
@@ -249,7 +258,7 @@
   </form>
 
   <nav class="bottom-nav">
-    Ai deja cont? <a href="{{ url_for('login') }}">Autentifică-te aici</a>.
+    Ai deja cont? <a href="{{ url_for('login') }}" class="button-style">Autentifică-te aici</a>.
   </nav>
 </main>
 

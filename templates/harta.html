@@ -229,18 +229,30 @@
     });
 
   const legend = L.control({ position: "bottomright" });
-  legend.onAdd = function () {
-    const div = L.DomUtil.create("div", "legend");
-    const grades = [1, 3, 5, 7, 10];
-    let html = "<strong>Calitatea aerului</strong><br>";
-    grades.forEach(level => {
-      const color = getColor(level);
-      html += `<i style="background:${color}"></i> Nivel ${level}<br>`;
-    });
-    div.innerHTML = html;
-    return div;
-  };
-  legend.addTo(map);
+
+legend.onAdd = function () {
+  const div = L.DomUtil.create("div", "legend");
+
+  const levels = [
+    { value: 1, label: "Aer foarte curat" },
+    { value: 3, label: "Aer curat" },
+    { value: 5, label: "Aer moderat" },
+    { value: 7, label: "Aer poluat" },
+    { value: 10, label: "Aer foarte poluat" }
+  ];
+
+  let html = "<strong>Calitatea aerului</strong><br>";
+  levels.forEach(level => {
+    const color = getColor(level.value); // Această funcție trebuie definită de tine
+    html += `<i style="background:${color}"></i> ${level.label}<br>`;
+  });
+
+  div.innerHTML = html;
+  return div;
+};
+
+legend.addTo(map);
+
 </script>
 
 <script>
@@ -309,4 +321,3 @@
 
 </body>
 </html>
-
