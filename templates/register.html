@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Înregistrare - Licheni</title>
+<title>Registration - Lichens</title>
 
-<!-- Leaflet CSS (pentru consistență, optional) -->
+<!-- Leaflet CSS (for consistency, optional) -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
 <style>
-  /* Reset și font */
+  /* Reset and font */
   html, body {
     margin: 0; padding: 0; height: 100%;
     font-family: Arial, sans-serif;
@@ -19,7 +19,7 @@
     color: white;
   }
 
-  /* Canvas norisori */
+  /* Clouds canvas */
   #cloud-canvas {
     position: fixed;
     top: 0; left: 0;
@@ -191,7 +191,7 @@
   nav.bottom-nav a {
     font-weight: bold;
   }
-  /* Stil buton pentru link-ul "Autentifică-te aici" */
+  /* Button style for "Log in here" link */
   nav.bottom-nav a.button-style {
     display: inline-block;
     background: #1d5957;
@@ -215,11 +215,11 @@
   <div class="logo" onclick="window.location='/'">Lichenary</div>
   <button class="menu-toggle" onclick="document.querySelector('nav.main-nav').classList.toggle('show')">☰</button>
   <nav class="main-nav">
-    <a href="{{ url_for('home') }}">Acasă</a>
-    <a href="{{ url_for('despre') }}">Despre</a>
-    <a href="{{ url_for('participa') }}">Cum Participi</a>
-    <a href="{{ url_for('galerie') }}">Galerie</a>
-    <a href="{{ url_for('harta') }}">Hartă</a>
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('despre') }}">About</a>
+    <a href="{{ url_for('participa') }}">How to Participate</a>
+    <a href="{{ url_for('galerie') }}">Gallery</a>
+    <a href="{{ url_for('harta') }}">Map</a>
     <a href="{{ url_for('contact') }}">Contact</a>
     {% if current_user.is_authenticated %}
       <a href="{{ url_for('dashboard') }}">Dashboard</a>
@@ -231,7 +231,7 @@
 </header>
 
 <main>
-  <h2>Înregistrare Voluntar</h2>
+  <h2>Volunteer Registration</h2>
 
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
@@ -242,27 +242,27 @@
   {% endwith %}
   
   <form method="POST" action="{{ url_for('register') }}">
-    <label for="username">Nume utilizator</label>
+    <label for="username">Username</label>
     <input type="text" id="username" name="username" required autocomplete="username" />
 
     <label for="email">Email</label>
     <input type="email" id="email" name="email" required autocomplete="email" />
 
-    <label for="password">Parolă</label>
+    <label for="password">Password</label>
     <input type="password" id="password" name="password" required autocomplete="new-password" />
 
-    <label for="confirm_password">Confirmă parola</label>
+    <label for="confirm_password">Confirm Password</label>
     <input type="password" id="confirm_password" name="confirm_password" required autocomplete="new-password" />
 
-    <button type="submit">Înregistrează-te</button>
+    <button type="submit">Register</button>
   </form>
 
   <nav class="bottom-nav">
-    Ai deja cont? <a href="{{ url_for('login') }}" class="button-style">Autentifică-te aici</a>.
+    Already have an account? <a href="{{ url_for('login') }}" class="button-style">Log in here</a>.
   </nav>
 </main>
 
-<!-- Norisori animati -->
+<!-- Animated clouds -->
 <script>
   const canvas = document.getElementById('cloud-canvas');
   const ctx = canvas.getContext('2d');

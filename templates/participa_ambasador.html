@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>🌍 Devino Ambasador – Lichenary</title>
+  <title>🌍 Become an Ambassador – Lichenary</title>
   <style>
     html, body {
       margin: 0; padding: 0;
@@ -158,75 +158,75 @@
   <div class="logo" onclick="window.location='/'">Lichenary</div>
   <button class="menu-toggle" onclick="document.querySelector('nav.main-nav').classList.toggle('show')">☰</button>
   <nav class="main-nav">
-    <a href="{{ url_for('home') }}">Acasă</a>
-    <a href="{{ url_for('despre') }}">Despre</a>
-    <a href="{{ url_for('participa') }}">Cum Participi</a>
-    <a href="{{ url_for('galerie') }}">Galerie</a>
-    <a href="{{ url_for('harta') }}">Hartă</a>
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('despre') }}">About</a>
+    <a href="{{ url_for('participa') }}">How to Participate</a>
+    <a href="{{ url_for('galerie') }}">Gallery</a>
+    <a href="{{ url_for('harta') }}">Map</a>
     <a href="{{ url_for('contact') }}">Contact</a>
     {% if current_user.is_authenticated %}
       <a href="{{ url_for('dashboard') }}">Dashboard</a>
       <a href="{{ url_for('logout') }}">Logout</a>
     {% else %}
       <a href="{{ url_for('login') }}">Login</a>
-      <a href="{{ url_for('register') }}">Înregistrare</a>
+      <a href="{{ url_for('register') }}">Register</a>
     {% endif %}
   </nav>
 </header>
 
 <main>
   <div class="section">
-    <h2>🌍 Devino Ambasador</h2>
+    <h2>🌍 Become an Ambassador</h2>
 
-    <a href="{{ url_for('login') }}" class="btn-login">Intră în cont / Login</a>
+    <a href="{{ url_for('login') }}" class="btn-login">Log In / Sign In</a>
 
-    <p>Vrei să aduci Lichenary în țara ta?<br />
-    Atunci devino unul dintre primii ambasadori oficiali Lichenary.</p>
+    <p>Do you want to bring Lichenary to your country?<br />
+    Then become one of the first official Lichenary ambassadors.</p>
 
-    <p>Ambasadorii sunt extinderile noastre în lume — lideri de echipă, voci locale, catalizatori ai schimbării. Dacă ești motivat să coordonezi, să inspiri și să organizezi oameni, acesta e rolul pentru tine.</p>
+    <p>Ambassadors are our extensions worldwide — team leaders, local voices, catalysts for change. If you are motivated to coordinate, inspire, and organize people, this role is for you.</p>
 
-    <h3>👑 Ce face un ambasador?</h3>
+    <h3>👑 What does an ambassador do?</h3>
     <ul>
-      <li>Înființează o filială locală Lichenary în țara sau regiunea sa</li>
-      <li>Traduce materialele și adaptează ghidurile la realitățile locale</li>
-      <li>Coordonează activitățile de voluntariat și cartografiere din zona sa</li>
-      <li>Recrutează voluntari, organizează sesiuni de formare și evenimente</li>
-      <li>Menține legătura directă cu echipa centrală Lichenary</li>
-      <li>Contribuie la extinderea impactului ecologic și educațional al proiectului</li>
+      <li>Establishes a local Lichenary branch in their country or region</li>
+      <li>Translates materials and adapts guides to local realities</li>
+      <li>Coordinates volunteering and mapping activities in their area</li>
+      <li>Recruits volunteers, organizes training sessions and events</li>
+      <li>Maintains direct contact with the central Lichenary team</li>
+      <li>Contributes to expanding the ecological and educational impact of the project</li>
     </ul>
 
-    <h3>✅ Cine poate deveni ambasador?</h3>
+    <h3>✅ Who can become an ambassador?</h3>
     <ul>
-      <li>Oricine are 14+ ani</li>
-      <li>Este pasionat de mediu, educație și știință</li>
-      <li>Are abilități de organizare, comunicare și inițiativă</li>
-      <li>Are cunoștințe de limba engleză</li>
-      <li>Poate lucra online și are acces regulat la internet</li>
+      <li>Anyone aged 14 or older</li>
+      <li>Passionate about environment, education, and science</li>
+      <li>Has organizational, communication, and initiative skills</li>
+      <li>Knows English</li>
+      <li>Can work online and has regular internet access</li>
     </ul>
 
-    <h3>🌱 Ce vei primi?</h3>
+    <h3>🌱 What will you receive?</h3>
     <ul>
-      <li>Recunoaștere oficială din partea echipei Lichenary</li>
-      <li>Acces la un Ambassador Toolkit (ghid de organizare, template-uri, suport media)</li>
-      <li>Suport continuu din partea echipei centrale</li>
-      <li>O rețea internațională de ambasadori tineri ca tine</li>
-      <li>Șansa de a lansa schimbarea reală în comunitatea ta</li>
-      <li>Diplome, recomandări și oportunități pentru proiecte comune</li>
+      <li>Official recognition from the Lichenary team</li>
+      <li>Access to an Ambassador Toolkit (organization guides, templates, media support)</li>
+      <li>Ongoing support from the central team</li>
+      <li>An international network of young ambassadors like you</li>
+      <li>The chance to spark real change in your community</li>
+      <li>Certificates, recommendations, and opportunities for joint projects</li>
     </ul>
 
-    <h3>📩 Cum aplici?</h3>
-    <p>Trimite-ne un mesaj pe pagina noastră de Instagram <strong>@lichenary.ro</strong>, povestește-ne despre tine și de ce vrei să reprezinți Lichenary în țara ta.<br />
-    Noi te vom ghida pas cu pas în a-ți construi propria filială.</p>
+    <h3>📩 How to apply?</h3>
+    <p>Send us a message on our Instagram page <strong>@lichenary.ro</strong>, tell us about yourself and why you want to represent Lichenary in your country.<br />
+    We will guide you step by step to build your own chapter.</p>
 
     <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.2); margin: 30px 0;">
 
-    <p><strong>💬 Nu trebuie să schimbi lumea de unul singur.<br />
-    Dar poți începe cu orașul tău.</strong></p>
+    <p><strong>💬 You don't have to change the world alone.<br />
+    But you can start with your city.</strong></p>
   </div>
 </main>
 
 <footer>
-  © 2025 Lichenary • Toate drepturile rezervate
+  © 2025 Lichenary • All rights reserved
 </footer>
 
 <script>

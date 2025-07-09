@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Despre – Lichenary</title>
+<title>About – Lichenary</title>
 <style>
   html, body { margin:0; padding:0; height:100%; font-family:Arial, sans-serif; background:#1f2f1f; color:white; overflow-x:hidden; }
   #cloud-canvas { position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:0; pointer-events:none; }
@@ -13,6 +13,7 @@
   nav.main-nav { display:flex; gap:10px; }
   nav.main-nav a { color:white; text-decoration:none; padding:6px 10px; border-radius:4px; }
   nav.main-nav a:hover { background:#1d5957; }
+
   @media(max-width:768px) {
     .menu-toggle { display:block; }
     nav.main-nav { display:none; flex-direction:column; width:100%; background:rgba(17,61,60,0.95); padding:10px 0; margin-top:10px; }
@@ -35,18 +36,18 @@
   <div class="logo" onclick="window.location='/'">Lichenary</div>
   <button class="menu-toggle" onclick="document.querySelector('nav').classList.toggle('show')">☰</button>
   <nav class="main-nav">
-    <a href="{{ url_for('home') }}">Acasă</a>
-    <a href="{{ url_for('despre') }}">Despre</a>
-    <a href="{{ url_for('participa') }}">Cum Participi</a>
-    <a href="{{ url_for('galerie') }}">Galerie</a>
-    <a href="{{ url_for('harta') }}">Hartă</a>
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('despre') }}">About</a>
+    <a href="{{ url_for('participa') }}">How to Participate</a>
+    <a href="{{ url_for('galerie') }}">Gallery</a>
+    <a href="{{ url_for('harta') }}">Map</a>
     <a href="{{ url_for('contact') }}">Contact</a>
     {% if current_user.is_authenticated %}
       <a href="{{ url_for('dashboard') }}">Dashboard</a>
       <a href="{{ url_for('logout') }}">Logout</a>
     {% else %}
       <a href="{{ url_for('login') }}">Login</a>
-      <a href="{{ url_for('register') }}">Înregistrare</a>
+      <a href="{{ url_for('register') }}">Register</a>
     {% endif %}
   </nav>
 </header>
@@ -55,67 +56,87 @@
   <div class="cards">
     <div class="card">
       <a href="{{ url_for('despre_proiect_si_rol') }}">
-        <h3>Ce este proiectul</h3>
-        <p>O scurtă descriere a proiectului și a motivului pentru care există acest demers...</p>
+        <h3>What the Project Is About</h3>
+        <p>A brief overview of the project and the reason behind this initiative...</p>
       </a>
     </div>
     <div class="card">
       <a href="{{ url_for('despre_pol_atmosferica') }}">
-        <h3>Ce este poluarea atmosferică</h3>
-        <p>Explică ce înseamnă poluarea atmosferică, cauze, efecte...</p>
+        <h3>What Is Air Pollution?</h3>
+        <p>Explains what air pollution means, its causes, effects...</p>
       </a>
     </div>
     <div class="card">
       <a href="{{ url_for('despre_licheni') }}">
-        <h3>Lichenii – ce sunt și cum îi folosim</h3>
-        <p>Descriere specii, rolul lor ca bioindicatoare etc...</p>
+        <h3>Lichens – What They Are and How We Use Them</h3>
+        <p>Description of species, their role as bioindicators, etc...</p>
       </a>
     </div>
     <div class="card">
       <a href="{{ url_for('despre_echipa') }}">
-        <h3>Echipa</h3>
-        <p>Prezentare membri echipă, roluri, competențe...</p>
+        <h3>The Team</h3>
+        <p>Introduction of team members, roles, skills...</p>
       </a>
     </div>
     <div class="card">
       <a href="{{ url_for('despre_timeline') }}">
         <h3>Timeline</h3>
-        <p>Etapele proiectului, calendar activități...</p>
+        <p>Project stages, activity calendar...</p>
       </a>
     </div>
     <div class="card">
       <a href="{{ url_for('despre_resurse') }}">
-        <h3>Resurse și materiale necesare</h3>
-        <p>Ce instrumente, echipamente, ghiduri folosim în teren...</p>
+        <h3>Resources and Materials Needed</h3>
+        <p>Tools, equipment, guides used in the field...</p>
       </a>
     </div>
     <div class="card">
       <a href="{{ url_for('despre_parteneri') }}">
-        <h3>Parteneri și sponsori</h3>
-        <p>Lista organizațiilor implicate, sprijin financiar etc...</p>
+        <h3>Partners and Sponsors</h3>
+        <p>List of involved organizations, financial support, etc...</p>
       </a>
     </div>
   </div>
 </main>
 
-<footer>© 2025 Lichenary • Toate drepturile rezervate</footer>
+<footer>© 2025 Lichenary • All rights reserved</footer>
 
 <script>
   const c = document.getElementById('cloud-canvas'), ctx = c.getContext('2d');
   let w, h;
-  function rez(){ w=innerWidth; h=innerHeight; c.width=w; c.height=h; }
-  addEventListener('resize',rez); rez();
-  class Cloud{constructor(x,y,s,col,spd){Object.assign(this,{x,y,s, col,spd})}
-    draw(ctx){ const g=ctx.createRadialGradient(this.x,this.y,this.s*0.3,this.x,this.y,this.s);
-      g.addColorStop(0,this.col); g.addColorStop(1,'rgba(0,0,0,0)');
-      ctx.fillStyle=g; ctx.beginPath(); ctx.arc(this.x,this.y,this.s,0,2*Math.PI);ctx.fill();}
-    update(){ this.x+=this.spd; if(this.x-this.s>w){this.x=-this.s; this.y=Math.random()*h*0.8+h*0.1;} }
+  function resizeCanvas(){ w=innerWidth; h=innerHeight; c.width=w; c.height=h; }
+  addEventListener('resize',resizeCanvas); resizeCanvas();
+  class Cloud{
+    constructor(x,y,s,col,spd){ Object.assign(this,{x,y,s,col,spd}); }
+    draw(ctx){
+      const g = ctx.createRadialGradient(this.x,this.y,this.s*0.3,this.x,this.y,this.s);
+      g.addColorStop(0,this.col);
+      g.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(this.x,this.y,this.s,0,2*Math.PI);
+      ctx.fill();
+    }
+    update(){
+      this.x += this.spd;
+      if(this.x - this.s > w){
+        this.x = -this.s;
+        this.y = Math.random() * h * 0.8 + h * 0.1;
+      }
+    }
   }
-  const clouds=[]; ['rgba(180,220,180,0.3)','rgba(150,190,150,0.25)','rgba(120,160,120,0.2)'].forEach((col,i)=>{
-    for(let j=0;j<7;j++)clouds.push(new Cloud(Math.random()*w, Math.random()*h*0.8+h*0.1, 60+Math.random()*50, col,0.2+Math.random()*0.2));
+  const clouds = [];
+  ['rgba(180,220,180,0.3)','rgba(150,190,150,0.25)','rgba(120,160,120,0.2)'].forEach((col)=>{
+    for(let j=0; j<7; j++){
+      clouds.push(new Cloud(Math.random()*w, Math.random()*h*0.8 + h*0.1, 60 + Math.random()*50, col, 0.2 + Math.random()*0.2));
+    }
   });
-  function anim(){ctx.clearRect(0,0,w,h); clouds.forEach(c=>{c.draw(ctx);c.update()}); requestAnimationFrame(anim);}
-  anim();
+  function animate(){
+    ctx.clearRect(0,0,w,h);
+    clouds.forEach(c => { c.draw(ctx); c.update(); });
+    requestAnimationFrame(animate);
+  }
+  animate();
 </script>
 </body>
 </html>

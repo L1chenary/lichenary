@@ -1,0 +1,13 @@
+<form action="" method="get" id="language-form" style="display: inline-block;">
+  <select name="lang" onchange="changeLanguage(this.value)">
+    <option value="en" {% if session.get('lang', 'en') == 'en' %}selected{% endif %}>English</option>
+    <option value="ro" {% if session.get('lang') == 'ro' %}selected{% endif %}>Română</option>
+    <option value="es" {% if session.get('lang') == 'es' %}selected{% endif %}>Español</option>
+  </select>
+</form>
+
+<script>
+  function changeLanguage(lang) {
+    window.location.href = '/change_lang/' + lang;
+  }
+</script>

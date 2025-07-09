@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ce este proiectul – Lichenary</title>
+  <title>About the Project – Lichenary</title>
   <style>
     html, body {
       margin: 0; padding: 0;
@@ -136,61 +136,60 @@
   <div class="logo" onclick="window.location='/'">Lichenary</div>
   <button class="menu-toggle" onclick="document.querySelector('nav.main-nav').classList.toggle('show')">☰</button>
   <nav class="main-nav">
-  <a href="{{ url_for('home') }}">Acasă</a>
-  <a href="{{ url_for('despre') }}">Despre</a>
-  <a href="{{ url_for('participa') }}">Cum Participi</a>
-  <a href="{{ url_for('galerie') }}">Galerie</a>
-  <a href="{{ url_for('harta') }}">Hartă</a>
-  <a href="{{ url_for('contact') }}">Contact</a>
-  {% if current_user.is_authenticated %}
-    <a href="{{ url_for('dashboard') }}">Dashboard</a>
-    <a href="{{ url_for('logout') }}">Logout</a>
-  {% else %}
-    <a href="{{ url_for('login') }}">Login</a>
-    <a href="{{ url_for('register') }}">Înregistrare</a>
-  {% endif %}
-</nav>
-
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('despre') }}">About</a>
+    <a href="{{ url_for('participa') }}">How to Participate</a>
+    <a href="{{ url_for('galerie') }}">Gallery</a>
+    <a href="{{ url_for('harta') }}">Map</a>
+    <a href="{{ url_for('contact') }}">Contact</a>
+    {% if current_user.is_authenticated %}
+      <a href="{{ url_for('dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('logout') }}">Logout</a>
+    {% else %}
+      <a href="{{ url_for('login') }}">Login</a>
+      <a href="{{ url_for('register') }}">Register</a>
+    {% endif %}
+  </nav>
 </header>
 
 <main>
   <div class="section">
-    <h2>📘 Despre proiect</h2>
-    <p><strong>Lichenary</strong> este un proiect educațional, științific și ecologic, care își propune să implice tinerii într-o explorare activă a mediului. Ideea centrală este simplă și eficientă: folosirea lichenilor ca indicatori naturali ai calității aerului.</p>
+    <h2>📘 About the Project</h2>
+    <p><strong>Lichenary</strong> is an educational, scientific, and ecological initiative aimed at engaging young people in active exploration of the environment. The core idea is simple yet powerful: using lichens as natural indicators of air quality.</p>
   </div>
 
   <div class="section">
-    <h3>🎯 Rolul proiectului</h3>
-    <p>Lichenary este o formă de <em>știință cetățenească</em>, în care datele nu sunt colectate în laboratoare, ci de către comunitate – în special de tineri, elevi, studenți sau voluntari dornici să înțeleagă și să protejeze mediul înconjurător.</p>
-    <p>Proiectul transformă orașul într-un laborator viu, iar participanții devin detectivi ai naturii. Prin observații, învățăm să citim mediul, să îl înțelegem și să transformăm experiența în informație utilă pentru toți.</p>
+    <h3>🎯 Project’s Purpose</h3>
+    <p>Lichenary is a form of <em>citizen science</em>, where data isn’t collected in labs but by the community — especially young people, students, and volunteers eager to understand and protect their surroundings.</p>
+    <p>The project transforms the city into a living laboratory, and participants become nature detectives. Through observations, we learn to read the environment, understand it, and turn experience into valuable information for everyone.</p>
   </div>
 
   <div class="section">
-    <h3>🧭 Obiectivele proiectului</h3>
-    <strong>Faza 1: Observare și cartografiere</strong>
+    <h3>🧭 Project Goals</h3>
+    <strong>Phase 1: Observation and Mapping</strong>
     <ul>
-      <li>📍 Identificăm și documentăm specii de licheni din diferite zone.</li>
-      <li>📸 Realizăm fotografii și descrieri, toate stocate într-o bază de date comună.</li>
-      <li>🗺️ Construim o hartă colaborativă a calității aerului pe baza prezenței lichenilor.</li>
+      <li>📍 Identify and document lichen species across different areas.</li>
+      <li>📸 Take photos and detailed descriptions, all stored in a shared database.</li>
+      <li>🗺️ Build a collaborative air quality map based on lichen presence.</li>
     </ul>
-    <strong>Faza 2: Remediere ecologică</strong>
+    <strong>Phase 2: Ecological Remediation</strong>
     <ul>
-      <li>📊 Analizăm datele pentru a identifica zonele afectate de poluare.</li>
-      <li>🧠 Propunem soluții simple și creative pentru reducerea poluării.</li>
-      <li>🌱 Implementăm aceste soluții împreună cu voluntari locali.</li>
+      <li>📊 Analyze data to pinpoint pollution-affected areas.</li>
+      <li>🧠 Propose simple, creative solutions to reduce pollution.</li>
+      <li>🌱 Implement these solutions together with local volunteers.</li>
     </ul>
   </div>
 
   <div class="section">
-    <h3>🔍 De ce Lichenary?</h3>
-    <p>Pentru că nu ai nevoie de laboratoare scumpe sau de diplome ca să schimbi lumea.</p>
-    <p>Ai nevoie doar de ochi curioși, atenție la detalii și dorința sinceră de a face o diferență.</p>
-    <p>Lichenary este mai mult decât un proiect – este o mișcare care oferă tinerilor voce și un scop. Fiecare plimbare pe stradă devine o misiune științifică pentru un aer mai curat.</p>
+    <h3>🔍 Why Lichenary?</h3>
+    <p>Because you don’t need expensive labs or degrees to change the world.</p>
+    <p>All you need is curious eyes, attention to detail, and a genuine desire to make a difference.</p>
+    <p>Lichenary is more than a project — it’s a movement giving young people a voice and a purpose. Every walk down the street becomes a scientific mission for cleaner air.</p>
   </div>
 </main>
 
 <footer>
-  © 2025 Lichenary • Toate drepturile rezervate
+  © 2025 Lichenary • All rights reserved
 </footer>
 
 <script>

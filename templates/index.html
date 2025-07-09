@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Bine ai venit – Lichenary</title>
+  <title>Welcome – Lichenary</title>
   <style>
     html, body {
       margin: 0;
@@ -37,9 +37,14 @@
     .menu-toggle {
       display:none;font-size:1.8em;background:none;border:none;color:white;cursor:pointer;
     }
-    nav.main-nav { display:flex; gap:15px; }
+    nav.main-nav { display:flex; gap:15px; align-items:center; }
     nav.main-nav a {
-      color:white;text-decoration:none;padding:8px 12px;border-radius:4px;
+      color:white;
+      text-decoration:none;
+      padding:8px 12px;
+      border-radius:4px;
+      transition: background 0.2s;
+      white-space: nowrap;
     }
     nav.main-nav a:hover { background:#14614d; }
     @media(max-width:768px) {
@@ -93,9 +98,10 @@
       position:relative;
       z-index:10;
     }
+
   </style>
 </head>
-<body>
+<body> 
 
 <canvas id="cloud-canvas"></canvas>
 
@@ -103,69 +109,67 @@
   <div class="logo" onclick="location='{{ url_for('home') }}'">Lichenary</div>
   <button class="menu-toggle" onclick="nav.classList.toggle('show')">☰</button>
   <nav class="main-nav" id="nav">
-    <a href="{{ url_for('home') }}">Acasă</a>
-    <a href="{{ url_for('despre') }}">Despre</a>
-    <a href="{{ url_for('participa') }}">Cum Participi</a>
-    <a href="{{ url_for('galerie') }}">Galerie</a>
-    <a href="{{ url_for('harta') }}">Hartă</a>
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('despre') }}">About</a>
+    <a href="{{ url_for('participa') }}">How to Participate</a>
+    <a href="{{ url_for('galerie') }}">Gallery</a>
+    <a href="{{ url_for('harta') }}">Map</a>
     <a href="{{ url_for('contact') }}">Contact</a>
     {% if current_user.is_authenticated %}
       <a href="{{ url_for('dashboard') }}">Dashboard</a>
       <a href="{{ url_for('logout') }}">Logout</a>
     {% else %}
       <a href="{{ url_for('login') }}">Login</a>
-      <a href="{{ url_for('register') }}">Înregistrare</a>
+      <a href="{{ url_for('register') }}">Register</a>
     {% endif %}
   </nav>
 </header>
 
 <main>
-  <div class="title">🌿 Bine ai venit la Lichenary</div>
+  <div class="title">🌿 Welcome to Lichenary</div>
   <div class="subtitle">
-    Natura vorbește. Tu o asculți. Noi o înțelegem.
+    Nature speaks. You listen. We understand.
   </div>
 
   <div class="btn-group">
-    <a href="{{ url_for('despre') }}" class="btn">Despre proiect</a>
-    <a href="{{ url_for('participa') }}" class="btn">Cum participi</a>
-    <a href="{{ url_for('harta') }}" class="btn">Hartă</a>
+    <a href="{{ url_for('despre') }}" class="btn">About the Project</a>
+    <a href="{{ url_for('participa') }}" class="btn">How to Participate</a>
+    <a href="{{ url_for('harta') }}" class="btn">Map</a>
   </div>
 
   <div class="section">
-    <h3>🌍 Ce este Lichenary?</h3>
+    <h3>🌍 What is Lichenary?</h3>
     <p>
-<strong>Lichenary</strong> este un proiect de știință cetățenească și o comunitate formată din tineri, elevi și pasionați de natură care monitorizează calitatea aerului — fără laboratoare, doar cu o lupă, curiozitate și atenție.
-
+      <strong>Lichenary</strong> is a citizen science project and a community of young people, students, and nature enthusiasts who monitor air quality — no labs needed, just a magnifying glass, curiosity, and attention.
     </p>
     <p>
-      Observăm specii de licheni din natură și le transformăm în date care conturează o hartă vie
-      a sănătății aerului. Ecologie, educație și activism — toate într-un singur gest: observarea.
+      By observing lichen species, we collect data that form a living map of air health. It’s ecology, education, and activism — all combined in one simple act: <strong>observation</strong>.
     </p>
   </div>
 
   <div class="section">
-    <h3>👣 De ce facem asta?</h3>
-    <p>Pentru că aerul respirat modelează sănătatea comunității și viitorul nostru.</p>
-    <p>Lichenii ne oferă o punte către invizibil: ei simt schimbările aerului înaintea noastră și ne vorbesc prin dispariție.</p>
-    <p><strong>Prin Lichenary:</strong></p>
+    <h3>👣 Why do we do this?</h3>
+    <p>Because the air we breathe shapes our community’s health and our future.</p>
+    <p>Lichens offer us a bridge to the unseen: they sense changes in the air before we do and speak to us through their disappearance.</p>
+    <p><strong>Through Lichenary, we:</strong></p>
     <ul>
-      <li>Deschidem ochii tinerilor spre știința din jur</li>
-      <li>Construim o rețea globală de voluntari pentru cartarea aerului</li>
-      <li>Reunim comunități în jurul protecției mediului</li>
+      <li>Open young people's eyes to the science around them</li>
+      <li>Build a global network of volunteers mapping the air</li>
+      <li>Unite communities around environmental protection</li>
     </ul>
   </div>
 
   <div class="section">
-    <h3>💫 Viziunea noastră</h3>
+    <h3>💫 Our Vision</h3>
     <p>
-      O lume în care oricine poate deveni cercetător, în care natura devine partener de dialog
-      și unde aerul nu mai este un necunoscut.
+      A world where anyone can become a researcher, where nature is a dialogue partner,
+      and where air is no longer a mystery.
     </p>
-    <p>Schimbarea începe cu o fotografie. Cu o simplă observație. Cu tine.</p>
+    <p>Change starts with a photo. With a simple observation. With you.</p>
   </div>
 </main>
 
-<footer>© 2025 Lichenary • Toate drepturile rezervate</footer>
+<footer>© 2025 Lichenary • All rights reserved</footer>
 
 <script>
   const canvas = document.getElementById('cloud-canvas'),

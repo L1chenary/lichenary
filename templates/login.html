@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Login - Licheni</title>
+<title>Login - Lichenary</title>
 
 <style>
   html, body {
@@ -94,7 +94,7 @@
     }
 
     body.menu-open main {
-      margin-top: 250px; /* ajustează dacă meniul este mai înalt */
+      margin-top: 250px; /* adjust if menu is taller */
       transition: margin-top 0.3s ease;
     }
 
@@ -198,31 +198,31 @@
 <header>
   <div class="logo" onclick="window.location='/'">Lichenary</div>
 
-  <div id="burger" class="burger" aria-label="Meniu">
+  <div id="burger" class="burger" aria-label="Menu">
     <div></div>
     <div></div>
     <div></div>
   </div>
 
   <nav id="nav-links">
-    <a href="{{ url_for('home') }}">Acasă</a>
-    <a href="{{ url_for('despre') }}">Despre</a>
-    <a href="{{ url_for('participa') }}">Cum Participi</a>
-    <a href="{{ url_for('galerie') }}">Galerie</a>
-    <a href="{{ url_for('harta') }}">Hartă</a>
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('despre') }}">About</a>
+    <a href="{{ url_for('participa') }}">How to Participate</a>
+    <a href="{{ url_for('galerie') }}">Gallery</a>
+    <a href="{{ url_for('harta') }}">Map</a>
     <a href="{{ url_for('contact') }}">Contact</a>
     {% if current_user.is_authenticated %}
       <a href="{{ url_for('dashboard') }}">Dashboard</a>
       <a href="{{ url_for('logout') }}">Logout</a>
     {% else %}
       <a href="{{ url_for('login') }}">Login</a>
-      <a href="{{ url_for('register') }}">Înregistrare</a>
+      <a href="{{ url_for('register') }}">Register</a>
     {% endif %}
   </nav>
 </header>
 
 <main>
-  <h1>Autentificare Voluntar</h1>
+  <h1>Volunteer Login</h1>
 
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
@@ -233,19 +233,19 @@
   {% endwith %}
 
   <form method="POST" action="{{ url_for('login') }}">
-    <label for="username">Nume utilizator</label>
+    <label for="username">Username</label>
     <input type="text" id="username" name="username" required autocomplete="username" />
 
-    <label for="password">Parolă</label>
+    <label for="password">Password</label>
     <input type="password" id="password" name="password" required autocomplete="current-password" />
 
-    <button type="submit">Autentifică-te</button>
+    <button type="submit">Log In</button>
   </form>
 
   <nav class="form-nav">
-  Nu ai cont?<a href="{{ url_for('register') }}">Înregistrează-te aici</a>.
-</nav>
-
+    Don't have an account?<a href="{{ url_for('register') }}"> Register here</a>.
+  </nav>
+</main>
 
 <script>
   // --- Burger menu toggle ---

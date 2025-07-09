@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Despre Poluarea Atmosferică – Lichenary</title>
+  <title>About Air Pollution – Lichenary</title>
   <style>
     html, body {
       margin: 0;
@@ -54,6 +54,7 @@
     nav.main-nav {
       display: flex;
       gap: 10px;
+      align-items: center;
     }
 
     nav.main-nav a {
@@ -146,99 +147,96 @@
   <div class="logo" onclick="window.location='/'">Lichenary</div>
   <button class="menu-toggle" onclick="document.querySelector('nav').classList.toggle('show')">☰</button>
   <nav class="main-nav">
-  <a href="{{ url_for('home') }}">Acasă</a>
-  <a href="{{ url_for('despre') }}">Despre</a>
-  <a href="{{ url_for('participa') }}">Cum Participi</a>
-  <a href="{{ url_for('galerie') }}">Galerie</a>
-  <a href="{{ url_for('harta') }}">Hartă</a>
-  <a href="{{ url_for('contact') }}">Contact</a>
-  {% if current_user.is_authenticated %}
-    <a href="{{ url_for('dashboard') }}">Dashboard</a>
-    <a href="{{ url_for('logout') }}">Logout</a>
-  {% else %}
-    <a href="{{ url_for('login') }}">Login</a>
-    <a href="{{ url_for('register') }}">Înregistrare</a>
-  {% endif %}
-</nav>
-
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('despre') }}">About</a>
+    <a href="{{ url_for('participa') }}">How to Participate</a>
+    <a href="{{ url_for('galerie') }}">Gallery</a>
+    <a href="{{ url_for('harta') }}">Map</a>
+    <a href="{{ url_for('contact') }}">Contact</a>
+    {% if current_user.is_authenticated %}
+      <a href="{{ url_for('dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('logout') }}">Logout</a>
+    {% else %}
+      <a href="{{ url_for('login') }}">Login</a>
+      <a href="{{ url_for('register') }}">Register</a>
+    {% endif %}
+  </nav>
 </header>
-
 <main>
   <div class="section">
-    <h2>🌫️ Ce este poluarea atmosferică?</h2>
-    <p>Poluarea atmosferică reprezintă contaminarea aerului cu substanțe dăunătoare pentru sănătatea oamenilor, a altor ființe vii și pentru echilibrul mediului natural. Deși aerul pare curat, adesea conține un amestec invizibil de particule, gaze toxice și compuși chimici care afectează direct viața pe planetă.</p>
-    <p>Nu este întotdeauna vizibilă sau ușor de perceput. Uneori vine sub forma unui smog dens, dar cel mai adesea este invizibilă – o amenințare tăcută, dar persistentă.</p>
+    <h2>🌫️ What is air pollution?</h2>
+    <p>Air pollution is the contamination of the atmosphere with substances harmful to human health, other living beings, and the natural environment. Although the air may seem clean, it often contains an invisible mix of particles, toxic gases, and chemical compounds that directly impact life on Earth.</p>
+    <p>It’s not always visible or easy to detect. Sometimes it appears as thick smog, but most of the time it’s invisible—a silent yet persistent threat.</p>
   </div>
 
   <div class="section">
-    <h2>🛑 De unde vine poluarea?</h2>
+    <h2>🛑 Where does pollution come from?</h2>
     <ul>
-      <li>Transportul rutier – dioxid de azot, monoxid de carbon și particule fine.</li>
-      <li>Industria și producția de energie – gaze și praf cu impact major asupra mediului.</li>
-      <li>Activități domestice – arderea deșeurilor, produse chimice.</li>
-      <li>Construcțiile – praf inhalabil periculos.</li>
-      <li>Surse naturale – vulcani, incendii de vegetație, praf saharian.</li>
+      <li>Road traffic – nitrogen dioxide, carbon monoxide, and fine particles.</li>
+      <li>Industry and energy production – gases and dust with a major environmental impact.</li>
+      <li>Household activities – burning waste, chemicals.</li>
+      <li>Construction – harmful inhalable dust.</li>
+      <li>Natural sources – volcanoes, wildfires, Saharan dust.</li>
     </ul>
   </div>
 
   <div class="section">
-    <h2>🔬 Ce conține aerul poluat?</h2>
+    <h2>🔬 What does polluted air contain?</h2>
     <ul>
-      <li>PM10 și PM2.5 – particule microscopice periculoase.</li>
-      <li>Dioxid de azot (NO₂) – gaz iritant.</li>
-      <li>Monoxid de carbon (CO) – gaz inodor, letal.</li>
-      <li>Dioxid de sulf (SO₂) – efecte asupra respirației și solului.</li>
-      <li>Ozon troposferic (O₃) – toxic la nivelul solului.</li>
-      <li>Compuși organici volatili (COV) – solvenți, vopsea, benzină.</li>
+      <li>PM10 and PM2.5 – dangerous microscopic particles.</li>
+      <li>Nitrogen dioxide (NO₂) – an irritating gas.</li>
+      <li>Carbon monoxide (CO) – a deadly, odorless gas.</li>
+      <li>Sulfur dioxide (SO₂) – affects breathing and soil quality.</li>
+      <li>Tropospheric ozone (O₃) – toxic at ground level.</li>
+      <li>Volatile organic compounds (VOCs) – solvents, paint, gasoline.</li>
     </ul>
   </div>
 
   <div class="section">
-    <h2>🫁 Cum ne afectează?</h2>
-    <p><strong>Efecte asupra sănătății:</strong></p>
+    <h2>🫁 How does it affect us?</h2>
+    <p><strong>Health effects:</strong></p>
     <ul>
-      <li>Agravarea afecțiunilor respiratorii</li>
-      <li>Creșterea riscului de boli cardiovasculare</li>
-      <li>Conduce la cancer pulmonar și boli neurologice</li>
-      <li>Dezvoltare afectată la copii și fetuși</li>
+      <li>Worsening respiratory conditions</li>
+      <li>Increased risk of cardiovascular diseases</li>
+      <li>Leads to lung cancer and neurological disorders</li>
+      <li>Impaired development in children and fetuses</li>
     </ul>
-    <p><strong>Efecte asupra mediului:</strong></p>
+    <p><strong>Environmental effects:</strong></p>
     <ul>
-      <li>Ploi acide, degradare a solului și apelor</li>
-      <li>Reducerea biodiversității</li>
-      <li>Contribuie la schimbările climatice</li>
+      <li>Acid rain, soil and water degradation</li>
+      <li>Loss of biodiversity</li>
+      <li>Contribution to climate change</li>
     </ul>
-    <p><strong>Efecte asupra calității vieții:</strong></p>
+    <p><strong>Impact on quality of life:</strong></p>
     <ul>
-      <li>Disconfort și vizibilitate redusă</li>
-      <li>Afectarea sănătății mintale</li>
-      <li>Scăderea speranței de viață</li>
+      <li>Discomfort and reduced visibility</li>
+      <li>Negative effects on mental health</li>
+      <li>Reduced life expectancy</li>
     </ul>
   </div>
 
   <div class="section">
-    <h2>📉 Ce spun datele?</h2>
-    <p>Milioane de decese premature sunt legate direct de poluarea aerului. În multe orașe, nivelurile de poluanți depășesc recomandările — fără ca populația să știe.</p>
+    <h2>📉 What do the data say?</h2>
+    <p>Millions of premature deaths are directly linked to air pollution. In many cities, pollutant levels exceed recommended limits — often without the public being aware.</p>
   </div>
 
   <div class="section">
-    <h2>🧭 De ce trebuie să acționăm?</h2>
-    <p>Aerul este un bun comun, esențial vieții. Conștientizarea este primul pas spre remediere. Trebuie să înțelegem, să măsurăm, apoi să acționăm.</p>
+    <h2>🧭 Why must we act?</h2>
+    <p>Air is a shared resource essential to life. Awareness is the first step towards change. We need to understand it, measure it, and then take action.</p>
   </div>
 
   <div class="section">
-    <h2>🌱 Ce face proiectul Lichenary?</h2>
-    <p>Lichenii – sensibili la poluare – pot spune o poveste tăcută despre aer. Prin cartografiere, Lichenary arată zonele afectate și implică cetățenii, în special tinerii, în știința mediului.</p>
+    <h2>🌱 What does the Lichenary project do?</h2>
+    <p>Lichens – sensitive to pollution – tell a silent story about the air. Through mapping, Lichenary reveals affected areas and engages citizens, especially young people, in environmental science.</p>
   </div>
 
   <div class="section">
-    <p><strong>Poluarea aerului este invizibilă, dar efectele ei sunt reale.</strong><br>
-    Viitorul este în mâinile celor care decid să privească mai atent cerul.</p>
+    <p><strong>Air pollution is invisible, but its effects are very real.</strong><br>
+    The future lies in the hands of those who choose to look up and pay closer attention to the sky.</p>
   </div>
 </main>
-
 <footer>
-  © 2025 Lichenary • Toate drepturile rezervate
+  © 2025 Lichenary • All rights reserved
 </footer>
 
 <script>

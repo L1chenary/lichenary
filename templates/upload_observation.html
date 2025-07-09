@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Încarcă observație licheni</title>
+  <title>Upload Lichen Observation</title>
 
   <style>
     html, body {
@@ -186,11 +186,11 @@
   <div class="logo" onclick="window.location='/'">Lichenary</div>
   <button class="menu-toggle" onclick="document.querySelector('nav').classList.toggle('show')">☰</button>
   <nav>
-    <a href="{{ url_for('home') }}">Acasă</a>
-    <a href="{{ url_for('despre') }}">Despre</a>
-    <a href="{{ url_for('participa') }}">Cum Participi</a>
-    <a href="{{ url_for('galerie') }}">Galerie</a>
-    <a href="{{ url_for('harta') }}">Hartă</a>
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('despre') }}">About</a>
+    <a href="{{ url_for('participa') }}">How to Participate</a>
+    <a href="{{ url_for('galerie') }}">Gallery</a>
+    <a href="{{ url_for('harta') }}">Map</a>
     <a href="{{ url_for('contact') }}">Contact</a>
     {% if current_user.is_authenticated %}
       <a href="{{ url_for('dashboard') }}">Dashboard</a>
@@ -202,7 +202,7 @@
 </header>
 
 <main>
-  <h2>Încarcă observație licheni</h2>
+  <h2>Upload Lichen Observation</h2>
 
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
@@ -213,33 +213,33 @@
   {% endwith %}
 
   <form method="POST" enctype="multipart/form-data">
-    <label for="photo">Poză cu lichenul:</label>
+    <label for="photo">Lichen Photo:</label>
     <input type="file" id="photo" name="photo" accept="image/*" required>
 
-    <label for="date_time">Data și ora:</label>
+    <label for="date_time">Date and Time:</label>
     <input type="datetime-local" id="date_time" name="date_time" required>
 
-    <label for="location">Locația:</label>
+    <label for="location">Location:</label>
     <input type="text" id="location" name="location" required>
 
-    <label for="latitude">Latitudine:</label>
+    <label for="latitude">Latitude:</label>
     <input type="text" id="latitude" name="latitude" required>
 
-    <label for="longitude">Longitudine:</label>
+    <label for="longitude">Longitude:</label>
     <input type="text" id="longitude" name="longitude" required>
 
-    <label for="species">Specie de lichen:</label>
-    <input type="text" id="species" name="species" placeholder="Introdu specia (ex: Xanthoria parietina)">
+    <label for="species">Lichen Species:</label>
+    <input type="text" id="species" name="species" placeholder="Enter species (e.g., Xanthoria parietina)">
 
-    <label for="pollution_level">Nivel poluare (1-10):</label>
+    <label for="pollution_level">Pollution Level (1-10):</label>
     <input type="number" id="pollution_level" name="pollution_level" min="1" max="10" placeholder="1-10">
 
-    <button type="submit">Încarcă</button>
+    <button type="submit">Upload</button>
   </form>
 </main>
 
 <footer>
-  &copy; 2025 Lichenary. Toate drepturile rezervate.
+  &copy; 2025 Lichenary. All rights reserved.
 </footer>
 
 <script>

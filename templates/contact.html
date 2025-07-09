@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -51,6 +51,7 @@
     nav.main-nav {
       display: flex;
       gap: 10px;
+      align-items: center;
     }
 
     nav.main-nav a {
@@ -63,6 +64,8 @@
     nav.main-nav a:hover {
       background-color: #1d5957;
     }
+
+    /* Removed: .lang-dropdown, .lang-btn, .lang-dropdown-content, etc. */
 
     @media (max-width: 768px) {
       .menu-toggle { display: block; }
@@ -81,6 +84,7 @@
         text-align: center;
         border-top: 1px solid rgba(255,255,255,0.1);
       }
+      /* Removed .lang-dropdown styles */
     }
 
     main {
@@ -159,31 +163,33 @@
   <div class="logo" onclick="window.location='{{ url_for('home') }}'">Lichenary</div>
   <button class="menu-toggle" onclick="document.querySelector('nav.main-nav').classList.toggle('show')">☰</button>
   <nav class="main-nav">
-    <a href="{{ url_for('home') }}">Acasă</a>
-    <a href="{{ url_for('despre') }}">Despre</a>
-    <a href="{{ url_for('participa') }}">Cum Participi</a>
-    <a href="{{ url_for('galerie') }}">Galerie</a>
-    <a href="{{ url_for('harta') }}">Hartă</a>
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('despre') }}">About</a>
+    <a href="{{ url_for('participa') }}">How to Participate</a>
+    <a href="{{ url_for('galerie') }}">Gallery</a>
+    <a href="{{ url_for('harta') }}">Map</a>
     <a href="{{ url_for('contact') }}">Contact</a>
     {% if current_user.is_authenticated %}
       <a href="{{ url_for('dashboard') }}">Dashboard</a>
       <a href="{{ url_for('logout') }}">Logout</a>
     {% else %}
       <a href="{{ url_for('login') }}">Login</a>
-      <a href="{{ url_for('register') }}">Înregistrare</a>
+      <a href="{{ url_for('register') }}">Register</a>
     {% endif %}
+    
+    <!-- Removed language dropdown menu -->
   </nav>
 </header>
 
 <main>
-  <h1>📬 Contactează-ne</h1>
-  <p>Ai întrebări? Sugestii? Vrei să colaborezi cu noi? Scrie-ne!</p>
+  <h1>📬 Contact Us</h1>
+  <p>Have questions? Suggestions? Want to collaborate with us? Write to us!</p>
 
   <form method="post" action="{{ url_for('contact') }}">
-    <input type="text" name="nume" placeholder="Numele tău" required />
-    <input type="email" name="email" placeholder="Emailul tău" required />
-    <textarea name="mesaj" rows="5" placeholder="Mesajul tău..." required></textarea>
-    <button type="submit">Trimite mesajul</button>
+    <input type="text" name="nume" placeholder="Your Name" required />
+    <input type="email" name="email" placeholder="Your Email" required />
+    <textarea name="mesaj" rows="5" placeholder="Your Message..." required></textarea>
+    <button type="submit">Send Message</button>
   </form>
 
   <div class="contact-info">
@@ -192,7 +198,7 @@
 </main>
 
 <footer>
-  © 2025 Lichenary • Toate drepturile rezervate
+  © 2025 Lichenary • All rights reserved
 </footer>
 
 <script>
@@ -255,6 +261,8 @@
   }
 
   animate();
+
+  // Removed language dropdown script
 </script>
 
 </body>

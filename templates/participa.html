@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Cum participi – Lichenary</title>
+  <title>How to Participate – Lichenary</title>
   <style>
     html, body {
       margin: 0;
@@ -149,18 +149,18 @@
   <div class="logo" onclick="window.location='/'">Lichenary</div>
   <button class="menu-toggle" onclick="document.querySelector('nav').classList.toggle('show')">☰</button>
   <nav class="main-nav">
-  <a href="{{ url_for('home') }}">Acasă</a>
-  <a href="{{ url_for('despre') }}">Despre</a>
-  <a href="{{ url_for('participa') }}">Cum Participi</a>
-  <a href="{{ url_for('galerie') }}">Galerie</a>
-  <a href="{{ url_for('harta') }}">Hartă</a>
+  <a href="{{ url_for('home') }}">Home</a>
+  <a href="{{ url_for('despre') }}">About</a>
+  <a href="{{ url_for('participa') }}">How to Participate</a>
+  <a href="{{ url_for('galerie') }}">Gallery</a>
+  <a href="{{ url_for('harta') }}">Map</a>
   <a href="{{ url_for('contact') }}">Contact</a>
   {% if current_user.is_authenticated %}
     <a href="{{ url_for('dashboard') }}">Dashboard</a>
     <a href="{{ url_for('logout') }}">Logout</a>
   {% else %}
     <a href="{{ url_for('login') }}">Login</a>
-    <a href="{{ url_for('register') }}">Înregistrare</a>
+    <a href="{{ url_for('register') }}">Register</a>
   {% endif %}
 </nav>
 
@@ -170,21 +170,21 @@
   <div class="cards">
     <div class="card">
       <a href="{{ url_for('participa_voluntariez') }}">
-        <h3>Vreau să fiu voluntar Lichenary</h3>
-        <p>Informații despre cum poți deveni voluntar, pași, responsabilități...</p>
+        <h3>I want to be a Lichenary volunteer</h3>
+        <p>Information about how you can become a volunteer, steps, responsibilities...</p>
       </a>
     </div>
     <div class="card">
       <a href="{{ url_for('participa_ambasador') }}">
-        <h3>Vreau să devin ambasador Lichenary</h3>
-        <p>Ce presupune rolul de ambasador, avantaje, ce vei face...</p>
+        <h3>I want to become a Lichenary ambassador</h3>
+        <p>What the ambassador role involves, advantages, what you will do...</p>
       </a>
     </div>
   </div>
 </main>
 
 <footer>
-  © 2025 Lichenary • Toate drepturile rezervate
+  © 2025 Lichenary • All rights reserved
 </footer>
 
 <script>
@@ -228,4 +228,3 @@
 
 </body>
 </html>
-

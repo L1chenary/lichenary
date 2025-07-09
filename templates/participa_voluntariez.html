@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>🤝 Vreau să fiu voluntar – Lichenary</title>
+  <title>🤝 I Want to Volunteer – Lichenary</title>
   <style>
     html, body {
       margin: 0; padding: 0;
@@ -129,7 +129,7 @@
       z-index: 10;
     }
 
-    /* Stil pentru butonul Login */
+    /* Style for the Login button */
     .btn-login {
       display: inline-block;
       margin: 15px 0 25px 0;
@@ -158,86 +158,85 @@
   <div class="logo" onclick="window.location='/'">Lichenary</div>
   <button class="menu-toggle" onclick="document.querySelector('nav.main-nav').classList.toggle('show')">☰</button>
   <nav class="main-nav">
-    <a href="{{ url_for('home') }}">Acasă</a>
-    <a href="{{ url_for('despre') }}">Despre</a>
-    <a href="{{ url_for('participa') }}">Cum Participi</a>
-    <a href="{{ url_for('galerie') }}">Galerie</a>
-    <a href="{{ url_for('harta') }}">Hartă</a>
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('despre') }}">About</a>
+    <a href="{{ url_for('participa') }}">How to Participate</a>
+    <a href="{{ url_for('galerie') }}">Gallery</a>
+    <a href="{{ url_for('harta') }}">Map</a>
     <a href="{{ url_for('contact') }}">Contact</a>
     {% if current_user.is_authenticated %}
       <a href="{{ url_for('dashboard') }}">Dashboard</a>
       <a href="{{ url_for('logout') }}">Logout</a>
     {% else %}
       <a href="{{ url_for('login') }}">Login</a>
-      <a href="{{ url_for('register') }}">Înregistrare</a>
+      <a href="{{ url_for('register') }}">Register</a>
     {% endif %}
   </nav>
 </header>
 
 <main>
   <div class="section">
-    <h2>🤝 Vreau să fiu voluntar</h2>
+    <h2>🤝 I Want to Volunteer</h2>
 
-    <a href="{{ url_for('login') }}" class="btn-login">Intră în cont / Login</a>
+    <a href="{{ url_for('login') }}" class="btn-login">Log In / Sign In</a>
 
-    <p>E simplu. Vrei să te implici? O poți face chiar de azi.<br />
-    Lichenary nu e doar un proiect de mediu — e o comunitate de tineri care aleg să nu mai fie spectatori. Aleg să observe, să învețe și să transmită mai departe.</p>
+    <p>It's simple. Want to get involved? You can start today.<br />
+    Lichenary is not just an environmental project — it's a community of young people choosing not to be spectators. They choose to observe, learn, and pass on knowledge.</p>
 
-<h3>🟢 Ce face un voluntar Lichenary?</h3>
-<ul>
-  <li>Observă natura din jur (parcuri, străzi, grădini, drumuri spre școală etc.)</li>
-  <li>Identifică și fotografiază lichenii găsiți pe copaci, pietre sau ziduri</li>
-  <li>Completează un formular digital din contul personal, unde introduce:
+    <h3>🟢 What does a Lichenary volunteer do?</h3>
     <ul>
-      <li>📍 Locația observației</li>
-      <li>📸 Fotografia realizată</li>
-      <li>🔎 Specia de lichen identificată</li>
-      <li>🌫️ O notă de la 1 la 10 care reflectă cât de poluat este aerul (1 = aer curat, 10 = aer poluat)</li>
-    </ul>
-  </li>
-  <li>Folosește un ghid vizual oferit de Lichenary pentru a identifica corect speciile și a înțelege ce nivel de poluare indică fiecare</li>
-  <li>Contribuie la construirea unei hărți colaborative a calității aerului.  </li>
-</ul>
-
-
-    <h3>🧠 Nu ai nevoie de:</h3>
-    <ul>
-      <li>Cunoștințe științifice avansate</li>
-      <li>Aparate complicate</li>
-      <li>Experiență anterioară în proiecte de mediu</li>
+      <li>Observe nature around (parks, streets, gardens, routes to school, etc.)</li>
+      <li>Identify and photograph lichens found on trees, stones, or walls</li>
+      <li>Fill out a digital form from their personal account, where they enter:
+        <ul>
+          <li>📍 Location of the observation</li>
+          <li>📸 Photo taken</li>
+          <li>🔎 Identified lichen species</li>
+          <li>🌫️ A rating from 1 to 10 reflecting how polluted the air is (1 = clean air, 10 = polluted air)</li>
+        </ul>
+      </li>
+      <li>Use a visual guide provided by Lichenary to correctly identify species and understand the pollution level each indicates</li>
+      <li>Contribute to building a collaborative air quality map.</li>
     </ul>
 
-    <p>Tot ce îți trebuie este:</p>
+    <h3>🧠 You don’t need:</h3>
     <ul>
-      <li>Curiozitate</li>
-      <li>O cameră de telefon decentă</li>
-      <li>Atenție la detalii</li>
-      <li>Dorința de a face ceva pentru aerul pe care-l respiri</li>
+      <li>Advanced scientific knowledge</li>
+      <li>Complicated equipment</li>
+      <li>Previous experience in environmental projects</li>
     </ul>
 
-    <h3>📦 Ce vei primi?</h3>
+    <p>All you need is:</p>
     <ul>
-      <li>Acces la un kit digital de inițiere</li>
-      <li>Ghiduri vizuale pentru recunoașterea lichenilor</li>
-      <li>Template pentru fișe de observație</li>
-      <li>Suport constant din partea echipei Lichenary</li>
-      <li>Posibilitatea de a participa la Faza 2 a proiectului (GreenWave)</li>
-      <li>O diplomă de participare la finalul sezonului</li>
-      <li>Și poate cel mai valoros lucru: un alt fel de a privi orașul tău.</li>
+      <li>Curiosity</li>
+      <li>A decent phone camera</li>
+      <li>Attention to detail</li>
+      <li>The desire to do something for the air you breathe</li>
     </ul>
 
-    <h3>🕐 Cât timp durează?</h3>
-    <p>Tu decizi. Poți participa:</p>
+    <h3>📦 What will you receive?</h3>
     <ul>
-      <li>într-un singur weekend</li>
-      <li>sau poți deveni un contribuitor constant, care urmărește cum se schimbă aerul din zona sa, lună de lună</li>
+      <li>Access to a digital starter kit</li>
+      <li>Visual guides for recognizing lichens</li>
+      <li>Templates for observation sheets</li>
+      <li>Continuous support from the Lichenary team</li>
+      <li>Opportunity to participate in Phase 2 of the project (GreenWave)</li>
+      <li>A participation certificate at the end of the season</li>
+      <li>And maybe the most valuable thing: a new way to see your city.</li>
     </ul>
-    <p>Nu contează cât contribui. Contează că începi.</p>
+
+    <h3>🕐 How long does it take?</h3>
+    <p>You decide. You can participate:</p>
+    <ul>
+      <li>for a single weekend</li>
+      <li>or you can become a regular contributor, monitoring how the air quality changes in your area month by month</li>
+    </ul>
+    <p>It doesn’t matter how much you contribute. What matters is that you start.</p>
   </div>
 </main>
 
 <footer>
-  © 2025 Lichenary • Toate drepturile rezervate
+  © 2025 Lichenary • All rights reserved
 </footer>
 
 <script>

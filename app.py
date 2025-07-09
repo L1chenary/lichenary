@@ -1,6 +1,6 @@
 import os
 from datetime import datetime
-from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory, jsonify
+from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory, jsonify, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -8,21 +8,18 @@ from werkzeug.utils import secure_filename
 
 # Configurare aplicație
 app = Flask(__name__)
-
 app.secret_key = 'lichena-foarte-secret-key'
 
 # Configurare DB SQLite
 db_url = os.environ.get("DATABASE_URL")
 if db_url:
-    # Dacă ești pe Render și ai DATABASE_URL, folosește PostgreSQL
     app.config['SQLALCHEMY_DATABASE_URI'] = db_url.replace("postgres://", "postgresql://")
 else:
-    # Altfel, local rămâi cu SQLite
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///lichenary.db'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Configurare folder de upload
+# Configurare folder upload
 UPLOAD_FOLDER = os.path.join(app.root_path, 'static', 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -40,7 +37,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(150), unique=True, nullable=False)
     email = db.Column(db.String(150), unique=True, nullable=False)
     password_hash = db.Column(db.String(256), nullable=False)
-    is_approved = db.Column(db.Boolean, default=False)  # Nou
+    is_approved = db.Column(db.Boolean, default=False)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -57,8 +54,8 @@ class Observation(db.Model):
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
     species = db.Column(db.String(150))
-    pollution_level = db.Column(db.Integer)  # 1-10
-    is_approved = db.Column(db.Boolean, default=False)  # Nou
+    pollution_level = db.Column(db.Integer)
+    is_approved = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship('User')
 
@@ -66,24 +63,21 @@ class Observation(db.Model):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# Definim funcția create_tables_and_admin aici, înainte să o apelăm
 def create_tables_and_admin():
     db.create_all()
     admin = User.query.filter_by(username='admin').first()
     if not admin:
         admin = User(username='admin', email='admin@example.com', is_approved=True)
-        admin.set_password('parola123')  # Schimbă parola după ce intri prima dată!
+        admin.set_password('parola123')
         db.session.add(admin)
         db.session.commit()
-        print("Admin creat!")
+        print("Admin created!")
 
-# Creează tabelele o singură dată când aplicația pornește pe Render
 if os.environ.get("RENDER"):
     with app.app_context():
         create_tables_and_admin()
 
-# Rute (la fel ca înainte, dar login verifică acum is_approved)
-
+# Routes
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -108,8 +102,7 @@ def harta():
 def contact():
     return render_template('contact.html')
 
-# Rute noi pentru subcapitolele specificate
-
+# Subpages
 @app.route('/despre/proiect_si_rol')
 def despre_proiect_si_rol():
     return render_template('despre_proiect_si_rol.html')
@@ -146,7 +139,7 @@ def participa_voluntariez():
 def participa_ambasador():
     return render_template('participa_ambasador.html')
 
-# Înregistrare
+# Register
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -156,29 +149,28 @@ def register():
         confirm_password = request.form.get('confirm_password')
 
         if not username or not email or not password or not confirm_password:
-            flash('Completează toate câmpurile.', 'error')
+            flash('Please complete all fields.', 'error')
             return redirect(url_for('register'))
 
         if password != confirm_password:
-            flash('Parolele nu coincid.', 'error')
+            flash('Passwords do not match.', 'error')
             return redirect(url_for('register'))
 
         if User.query.filter((User.username == username) | (User.email == email)).first():
-            flash('Username sau email deja folosit.', 'error')
+            flash('Username or email already used.', 'error')
             return redirect(url_for('register'))
 
         new_user = User(username=username, email=email)
         new_user.set_password(password)
-        # implicit new_user.is_approved = False
         db.session.add(new_user)
         db.session.commit()
 
-        flash('Înregistrare reușită! Contul tău va fi aprobat în curând de un moderator.')
+        flash('Registration successful! Your account will be approved soon.')
         return redirect(url_for('login'))
 
     return render_template('register.html')
 
-# Login cu verificare is_approved
+# Login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -187,38 +179,34 @@ def login():
         user = User.query.filter_by(username=username).first()
         if user and user.check_password(password):
             if not user.is_approved:
-                flash('Contul tău nu este aprobat încă. Te rugăm să aștepți aprobarea moderatorului.', 'error')
+                flash('Your account is not approved yet.', 'error')
                 return redirect(url_for('login'))
             login_user(user)
-            flash(f'Bine ai venit, {username}!')
+            flash(f'Welcome, {username}!')
             return redirect(url_for('dashboard'))
         else:
-            flash('Username sau parolă greșită.', 'error')
+            flash('Invalid username or password.', 'error')
             return redirect(url_for('login'))
     return render_template('login.html')
 
-# Logout
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
-    flash('Te-ai deconectat.')
+    flash('You have been logged out.')
     return redirect(url_for('home'))
 
-# Dashboard
 @app.route('/dashboard')
 @login_required
 def dashboard():
     return render_template('dashboard.html')
-
-# Restul rutelor (upload_observation, view_observations, uploads, api_observations) - le păstrezi la fel
 
 @app.route('/upload', methods=['GET', 'POST'])
 @login_required
 def upload_observation():
     if request.method == 'POST':
         if 'photo' not in request.files:
-            flash('Nu a fost selectată nicio poză.', 'error')
+            flash('No photo selected.', 'error')
             return redirect(request.url)
 
         photo = request.files['photo']
@@ -230,7 +218,7 @@ def upload_observation():
         pollution_level_str = request.form.get('pollution_level')
 
         if not photo.filename or not date_time_str or not location or not latitude or not longitude:
-            flash('Completează toate câmpurile, inclusiv coordonatele.', 'error')
+            flash('Please fill in all fields.', 'error')
             return redirect(request.url)
 
         pollution_level = None
@@ -240,12 +228,11 @@ def upload_observation():
                 if pollution_level < 1 or pollution_level > 10:
                     raise ValueError()
             except ValueError:
-                flash('Nivelul de poluare trebuie să fie un număr între 1 și 10.', 'error')
+                flash('Pollution level must be a number between 1 and 10.', 'error')
                 return redirect(request.url)
 
         filename = secure_filename(photo.filename)
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-
         if os.path.exists(filepath):
             name, ext = os.path.splitext(filename)
             filename = f"{name}_{int(datetime.utcnow().timestamp())}{ext}"
@@ -256,7 +243,7 @@ def upload_observation():
         try:
             date_time = datetime.strptime(date_time_str, "%Y-%m-%dT%H:%M")
         except ValueError:
-            flash('Formatul datei este incorect.', 'error')
+            flash('Invalid date format.', 'error')
             return redirect(request.url)
 
         obs = Observation(
@@ -268,12 +255,12 @@ def upload_observation():
             species=species if species else None,
             pollution_level=pollution_level,
             user_id=current_user.id,
-            is_approved=False  # implicit la upload
+            is_approved=False
         )
         db.session.add(obs)
         db.session.commit()
 
-        flash('Observația a fost încărcată cu succes. Mulțumim!')
+        flash('Observation uploaded successfully. Thank you!')
         return redirect(url_for('view_observations'))
 
     return render_template('upload_observation.html')
@@ -311,12 +298,12 @@ def api_observations():
     ]
     return jsonify(data)
 
-# Admin - vizualizare utilizatori neaprobati și aprobare
+# Admin routes
 @app.route('/admin/users')
 @login_required
 def admin_users():
     if current_user.username != 'admin':
-        flash('Nu ai permisiunea să accesezi această pagină.', 'error')
+        flash('Access denied.', 'error')
         return redirect(url_for('dashboard'))
     users = User.query.filter_by(is_approved=False).all()
     return render_template('admin_users.html', users=users)
@@ -325,33 +312,31 @@ def admin_users():
 @login_required
 def approve_user(user_id):
     if current_user.username != 'admin':
-        flash('Nu ai permisiunea să faci această acțiune.', 'error')
+        flash('Access denied.', 'error')
         return redirect(url_for('dashboard'))
     user = User.query.get(user_id)
     if user:
         user.is_approved = True
         db.session.commit()
-        flash(f'User {user.username} aprobat cu succes.')
+        flash(f'User {user.username} approved.')
     else:
-        flash('User inexistent.', 'error')
+        flash('User not found.', 'error')
     return redirect(url_for('admin_users'))
 
-# Admin - vizualizare observații neaprobate și aprobare
 @app.route('/admin/observations')
 @login_required
 def admin_observations():
     if current_user.username != 'admin':
-        flash('Nu ai permisiunea să accesezi această pagină.', 'error')
+        flash('Access denied.', 'error')
         return redirect(url_for('dashboard'))
     observations = Observation.query.filter_by(is_approved=False).order_by(Observation.date_time.desc()).all()
     return render_template('admin_observations.html', observations=observations)
 
-# Admin - vizualizare observații aprobate
 @app.route('/admin/observations/approved')
 @login_required
 def admin_approved_observations():
     if current_user.username != 'admin':
-        flash('Nu ai permisiunea să accesezi această pagină.', 'error')
+        flash('Access denied.', 'error')
         return redirect(url_for('dashboard'))
     observations = Observation.query.filter_by(is_approved=True).order_by(Observation.date_time.desc()).all()
     return render_template('admin_approved_observations.html', observations=observations)
@@ -360,21 +345,22 @@ def admin_approved_observations():
 @login_required
 def approve_observation(obs_id):
     if current_user.username != 'admin':
-        flash('Nu ai permisiunea să faci această acțiune.', 'error')
+        flash('Access denied.', 'error')
         return redirect(url_for('dashboard'))
     observation = Observation.query.get(obs_id)
     if observation:
         observation.is_approved = True
         db.session.commit()
-        flash('Observație aprobată cu succes.')
+        flash('Observation approved.')
     else:
-        flash('Observație inexistentă.', 'error')
+        flash('Observation not found.', 'error')
     return redirect(url_for('admin_observations'))
+
 @app.route('/admin/observations/<int:obs_id>/edit', methods=['GET', 'POST'])
 @login_required
 def edit_observation(obs_id):
     if current_user.username != 'admin':
-        flash('Nu ai permisiunea să accesezi această pagină.', 'error')
+        flash('Access denied.', 'error')
         return redirect(url_for('dashboard'))
 
     observation = Observation.query.get_or_404(obs_id)
@@ -384,11 +370,11 @@ def edit_observation(obs_id):
         location = request.form.get('location').strip()
         latitude = request.form.get('latitude')
         longitude = request.form.get('longitude')
-        species = request.form.get('species').strip() if request.form.get('species') else None
+        species = request.form.get('species').strip()
         pollution_level_str = request.form.get('pollution_level')
 
         if not date_time_str or not location or not latitude or not longitude:
-            flash('Completează toate câmpurile obligatorii.', 'error')
+            flash('All fields are required.', 'error')
             return redirect(request.url)
 
         try:
@@ -396,7 +382,7 @@ def edit_observation(obs_id):
             latitude = float(latitude)
             longitude = float(longitude)
         except ValueError:
-            flash('Datele introduse sunt incorecte.', 'error')
+            flash('Invalid data.', 'error')
             return redirect(request.url)
 
         pollution_level = None
@@ -406,7 +392,7 @@ def edit_observation(obs_id):
                 if pollution_level < 1 or pollution_level > 10:
                     raise ValueError()
             except ValueError:
-                flash('Nivelul de poluare trebuie să fie un număr între 1 și 10.', 'error')
+                flash('Pollution level must be 1-10.', 'error')
                 return redirect(request.url)
 
         observation.date_time = date_time
@@ -417,29 +403,19 @@ def edit_observation(obs_id):
         observation.pollution_level = pollution_level
 
         db.session.commit()
-        flash('Observația a fost actualizată cu succes.')
+        flash('Observation updated.')
         return redirect(url_for('admin_observations'))
 
     return render_template('admin_edit_observation.html', observation=observation)
+
 @app.route('/admin/observations/disapprove/<int:obs_id>', methods=['POST'])
 @login_required
 def disapprove_observation(obs_id):
     obs = Observation.query.get_or_404(obs_id)
-    
-    # Schimbă statusul observației în "pending"
     obs.is_approved = False
-
-    
-    # Salvează modificările în baza de date
     db.session.commit()
-    
-    # Trimite un mesaj flash (opțional, dar recomandat)
-    flash('Observația a fost dezaprobată cu succes.', 'success')
-    
-    # Redirecționează către lista observațiilor aprobate
+    flash('Observation disapproved.', 'success')
     return redirect(url_for('admin_approved_observations'))
-
-
 
 if __name__ == '__main__':
     with app.app_context():
