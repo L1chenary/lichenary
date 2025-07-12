@@ -197,7 +197,7 @@
       <tbody>
         {% for obs in observations %}
           <tr>
-            <td><img src="{{ url_for('static', filename='uploads/' + obs.image_filename) }}" alt="Lichen"></td>
+            <td><img src="{{ obs.image_filename }}" alt="Lichen"></td>
             <td>{{ obs.date_time.strftime('%Y-%m-%d %H:%M') }}</td>
             <td>{{ obs.location }}</td>
             <td>{{ obs.species if obs.species else 'Not provided' }}</td>

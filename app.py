@@ -5,6 +5,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 # Configurare aplicație
 app = Flask(__name__)
@@ -18,6 +21,12 @@ else:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///lichenary.db'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+cloudinary.config(
+    cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
+    api_key=os.getenv('CLOUDINARY_API_KEY'),
+    api_secret=os.getenv('CLOUDINARY_API_SECRET'),
+    secure=True
+)
 
 # Configurare folder upload
 UPLOAD_FOLDER = os.path.join(app.root_path, 'static', 'uploads')
@@ -48,7 +57,7 @@ class User(UserMixin, db.Model):
 # Model Observation
 class Observation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    image_filename = db.Column(db.String(300), nullable=False)
+    image_filename = db.Column(db.Text, nullable=False)
     date_time = db.Column(db.DateTime, nullable=False)
     location = db.Column(db.String(300), nullable=False)
     latitude = db.Column(db.Float)
@@ -201,6 +210,8 @@ def logout():
 def dashboard():
     return render_template('dashboard.html')
 
+from cloudinary.uploader import upload
+
 @app.route('/upload', methods=['GET', 'POST'])
 @login_required
 def upload_observation():
@@ -210,6 +221,15 @@ def upload_observation():
             return redirect(request.url)
 
         photo = request.files['photo']
+        if not photo.filename:
+            flash('No photo selected.', 'error')
+            return redirect(request.url)
+
+        # Upload imaginea pe Cloudinary
+        result = upload(photo)
+        image_url = result['secure_url']  # link-ul imaginii de pe Cloudinary
+
+        # Preia datele din formular
         date_time_str = request.form.get('date_time')
         location = request.form.get('location').strip()
         latitude = request.form.get('latitude')
@@ -217,8 +237,17 @@ def upload_observation():
         species = request.form.get('species').strip() if request.form.get('species') else None
         pollution_level_str = request.form.get('pollution_level')
 
-        if not photo.filename or not date_time_str or not location or not latitude or not longitude:
-            flash('Please fill in all fields.', 'error')
+        # Validări date
+        if not date_time_str or not location or not latitude or not longitude:
+            flash('Please fill in all required fields.', 'error')
+            return redirect(request.url)
+
+        try:
+            date_time = datetime.strptime(date_time_str, "%Y-%m-%dT%H:%M")
+            latitude = float(latitude)
+            longitude = float(longitude)
+        except ValueError:
+            flash('Invalid date or coordinates.', 'error')
             return redirect(request.url)
 
         pollution_level = None
@@ -231,32 +260,19 @@ def upload_observation():
                 flash('Pollution level must be a number between 1 and 10.', 'error')
                 return redirect(request.url)
 
-        filename = secure_filename(photo.filename)
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        if os.path.exists(filepath):
-            name, ext = os.path.splitext(filename)
-            filename = f"{name}_{int(datetime.utcnow().timestamp())}{ext}"
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-
-        photo.save(filepath)
-
-        try:
-            date_time = datetime.strptime(date_time_str, "%Y-%m-%dT%H:%M")
-        except ValueError:
-            flash('Invalid date format.', 'error')
-            return redirect(request.url)
-
+        # Creează observația cu link-ul imaginii din Cloudinary
         obs = Observation(
-            image_filename=filename,
+            image_filename=image_url,
             date_time=date_time,
             location=location,
-            latitude=float(latitude),
-            longitude=float(longitude),
-            species=species if species else None,
+            latitude=latitude,
+            longitude=longitude,
+            species=species,
             pollution_level=pollution_level,
             user_id=current_user.id,
             is_approved=False
         )
+
         db.session.add(obs)
         db.session.commit()
 
@@ -264,6 +280,7 @@ def upload_observation():
         return redirect(url_for('view_observations'))
 
     return render_template('upload_observation.html')
+
 
 @app.route('/observations')
 @login_required
