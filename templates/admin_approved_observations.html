@@ -74,7 +74,7 @@
             <tr>
                 <td>{{ obs.id }}</td>
                 <td>
-                    <img src="{{ url_for('uploaded_file', filename=obs.image_filename) }}" alt="observatie">
+                    <img src="{{ obs.image_url }}" alt="observatie">
                 </td>
                 <td>{{ obs.location }}</td>
                 <td>{{ obs.species if obs.species else 'Necompletat' }}</td>
