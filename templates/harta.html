@@ -11,7 +11,7 @@
   <style>
     html, body {
       margin: 0; padding: 0; height: 100%;
-      overflow: hidden;
+      overflow-x: hidden; /* schimbat din overflow:hidden la overflow-x:hidden ca să nu afecteze vertical */
       font-family: Arial, sans-serif;
       background-color: #1f2f1f;
       position: relative;
@@ -35,7 +35,7 @@
       align-items: center;
       flex-wrap: wrap;
       position: relative;
-      z-index: 10;
+      z-index: 20; /* schimbat de la 10 la 20 pentru a fi peste canvas */
     }
 
     .logo {
@@ -45,20 +45,10 @@
       color: white;
     }
 
-    .menu-toggle {
-      display: none;
-      font-size: 1.8em;
-      background: none;
-      border: none;
-      color: white;
-      cursor: pointer;
-    }
-
     nav {
       display: flex;
-      flex-wrap: wrap;
-      align-items: center;
       gap: 10px;
+      z-index: 20;
     }
 
     nav a {
@@ -70,6 +60,51 @@
 
     nav a:hover {
       background-color: #1d5957;
+    }
+
+    .burger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 5px;
+      z-index: 30;
+    }
+
+    .burger div {
+      width: 25px;
+      height: 3px;
+      background-color: white;
+      border-radius: 2px;
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        max-height: 0;
+        overflow: hidden;
+        flex-direction: column;
+        width: 100%;
+        background-color: rgba(17, 61, 60, 0.9);
+        position: absolute;
+        top: 56px;
+        left: 0;
+        padding: 0 20px;
+        border-radius: 0 0 8px 8px;
+        box-sizing: border-box;
+        transition: max-height 0.4s ease, padding 0.4s ease;
+      }
+      nav.open {
+        max-height: 500px;
+        padding: 10px 20px;
+      }
+
+      body.menu-open main {
+        margin-top: 250px;
+        transition: margin-top 0.3s ease;
+      }
+
+      .burger {
+        display: flex;
+      }
     }
 
     main {
@@ -118,31 +153,6 @@
       margin-right: 8px;
       opacity: 0.7;
     }
-
-    @media (max-width: 768px) {
-      .menu-toggle {
-        display: block;
-      }
-
-      nav {
-        flex-direction: column;
-        width: 100%;
-        display: none;
-        background-color: rgba(17, 61, 60, 0.95);
-        padding: 10px 0;
-      }
-
-      nav.show {
-        display: flex;
-      }
-
-      nav a {
-        padding: 10px;
-        width: 100%;
-        text-align: center;
-        border-top: 1px solid rgba(255,255,255,0.1);
-      }
-    }
   </style>
 </head>
 <body>
@@ -151,8 +161,15 @@
 
 <header>
   <div class="logo" onclick="window.location='/'">Lichenary</div>
-  <button class="menu-toggle" onclick="document.querySelector('nav').classList.toggle('show')">☰</button>
-  <nav>
+
+  <!-- burger menu (dropdown) -->
+  <div id="burger" class="burger" aria-label="Menu">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+  <nav id="nav-links">
     <a href="{{ url_for('home') }}">Home</a>
     <a href="{{ url_for('despre') }}">About</a>
     <a href="{{ url_for('participa') }}">How to Participate</a>
@@ -253,7 +270,24 @@
   };
 
   legend.addTo(map);
+</script>
 
+<script>
+  const burger = document.getElementById('burger');
+  const navLinks = document.getElementById('nav-links');
+
+  burger.addEventListener('click', () => {
+    const isOpen = navLinks.classList.toggle('open');
+    document.body.classList.toggle('menu-open', isOpen);
+  });
+
+  // Închide meniul când se apasă un link (pe mobil)
+  document.querySelectorAll('#nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      document.body.classList.remove('menu-open');
+    });
+  });
 </script>
 
 <script>

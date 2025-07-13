@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -59,7 +59,6 @@
     background-color: #1d5957;
   }
 
-  /* Burger menu button */
   .burger {
     display: none;
     flex-direction: column;
@@ -77,24 +76,26 @@
 
   @media (max-width: 768px) {
     nav {
-      display: none;
+      max-height: 0;
+      overflow: hidden;
       flex-direction: column;
       width: 100%;
       background-color: rgba(17, 61, 60, 0.9);
       position: absolute;
       top: 56px;
       left: 0;
-      padding: 10px 20px;
+      padding: 0 20px;
       border-radius: 0 0 8px 8px;
       box-sizing: border-box;
-      z-index: 20;
+      transition: max-height 0.4s ease, padding 0.4s ease;
     }
-    nav.show {
-      display: flex;
+    nav.open {
+      max-height: 500px;
+      padding: 10px 20px;
     }
 
     body.menu-open main {
-      margin-top: 250px; /* adjust if menu is taller */
+      margin-top: 250px;
       transition: margin-top 0.3s ease;
     }
 
@@ -248,18 +249,24 @@
 </main>
 
 <script>
-  // --- Burger menu toggle ---
   const burger = document.getElementById('burger');
   const navLinks = document.getElementById('nav-links');
 
   burger.addEventListener('click', () => {
-    navLinks.classList.toggle('show');
-    document.body.classList.toggle('menu-open');
+    const isOpen = navLinks.classList.toggle('open');
+    document.body.classList.toggle('menu-open', isOpen);
+  });
+
+  // Închide meniul când se apasă un link (pe mobil)
+  document.querySelectorAll('#nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      document.body.classList.remove('menu-open');
+    });
   });
 </script>
 
 <script>
-  // --- Simple moving cloud effect on canvas ---
   const canvas = document.getElementById('cloud-canvas');
   const ctx = canvas.getContext('2d');
   let width, height;
@@ -325,4 +332,3 @@
 
 </body>
 </html>
-

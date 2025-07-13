@@ -12,10 +12,16 @@
       position: relative;
       overflow-x: hidden;
       color: white;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
+      /* aici am adaugat pentru meniul dropdown */
+      /* (nu era în codul tău original, dar e necesar ca main să se împingă) */
     }
+
+    /* am adăugat margin-top pe body.menu-open main pentru împingerea conținutului */
+    body.menu-open main {
+      margin-top: 250px;
+      transition: margin-top 0.3s ease;
+    }
+
     #cloud-canvas {
       position: fixed;
       top: 0; left: 0;
@@ -26,29 +32,25 @@
     header {
       background-color: rgba(17, 61, 60, 0.85);
       padding: 15px 20px;
+      color: white;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      z-index: 10;
+      flex-wrap: wrap;
       position: relative;
+      z-index: 20;
     }
     .logo {
       font-size: 1.5em;
       font-weight: bold;
-      color: white;
       cursor: pointer;
-    }
-    .menu-toggle {
-      display: none;
-      font-size: 1.8em;
-      background: none;
-      border: none;
       color: white;
-      cursor: pointer;
     }
     nav {
       display: flex;
       gap: 10px;
+      z-index: 20;
+      transition: max-height 0.4s ease, padding 0.4s ease;
     }
     nav a {
       color: white;
@@ -59,25 +61,42 @@
     nav a:hover {
       background-color: #1d5957;
     }
+    .burger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 5px;
+      z-index: 30;
+    }
+    .burger div {
+      width: 25px;
+      height: 3px;
+      background-color: white;
+      border-radius: 2px;
+    }
     @media (max-width: 768px) {
-      .menu-toggle { display: block; }
       nav {
+        max-height: 0;
+        overflow: hidden;
         flex-direction: column;
         width: 100%;
-        display: none;
-        background-color: rgba(17, 61, 60, 0.95);
-        padding: 10px 0;
-        margin-top: 10px;
-        z-index: 9;
+        background-color: rgba(17, 61, 60, 0.9);
+        position: absolute;
+        top: 56px;
+        left: 0;
+        padding: 0 20px;
+        border-radius: 0 0 8px 8px;
+        box-sizing: border-box;
       }
-      nav.show { display: flex; }
-      nav a {
-        padding: 10px;
-        width: 100%;
-        text-align: center;
-        border-top: 1px solid rgba(255,255,255,0.1);
+      nav.open {
+        max-height: 500px;
+        padding: 10px 20px;
+      }
+      .burger {
+        display: flex;
       }
     }
+
     main {
       max-width: 900px;
       margin: 40px auto;
@@ -89,6 +108,7 @@
       position: relative;
       z-index: 10;
       flex: 1;
+      /* margin-top se modifică din JS la deschiderea meniului */
     }
     main h2 {
       text-align: center;
@@ -154,8 +174,14 @@
 
 <header>
   <div class="logo" onclick="window.location='/'">Lichenary</div>
-  <button class="menu-toggle" onclick="document.querySelector('nav').classList.toggle('show')">☰</button>
-  <nav>
+
+  <div id="burger" class="burger" aria-label="Menu">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+  <nav id="nav-links">
     <a href="{{ url_for('home') }}">Home</a>
     <a href="{{ url_for('despre') }}">About</a>
     <a href="{{ url_for('participa') }}">How to Participate</a>
@@ -216,6 +242,24 @@
 <footer>
   &copy; 2025 Lichenary • All rights reserved
 </footer>
+
+<script>
+  const burger = document.getElementById('burger');
+  const navLinks = document.getElementById('nav-links');
+
+  burger.addEventListener('click', () => {
+    const isOpen = navLinks.classList.toggle('open');
+    document.body.classList.toggle('menu-open', isOpen);
+  });
+
+  // Închide meniul când se apasă un link (pe mobil)
+  document.querySelectorAll('#nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      document.body.classList.remove('menu-open');
+    });
+  });
+</script>
 
 <script>
   const canvas = document.getElementById('cloud-canvas');
