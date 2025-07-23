@@ -47,6 +47,22 @@
         button:hover {
             background-color: #1c5980;
         }
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .link-button {
+            text-decoration: none;
+            color: #2980b9;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .link-button:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -56,6 +72,10 @@
 
 <main>
     <form method="POST">
+        <label for="date_time">Data și ora observației:</label>
+        <input type="datetime-local" id="date_time" name="date_time"
+               value="{{ observation.date_time.strftime('%Y-%m-%dT%H:%M') }}" required>
+
         <label for="location">Locația:</label>
         <input type="text" id="location" name="location" value="{{ observation.location }}" required>
 
@@ -71,7 +91,13 @@
         <label for="pollution_level">Nivel poluare (1-10):</label>
         <input type="number" id="pollution_level" name="pollution_level" value="{{ observation.pollution_level or '' }}" min="1" max="10">
 
-        <button type="submit">Salvează modificările</button>
+        <div class="actions">
+            <button type="submit">💾 Salvează modificările</button>
+            <div>
+                <a href="{{ url_for('admin_observations') }}" class="link-button">← Înapoi la observații</a><br>
+                <a href="{{ url_for('dashboard') }}" class="link-button">🏠 Înapoi la dashboard</a>
+            </div>
+        </div>
     </form>
 </main>
 </body>

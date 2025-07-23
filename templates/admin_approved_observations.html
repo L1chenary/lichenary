@@ -37,6 +37,7 @@
         img {
             max-width: 150px;
             border-radius: 4px;
+            cursor: pointer; /* să arate că e clickabilă */
         }
         form {
             display: inline-block;
@@ -52,11 +53,51 @@
         button:hover {
             background-color: #922b21;
         }
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            text-decoration: none;
+            color: #2980b9;
+            font-weight: bold;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            padding-top: 50px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.85);
+        }
+        .modal-content {
+            display: block;
+            margin: auto;
+            max-width: 90%;
+            max-height: 80%;
+            border: 3px solid #fff;
+            border-radius: 6px;
+        }
+        .close {
+            color: white;
+            position: absolute;
+            top: 30px;
+            right: 50px;
+            font-size: 30px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 <main>
     <h2>Observații aprobate</h2>
+
     {% if observations %}
     <table>
         <thead>
@@ -74,14 +115,13 @@
             <tr>
                 <td>{{ obs.id }}</td>
                 <td>
-                    <img src="{{ obs.image_filename }}" alt="observatie">
+                    <img src="{{ obs.image_filename }}" alt="observatie" onclick="showModal(this.src)">
                 </td>
                 <td>{{ obs.location }}</td>
                 <td>{{ obs.species if obs.species else 'Necompletat' }}</td>
                 <td>{{ obs.pollution_level if obs.pollution_level is not none else 'Necompletat' }}</td>
                 <td>
                     <form method="POST" action="{{ url_for('disapprove_observation', obs_id=obs.id) }}">
-
                         <button type="submit">Dezaprobă</button>
                     </form>
                 </td>
@@ -92,6 +132,29 @@
     {% else %}
     <p>Nu există observații aprobate.</p>
     {% endif %}
+
+    <a href="{{ url_for('dashboard') }}" class="back-link">← Înapoi la dashboard</a>
 </main>
+
+<!-- Modal Viewer -->
+<div id="imgModal" class="modal">
+    <span class="close" onclick="document.getElementById('imgModal').style.display='none'">&times;</span>
+    <img id="modalImg" class="modal-content">
+</div>
+
+<script>
+    function showModal(src) {
+        document.getElementById('modalImg').src = src;
+        document.getElementById('imgModal').style.display = 'block';
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById('imgModal');
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
 </body>
 </html>
