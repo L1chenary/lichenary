@@ -309,7 +309,8 @@ def api_observations():
             'pollution_level': obs.pollution_level,
             'species': obs.species,
             'date_time': obs.date_time.strftime('%Y-%m-%d %H:%M'),
-            'location': obs.location
+             'location': obs.location,
+            'image_filename': obs.image_filename  # ✅ adăugat aici
         }
         for obs in observations
     ]
