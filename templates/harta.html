@@ -238,10 +238,16 @@
             fillOpacity: 0.8
           }).addTo(map);
           marker.bindPopup(`
-            <strong>Species Name:</strong> ${obs.species ?? 'Not provided'}<br>
-            <strong>Date:</strong> ${obs.date_time}<br>
-            <strong>Pollution Level:</strong> ${obs.pollution_level}
-          `);
+  <div style="text-align: center;">
+    <img src="${obs.image_filename}" alt="Lichen" style="max-width: 150px; border-radius: 4px;"><br>
+    <strong>Date:</strong> ${obs.date_time}<br>
+    <strong>Location:</strong> ${obs.location}<br>
+    <strong>Species:</strong> ${obs.species ?? 'Not provided'}<br>
+    <strong>Pollution Level:</strong> ${obs.pollution_level}
+  </div>
+`);
+
+
         }
       });
     });
