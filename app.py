@@ -323,8 +323,27 @@ def admin_users():
     if current_user.username != 'admin':
         flash('Access denied.', 'error')
         return redirect(url_for('dashboard'))
-    users = User.query.filter_by(is_approved=False).all()
-    return render_template('admin_users.html', users=users)
+
+    unapproved_users = User.query.filter_by(is_approved=False).all()
+    approved_users = User.query.filter_by(is_approved=True).all()
+
+    return render_template('admin_users.html', users=unapproved_users, approved_users=approved_users)
+
+@app.route('/admin/users/disapprove/<int:user_id>', methods=['POST'])
+@login_required
+def disapprove_user(user_id):
+    if current_user.username != 'admin':
+        flash('Access denied.', 'error')
+        return redirect(url_for('dashboard'))
+
+    user = User.query.get(user_id)
+    if user:
+        user.is_approved = False
+        db.session.commit()
+        flash(f'User {user.username} disapproved.')
+    else:
+        flash('User not found.', 'error')
+    return redirect(url_for('admin_users'))
 
 @app.route('/admin/users/approve/<int:user_id>', methods=['POST'])
 @login_required

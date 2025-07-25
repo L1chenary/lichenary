@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="ro">
 <head>
     <meta charset="UTF-8" />
@@ -34,6 +34,34 @@
         </table>
     {% else %}
         <p>Nu există utilizatori neaprobați.</p>
+    {% endif %}
+
+    <h1>Utilizatori aprobați</h1>
+    {% if approved_users %}
+        <table border="1" cellpadding="5" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Acțiuni</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in approved_users %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        <form action="{{ url_for('disapprove_user', user_id=user.id) }}" method="post" style="display:inline;">
+                            <button type="submit" onclick="return confirm('Ești sigur că vrei să dezaprob acest utilizator?')">Dezaprobă</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Nu există utilizatori aprobați.</p>
     {% endif %}
 </body>
 </html>
