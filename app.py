@@ -427,6 +427,19 @@ def edit_observation(obs_id):
     return render_template('admin_edit_observation.html', observation=observation)
 
 @app.route('/admin/observations/disapprove/<int:obs_id>', methods=['POST'])
+@app.route('/admin/observations/delete/<int:obs_id>', methods=['POST'])
+@login_required
+def delete_observation(obs_id):
+    if current_user.username != 'admin':
+        flash('Access denied.', 'error')
+        return redirect(url_for('dashboard'))
+
+    observation = Observation.query.get_or_404(obs_id)
+    db.session.delete(observation)
+    db.session.commit()
+    flash('Observation deleted.', 'success')
+    return redirect(url_for('admin_observations'))
+
 @login_required
 def disapprove_observation(obs_id):
     obs = Observation.query.get_or_404(obs_id)
