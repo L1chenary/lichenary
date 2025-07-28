@@ -325,7 +325,7 @@ def admin_users():
         return redirect(url_for('dashboard'))
 
     unapproved_users = User.query.filter_by(is_approved=False).all()
-    approved_users = User.query.filter_by(is_approved=True).all()
+    approved_users = User.query.filter(User.is_approved == True, User.username != 'admin').all()
 
     return render_template('admin_users.html', users=unapproved_users, approved_users=approved_users)
 
