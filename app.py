@@ -78,8 +78,8 @@ def create_tables_and_admin():
     if not admin:
         admin = User(username='admin', email='admin@example.com', is_approved=True)
         db.session.add(admin)
-    admin_password = os.getenv("ADMIN_PASSWORD", "parola123")  # fallback dacă nu există
-admin.set_password(admin_password)
+    	admin_password = os.getenv("ADMIN_PASSWORD", "parola123")  # fallback dacă nu există
+	admin.set_password(admin_password)
     db.session.commit()
     print("Admin created or updated!")
 
