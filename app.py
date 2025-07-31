@@ -77,10 +77,11 @@ def create_tables_and_admin():
     admin = User.query.filter_by(username='admin').first()
     if not admin:
         admin = User(username='admin', email='admin@example.com', is_approved=True)
-        admin.set_password('parola123')
         db.session.add(admin)
-        db.session.commit()
-        print("Admin created!")
+    admin_password = os.getenv("ADMIN_PASSWORD", "parola123")  # fallback dacă nu există
+admin.set_password(admin_password)
+    db.session.commit()
+    print("Admin created or updated!")
 
 if os.environ.get("RENDER"):
     with app.app_context():
