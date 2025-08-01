@@ -137,6 +137,7 @@
                     <th>Locația</th>
                     <th>Specie</th>
                     <th>Nivel poluare</th>
+                    <th>Utilizator</th>
                     <th>Acțiuni</th>
                 </tr>
             </thead>
@@ -145,33 +146,32 @@
                 <tr>
                     <td>
                         <img src="{{ obs.image_filename }}"
-     alt="Lichen"
-     onclick="showModal(this.src)">
-
+                             alt="Lichen"
+                             onclick="showModal(this.src)">
                     </td>
                     <td>{{ obs.date_time.strftime('%Y-%m-%d %H:%M') }}</td>
                     <td>{{ obs.location }}</td>
                     <td>{{ obs.species if obs.species else 'Necompletat' }}</td>
                     <td>{{ obs.pollution_level if obs.pollution_level is not none else 'Necompletat' }}</td>
+                    <td>{{ obs.user.username }}</td>
                     <td>
-    <form method="post" action="{{ url_for('approve_observation', obs_id=obs.id) }}" class="inline">
-        <button type="submit">Aprobă</button>
-    </form>
-    <a class="edit-link" href="{{ url_for('edit_observation', obs_id=obs.id) }}">Editează</a>
+                        <form method="post" action="{{ url_for('approve_observation', obs_id=obs.id) }}" class="inline">
+                            <button type="submit">Aprobă</button>
+                        </form>
+                        <a class="edit-link" href="{{ url_for('edit_observation', obs_id=obs.id) }}">Editează</a>
 
-    <!-- Buton Șterge -->
-    <button onclick="toggleConfirm({{ obs.id }})" style="background-color: #e74c3c;">Șterge</button>
+                        <!-- Buton Șterge -->
+                        <button onclick="toggleConfirm({{ obs.id }})" style="background-color: #e74c3c;">Șterge</button>
 
-    <!-- Confirmare ștergere -->
-    <form id="confirm-delete-{{ obs.id }}" method="post"
-          action="{{ url_for('delete_observation', obs_id=obs.id) }}"
-          style="display:none; margin-top: 5px;" class="inline">
-        <span style="color: red;">Ești sigur?</span>
-        <button type="submit" style="background-color: #c0392b;">Da</button>
-        <button type="button" onclick="toggleConfirm({{ obs.id }})">Nu</button>
-    </form>
-</td>
-
+                        <!-- Confirmare ștergere -->
+                        <form id="confirm-delete-{{ obs.id }}" method="post"
+                              action="{{ url_for('delete_observation', obs_id=obs.id) }}"
+                              style="display:none; margin-top: 5px;" class="inline">
+                            <span style="color: red;">Ești sigur?</span>
+                            <button type="submit" style="background-color: #c0392b;">Da</button>
+                            <button type="button" onclick="toggleConfirm({{ obs.id }})">Nu</button>
+                        </form>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

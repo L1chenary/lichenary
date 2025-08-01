@@ -37,21 +37,24 @@
         img {
             max-width: 150px;
             border-radius: 4px;
-            cursor: pointer; /* să arate că e clickabilă */
+            cursor: pointer;
         }
         form {
             display: inline-block;
         }
-        button {
+        button, .edit-link {
             padding: 6px 12px;
-            background-color: #c0392b;
+            background-color: #2980b9;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
         }
-        button:hover {
-            background-color: #922b21;
+        button:hover,
+        .edit-link:hover {
+            background-color: #1c5980;
         }
         .back-link {
             display: inline-block;
@@ -63,7 +66,6 @@
         .back-link:hover {
             text-decoration: underline;
         }
-        /* Modal styles */
         .modal {
             display: none;
             position: fixed;
@@ -107,6 +109,7 @@
                 <th>Locație</th>
                 <th>Specie</th>
                 <th>Poluare</th>
+                <th>Utilizator</th>
                 <th>Acțiuni</th>
             </tr>
         </thead>
@@ -120,10 +123,12 @@
                 <td>{{ obs.location }}</td>
                 <td>{{ obs.species if obs.species else 'Necompletat' }}</td>
                 <td>{{ obs.pollution_level if obs.pollution_level is not none else 'Necompletat' }}</td>
+                <td>{{ obs.user.username }}</td>
                 <td>
                     <form method="POST" action="{{ url_for('disapprove_observation', obs_id=obs.id) }}">
                         <button type="submit">Dezaprobă</button>
                     </form>
+                    <a href="{{ url_for('edit_observation', obs_id=obs.id) }}" class="edit-link">Editează</a>
                 </td>
             </tr>
             {% endfor %}
@@ -155,6 +160,5 @@
         }
     }
 </script>
-
 </body>
 </html>
