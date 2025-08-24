@@ -12,11 +12,8 @@
       position: relative;
       overflow-x: hidden;
       color: white;
-      /* aici am adaugat pentru meniul dropdown */
-      /* (nu era în codul tău original, dar e necesar ca main să se împingă) */
     }
 
-    /* am adăugat margin-top pe body.menu-open main pentru împingerea conținutului */
     body.menu-open main {
       margin-top: 250px;
       transition: margin-top 0.3s ease;
@@ -29,6 +26,7 @@
       z-index: 0;
       pointer-events: none;
     }
+
     header {
       background-color: rgba(17, 61, 60, 0.85);
       padding: 15px 20px;
@@ -40,27 +38,32 @@
       position: relative;
       z-index: 20;
     }
+
     .logo {
       font-size: 1.5em;
       font-weight: bold;
       cursor: pointer;
       color: white;
     }
+
     nav {
       display: flex;
       gap: 10px;
       z-index: 20;
       transition: max-height 0.4s ease, padding 0.4s ease;
     }
+
     nav a {
       color: white;
       text-decoration: none;
       padding: 6px 10px;
       border-radius: 4px;
     }
+
     nav a:hover {
       background-color: #1d5957;
     }
+
     .burger {
       display: none;
       flex-direction: column;
@@ -68,12 +71,14 @@
       gap: 5px;
       z-index: 30;
     }
+
     .burger div {
       width: 25px;
       height: 3px;
       background-color: white;
       border-radius: 2px;
     }
+
     @media (max-width: 768px) {
       nav {
         max-height: 0;
@@ -88,10 +93,12 @@
         border-radius: 0 0 8px 8px;
         box-sizing: border-box;
       }
+
       nav.open {
         max-height: 500px;
         padding: 10px 20px;
       }
+
       .burger {
         display: flex;
       }
@@ -108,29 +115,36 @@
       position: relative;
       z-index: 10;
       flex: 1;
-      /* margin-top se modifică din JS la deschiderea meniului */
     }
-    main h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
+
+    .main-title {
+  text-align: left;
+  font-size: 1.8em;
+  margin: 0 0 20px 0;
+}
+
+
     table {
       width: 100%; border-collapse: collapse;
       margin-bottom: 20px;
     }
+
     th, td {
       padding: 12px;
       border: 1px solid rgba(255,255,255,0.2);
       text-align: center;
       color: white;
     }
+
     th {
       background-color: #1d5957;
     }
+
     img {
       max-width: 150px;
       border-radius: 4px;
     }
+
     .button-link {
       display: inline-block;
       padding: 10px 20px;
@@ -140,9 +154,11 @@
       border-radius: 6px;
       transition: background 0.3s;
     }
+
     .button-link:hover {
       background: #14614d;
     }
+
     .flash-message {
       margin-bottom: 20px;
       padding: 12px;
@@ -151,14 +167,17 @@
       font-weight: bold;
       color: black;
     }
+
     .error {
       background-color: #f8d7da;
       border: 1px solid #f5c6cb;
     }
+
     .success {
       background-color: #d4edda;
       border: 1px solid #c3e6cb;
     }
+
     footer {
       padding: 15px;
       text-align: center;
@@ -200,7 +219,7 @@
 
 <main>
   <a href="{{ url_for('upload_observation') }}" class="button-link" style="float: right; margin-bottom: 10px;">Upload a New Observation</a>
-  <h2>My Observations</h2>
+  <h2 class="main-title">My Observations</h2>
 
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
@@ -236,8 +255,6 @@
   {% else %}
     <p>You haven't uploaded any observations yet.</p>
   {% endif %}
-
-  <a href="{{ url_for('upload_observation') }}" class="button-link">Upload a New Observation</a>
 </main>
 
 <footer>
@@ -253,7 +270,6 @@
     document.body.classList.toggle('menu-open', isOpen);
   });
 
-  // Închide meniul când se apasă un link (pe mobil)
   document.querySelectorAll('#nav-links a').forEach(link => {
     link.addEventListener('click', () => {
       navLinks.classList.remove('open');
