@@ -199,6 +199,7 @@
 </header>
 
 <main>
+  <a href="{{ url_for('upload_observation') }}" class="button-link" style="float: right; margin-bottom: 10px;">Upload a New Observation</a>
   <h2>My Observations</h2>
 
   {% with messages = get_flashed_messages(with_categories=true) %}

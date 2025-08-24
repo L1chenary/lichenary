@@ -11,7 +11,7 @@
   <style>
     html, body {
       margin: 0; padding: 0; height: 100%;
-      overflow-x: hidden; /* schimbat din overflow:hidden la overflow-x:hidden ca să nu afecteze vertical */
+      overflow-x: hidden;
       font-family: Arial, sans-serif;
       background-color: #1f2f1f;
       position: relative;
@@ -35,7 +35,7 @@
       align-items: center;
       flex-wrap: wrap;
       position: relative;
-      z-index: 20; /* schimbat de la 10 la 20 pentru a fi peste canvas */
+      z-index: 20;
     }
 
     .logo {
@@ -199,7 +199,6 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
-  // Set map center to coordinates [0, 0] (middle of the world) and zoom level 2 for a global view
   var map = L.map('map').setView([0, 0], 2);
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -207,22 +206,23 @@
     attribution: '&copy; OpenStreetMap contributors'
   }).addTo(map);
 
+  // ✅ NOUA versiune getColor
   function getColor(pollutionLevel) {
-    if (pollutionLevel <= 1) return 'green';
-    if (pollutionLevel >= 10) return 'red';
-    if (pollutionLevel <= 5) {
-      let ratio = (pollutionLevel - 1) / 4;
-      let r = Math.round(0 + ratio * (255 - 0));
-      let g = 128;
-      let b = 0;
-      return `rgb(${r},${g},${b})`;
-    } else {
-      let ratio = (pollutionLevel - 5) / 5;
-      let r = 255;
-      let g = Math.round(128 - ratio * 128);
-      let b = 0;
-      return `rgb(${r},${g},${b})`;
-    }
+    const colorMap = {
+      1: '#10A200',
+      2: '#3EB401',
+      3: '#6DC602',
+      4: '#9BD803',
+      5: '#CAEA04',
+      6: '#F8FC05',
+      7: '#FABD04',
+      8: '#FC7E03',
+      9: '#FD3F01',
+      10: '#FF0000'
+    };
+
+    const level = Math.round(pollutionLevel);
+    return colorMap[Math.max(1, Math.min(10, level))] || '#888';
   }
 
   fetch('/api/observations')
@@ -246,8 +246,6 @@
     <strong>Pollution Level:</strong> ${obs.pollution_level}
   </div>
 `);
-
-
         }
       });
     });
@@ -287,7 +285,6 @@
     document.body.classList.toggle('menu-open', isOpen);
   });
 
-  // Închide meniul când se apasă un link (pe mobil)
   document.querySelectorAll('#nav-links a').forEach(link => {
     link.addEventListener('click', () => {
       navLinks.classList.remove('open');

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Timeline - Lichenary</title>
+
+  <style>
+    html, body {
+      margin: 0; padding: 0; height: 100%;
+      font-family: Arial, sans-serif;
+      background-color: #1f2f1f;
+      position: relative;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #cloud-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    header {
+      background-color: rgba(17, 61, 60, 0.85);
+      padding: 15px 20px;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 20;
+    }
+
+    .logo {
+      font-size: 1.5em;
+      font-weight: bold;
+      cursor: pointer;
+      color: white;
+    }
+
+    nav {
+      display: flex;
+      gap: 10px;
+      z-index: 20;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+    }
+
+    nav a:hover {
+      background-color: #1d5957;
+    }
+
+    .burger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 5px;
+      z-index: 30;
+    }
+
+    .burger div {
+      width: 25px;
+      height: 3px;
+      background-color: white;
+      border-radius: 2px;
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        max-height: 0;
+        overflow: hidden;
+        flex-direction: column;
+        width: 100%;
+        background-color: rgba(17, 61, 60, 0.9);
+        position: absolute;
+        top: 56px;
+        left: 0;
+        padding: 0 20px;
+        border-radius: 0 0 8px 8px;
+        box-sizing: border-box;
+        transition: max-height 0.4s ease, padding 0.4s ease;
+      }
+
+      nav.open {
+        max-height: 500px;
+        padding: 10px 20px;
+      }
+
+      body.menu-open main {
+        margin-top: 250px;
+        transition: margin-top 0.3s ease;
+      }
+
+      .burger {
+        display: flex;
+      }
+    }
+
+    main {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 40px 20px;
+      position: relative;
+      z-index: 10;
+      color: white;
+      flex: 1;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+      text-align: center;
+    }
+
+    .timeline {
+      position: relative;
+      border-left: 3px solid #4caf50;
+      padding-left: 45px;
+      margin-top: 30px;
+    }
+
+    .timeline-item {
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    .timeline-item::before {
+      display: none;
+    }
+
+    .timeline-date {
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #aaffaa;
+    }
+
+    .timeline-content {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 15px 20px;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .timeline-content h3 {
+      margin-top: 0;
+      color: #ccffcc;
+    }
+
+    .timeline-content p {
+      margin: 5px 0 0;
+      color: #cccccc;
+    }
+
+    footer {
+      background: rgba(17, 61, 60, 0.85);
+      padding: 15px;
+      text-align: center;
+      z-index: 10;
+      color: white;
+    }
+
+    .carousel {
+      position: relative;
+      margin-top: 20px;
+      background: rgba(50, 90, 70, 0.4);
+      border-radius: 8px;
+      padding: 10px 40px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      max-width: 100%;
+      overflow: hidden;
+    }
+
+    .carousel-images {
+      display: flex;
+      transition: transform 0.4s ease;
+      gap: 10px;
+      scroll-behavior: smooth;
+    }
+
+    .carousel-images img {
+      width: 100%;
+      max-width: 300px;
+      border-radius: 6px;
+      box-shadow: 0 0 8px rgba(76, 175, 80, 0.7);
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(28, 80, 60, 0.7);
+      border: none;
+      color: #aaffaa;
+      font-size: 1.7rem;
+      padding: 8px 12px;
+      cursor: pointer;
+      border-radius: 50%;
+      user-select: none;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      z-index: 10;
+    }
+
+    .carousel-btn:hover:not(:disabled) {
+      background: #4caf50;
+      color: #003300;
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .carousel-btn.prev {
+      left: 10px;
+    }
+
+    .carousel-btn.next {
+      right: 10px;
+    }
+
+    .carousel-btn:disabled {
+      background: rgba(28,80,60,0.3);
+      cursor: default;
+      color: #668866;
+    }
+
+    @media (max-width: 480px) {
+      .carousel-images img {
+        max-width: 200px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="cloud-canvas"></canvas>
+
+<header>
+  <div class="logo" onclick="window.location='{{ url_for('home') }}'">Lichenary</div>
+
+  <div id="burger" class="burger" aria-label="Menu" tabindex="0">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+  <nav id="nav-links">
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('despre') }}">About</a>
+    <a href="{{ url_for('participa') }}">How to Participate</a>
+    <a href="{{ url_for('galerie') }}">Gallery</a>
+    <a href="{{ url_for('harta') }}">Map</a>
+    <a href="{{ url_for('contact') }}">Contact</a>
+    {% if current_user.is_authenticated %}
+      <a href="{{ url_for('dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('logout') }}">Logout</a>
+    {% else %}
+      <a href="{{ url_for('login') }}">Login</a>
+      <a href="{{ url_for('register') }}">Register</a>
+    {% endif %}
+  </nav>
+</header>
+
+<main>
+  <h1>Project Timeline & Events</h1>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-date">July 1, 2025</div>
+      <div class="timeline-content">
+        <h3>Official launch of the Lichenary project</h3>
+        <p>The website went live, opening the door to the lichen enthusiast community.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">July 30, 2025</div>
+      <div class="timeline-content">
+        <h3>First meeting with volunteers</h3>
+        <p>Rareș and Carla Gheorghe explained how to properly photograph lichens and upload observations to the site.</p>
+
+        <!-- Carousel start -->
+        <div class="carousel" aria-label="Photo carousel of the first volunteer meeting">
+          <button class="carousel-btn prev" aria-label="Previous image" disabled>&#10094;</button>
+          <div class="carousel-images">
+            <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1756016103/WhatsApp_Image_2025-08-24_at_08.44.59_sraqbv.jpg" alt="Meeting photo 1" />
+            <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1756016117/WhatsApp_Image_2025-08-24_at_08.44.59_1_lwbiij.jpg" alt="Meeting photo 2" />
+            <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1756016122/WhatsApp_Image_2025-08-24_at_08.45.00_jlaj26.jpg" alt="Meeting photo 3" />
+            <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1756016216/WhatsApp_Image_2025-08-24_at_08.43.58_1_odg4xl.jpg" alt="Meeting photo 4" />
+            <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1756016212/WhatsApp_Image_2025-08-24_at_08.43.58_yqpz1b.jpg" alt="Meeting photo 5" />
+          </div>
+          <button class="carousel-btn next" aria-label="Next image">&#10095;</button>
+        </div>
+        <!-- Carousel end -->
+
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">August 1, 2025</div>
+      <div class="timeline-content">
+        <h3>First field trip – Buzău</h3>
+        <p>11 participants joined. We explored Crâng Park for lichen observations and photos.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">August 13, 2025</div>
+      <div class="timeline-content">
+        <h3>First field trip – Cluj</h3>
+        <p>8 participants joined. We visited Central Park for observations and pollution assessment.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">August 18, 2025</div>
+      <div class="timeline-content">
+        <h3>First field trip – Constanța</h3>
+        <p>3 participants attended. We made urban observations and discussed local diversity.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">August 21, 2025</div>
+      <div class="timeline-content">
+        <h3>First field trip – Bucharest</h3>
+        <p>4 participants joined. We explored Herăstrău Park and tested uploads directly from the field.</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  © 2025 Lichenary • All rights reserved
+</footer>
+
+<script>
+  const burger = document.getElementById('burger');
+  const navLinks = document.getElementById('nav-links');
+
+  burger.addEventListener('click', () => {
+    const isOpen = navLinks.classList.toggle('open');
+    document.body.classList.toggle('menu-open', isOpen);
+  });
+
+  document.querySelectorAll('#nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      document.body.classList.remove('menu-open');
+    });
+  });
+</script>
+
+<script>
+  const canvas = document.getElementById('cloud-canvas');
+  const ctx = canvas.getContext('2d');
+  let width, height;
+
+  function resize() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  class Cloud {
+    constructor(x, y, size, color, speed) {
+      this.x = x;
+      this.y = y;
+      this.size = size;
+      this.color = color;
+      this.speed = speed;
+    }
+
+    draw(ctx) {
+      let gradient = ctx.createRadialGradient(this.x, this.y, this.size*0.3, this.x, this.y, this.size);
+      gradient.addColorStop(0, this.color);
+      gradient.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    update() {
+      this.x += this.speed;
+      if(this.x - this.size > width) {
+        this.x = -this.size;
+        this.y = Math.random() * height * 0.8 + height * 0.1;
+      }
+    }
+  }
+
+  const clouds = [];
+  const cloudColors = ['rgba(180,220,180,0.3)', 'rgba(150,190,150,0.25)', 'rgba(120,160,120,0.2)'];
+
+  for(let i=0; i<20; i++) {
+    clouds.push(new Cloud(
+      Math.random() * width,
+      Math.random() * height * 0.8 + height * 0.1,
+      60 + Math.random() * 50,
+      cloudColors[Math.floor(Math.random()*cloudColors.length)],
+      0.2 + Math.random() * 0.2
+    ));
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    clouds.forEach(cloud => {
+      cloud.draw(ctx);
+      cloud.update();
+    });
+    requestAnimationFrame(animate);
+  }
+  animate();
+</script>
+
+<script>
+  const carousel = document.querySelector('.carousel');
+  const imagesContainer = carousel.querySelector('.carousel-images');
+  const images = imagesContainer.querySelectorAll('img');
+  const prevBtn = carousel.querySelector('.carousel-btn.prev');
+  const nextBtn = carousel.querySelector('.carousel-btn.next');
+
+  let currentIndex = 0;
+  const maxIndex = 3; // limit to 0, 1, 2, 3
+
+  function updateCarousel() {
+    const gap = 10;
+    const imageWidth = images[0].clientWidth;
+    const offset = -currentIndex * (imageWidth + gap);
+    imagesContainer.style.transform = `translateX(${offset}px)`;
+
+    prevBtn.disabled = currentIndex === 0;
+    nextBtn.disabled = currentIndex === maxIndex;
+  }
+
+  prevBtn.addEventListener('click', () => {
+    if(currentIndex > 0){
+      currentIndex--;
+      updateCarousel();
+    }
+  });
+
+  nextBtn.addEventListener('click', () => {
+    if(currentIndex < maxIndex){
+      currentIndex++;
+      updateCarousel();
+    }
+  });
+
+  window.addEventListener('resize', updateCarousel);
+  updateCarousel();
+</script>
+
+</body>
+</html>

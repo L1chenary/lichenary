@@ -120,27 +120,44 @@
 
   .card {
     background: rgba(255, 255, 255, 0.15);
-    padding: 20px;
     border-radius: 8px;
     backdrop-filter: blur(6px);
     box-shadow: 0 0 10px rgba(0,0,0,0.2);
     transition: transform 0.2s;
     cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
   }
 
   .card:hover {
     transform: translateY(-5px);
   }
 
-  .card h3 {
-    margin-top: 0;
-  }
-
   .card a {
     color: white;
     text-decoration: none;
-    display: block;
+    display: flex;
+    flex-direction: column;
     height: 100%;
+  }
+
+  .card img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+
+  .card-content {
+    padding: 15px 20px 20px;
+    flex-grow: 1;
+  }
+
+  .card h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
   }
 
   footer {
@@ -187,44 +204,65 @@
   <div class="cards">
     <div class="card">
       <a href="{{ url_for('despre_proiect_si_rol') }}">
-        <h3>What the Project Is About</h3>
-        <p>A brief overview of the project and the reason behind this initiative...</p>
+        <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1754408184/jmqmznrg4ove8lav24wo.jpg" alt="What the Project Is About">
+        <div class="card-content">
+          <h3>What the Project Is About</h3>
+          <p>A brief overview of the project and the reason behind this initiative...</p>
+        </div>
       </a>
     </div>
     <div class="card">
       <a href="{{ url_for('despre_pol_atmosferica') }}">
-        <h3>What Is Air Pollution?</h3>
-        <p>Explains what air pollution means, its causes, effects...</p>
+        <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1756020661/WhatsApp_Image_2025-08-24_at_10.30.30_xc0udk.jpg" alt="What Is Air Pollution?">
+        <div class="card-content">
+          <h3>What Is Air Pollution?</h3>
+          <p>Explains what air pollution means, its causes, effects...</p>
+        </div>
       </a>
     </div>
     <div class="card">
       <a href="{{ url_for('despre_licheni') }}">
-        <h3>Lichens – What They Are and How We Use Them</h3>
-        <p>Description of species, their role as bioindicators, etc...</p>
+        <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1754902029/gaejpenbs5vqw6cw4zdn.jpg" alt="Lichens – What They Are">
+        <div class="card-content">
+          <h3>Lichens – What They Are and How We Use Them</h3>
+          <p>Description of species, their role as bioindicators, etc...</p>
+        </div>
       </a>
     </div>
     <div class="card">
       <a href="{{ url_for('despre_echipa') }}">
-        <h3>The Team</h3>
-        <p>Introduction of team members, roles, skills...</p>
+        <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1756025797/Captur%C4%83_de_ecran_2025-08-24_115018_dncgof.png" alt="The Team">
+        <div class="card-content">
+          <h3>The Team</h3>
+          <p>Introduction of team members, roles, skills...</p>
+        </div>
       </a>
     </div>
     <div class="card">
       <a href="{{ url_for('despre_timeline') }}">
-        <h3>Timeline</h3>
-        <p>Project stages, activity calendar...</p>
+        <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1756027194/WhatsApp_Image_2025-08-24_at_12.18.59_mcxlpo.jpg" alt="Timeline & Events">
+        <div class="card-content">
+          <h3>Timeline & Events</h3>
+          <p>Project stages, activity calendar...</p>
+        </div>
       </a>
     </div>
     <div class="card">
       <a href="{{ url_for('despre_resurse') }}">
-        <h3>Resources and Materials Needed</h3>
-        <p>Tools, equipment, guides used in the field...</p>
+        <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1756021332/WhatsApp_Image_2025-08-24_at_10.39.06_gdnsv7.jpg" alt="Resources and Materials">
+        <div class="card-content">
+          <h3>Resources and Materials Needed</h3>
+          <p>Tools, equipment, guides used in the field...</p>
+        </div>
       </a>
     </div>
     <div class="card">
       <a href="{{ url_for('despre_parteneri') }}">
-        <h3>Partners and Sponsors</h3>
-        <p>List of involved organizations, financial support, etc...</p>
+        <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1756026179/WhatsApp_Image_2025-08-24_at_12.02.03_nn6f2u.jpg" alt="Partners and Sponsors">
+        <div class="card-content">
+          <h3>Partners and Sponsors</h3>
+          <p>List of involved organizations, financial support, etc...</p>
+        </div>
       </a>
     </div>
   </div>
@@ -241,7 +279,6 @@
     document.body.classList.toggle('menu-open', isOpen);
   });
 
-  // Închide meniul când se apasă un link (pe mobil)
   document.querySelectorAll('#nav-links a').forEach(link => {
     link.addEventListener('click', () => {
       navLinks.classList.remove('open');
