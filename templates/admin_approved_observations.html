@@ -58,7 +58,7 @@
         }
         .back-link {
             display: inline-block;
-            margin-top: 30px;
+            margin-bottom: 20px;
             text-decoration: none;
             color: #2980b9;
             font-weight: bold;
@@ -98,6 +98,7 @@
 </head>
 <body>
 <main>
+    <a href="{{ url_for('dashboard') }}" class="back-link">← Înapoi la dashboard</a>
     <h2>Observații aprobate</h2>
 
     {% if observations %}
@@ -137,8 +138,6 @@
     {% else %}
     <p>Nu există observații aprobate.</p>
     {% endif %}
-
-    <a href="{{ url_for('dashboard') }}" class="back-link">← Înapoi la dashboard</a>
 </main>
 
 <!-- Modal Viewer -->
