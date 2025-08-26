@@ -171,6 +171,36 @@
       background-color: #62b562;
       color: white;
     }
+
+    /* Buton nou pentru formularul de aplicare */
+    .btn-apply {
+      display: inline-block;
+      margin-left: 15px;
+      padding: 12px 25px;
+      font-size: 1.1em;
+      font-weight: 600;
+      color: white;
+      background-color: #3a8264;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-apply:hover {
+      background-color: #2e654c;
+      color: white;
+    }
+
+    /* Pentru a alinia butoanele in main pe orizontala */
+    .btn-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+    }
   </style>
 </head>
 <body>
@@ -207,7 +237,10 @@
   <div class="section">
     <h2>🌍 Become an Ambassador</h2>
 
-    <a href="{{ url_for('login') }}" class="btn-login">Log In / Sign In</a>
+<div class="btn-group">
+  <a href="https://forms.gle/GpzDRoJFazP3eqvn8" class="btn-login" target="_blank" rel="noopener noreferrer">Apply to be an Ambassador</a>
+</div>
+
 
     <p>Do you want to bring Lichenary to your country?<br />
     Then become one of the first official Lichenary ambassadors.</p>
@@ -236,7 +269,6 @@
     <h3>🌱 What will you receive?</h3>
     <ul>
       <li>Official recognition from the Lichenary team</li>
-      <li>Access to an Ambassador Toolkit (organization guides, templates, media support)</li>
       <li>Ongoing support from the central team</li>
       <li>An international network of young ambassadors like you</li>
       <li>The chance to spark real change in your community</li>
@@ -244,7 +276,7 @@
     </ul>
 
     <h3>📩 How to apply?</h3>
-    <p>Send us a message on our Instagram page <strong>@lichenary.ro</strong>, tell us about yourself and why you want to represent Lichenary in your country.<br />
+    <p>Fill in the form on the top of this page, or send us a message on our Instagram page <strong>@lichenary.ro</strong>, tell us about yourself and why you want to represent Lichenary in your country.<br />
     We will guide you step by step to build your own chapter.</p>
 
     <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.2); margin: 30px 0;">
