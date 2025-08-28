@@ -9,6 +9,10 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
 # Configurare aplicație
 app = Flask(__name__)
 app.secret_key = 'lichena-foarte-secret-key'
@@ -108,8 +112,22 @@ def galerie():
 def harta():
     return render_template('harta.html')
 
-@app.route('/contact')
+@app.route('/contact', methods=['GET', 'POST'])
 def contact():
+    if request.method == 'POST':
+        name = request.form.get('nume')
+        sender_email = request.form.get('email')
+        message = request.form.get('mesaj')
+
+        try:
+            send_contact_email(name, sender_email, message)
+            flash('Message sent successfully! Thank you.', 'success')
+        except Exception as e:
+            print(f"Email send failed: {e}")
+            flash('There was an error sending your message. Please try again later.', 'error')
+
+        return redirect(url_for('contact'))
+
     return render_template('contact.html')
 
 # Subpages
@@ -470,6 +488,29 @@ def delete_observation(obs_id):
     db.session.commit()
     flash('Observation deleted.', 'success')
     return redirect(url_for('admin_observations'))
+
+# ↓ Add this above if __name__ == '__main__':
+def send_contact_email(name, sender_email, message):
+    recipient_email = "lichenary@gmail.com"
+
+    msg = MIMEMultipart()
+    msg['From'] = sender_email
+    msg['To'] = recipient_email
+    msg['Subject'] = f"New message from {name} via Lichenary contact form"
+
+    body = f"Name: {name}\nEmail: {sender_email}\n\nMessage:\n{message}"
+    msg.attach(MIMEText(body, 'plain'))
+
+    smtp_server = "smtp.gmail.com"
+    smtp_port = 587
+    your_gmail = "lichenary@gmail.com"
+    your_password = os.getenv("EMAIL_APP_PASSWORD")
+
+    with smtplib.SMTP(smtp_server, smtp_port) as server:
+        server.starttls()
+        server.login(your_gmail, your_password)
+        server.send_message(msg)
+
 
 if __name__ == '__main__':
     with app.app_context():
