@@ -515,6 +515,4 @@ def send_contact_email(name, sender_email, message):
 if __name__ == '__main__':
     with app.app_context():
         create_tables_and_admin()
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port, debug=True)
-
+    app.run(debug=True)
