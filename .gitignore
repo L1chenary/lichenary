@@ -4,3 +4,4 @@ instance/
 .venv/
 .env
 lichenary.db
+"client_secrets.json" 

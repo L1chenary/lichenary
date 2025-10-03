@@ -164,6 +164,73 @@
     z-index: 10;
     color: white;
   }
+/* Glassmorphism + pop-up efect, fără justify și fără suprapunere peste imagine */
+.gallery-item {
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05); /* fundal subtil card */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.gallery-item:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.5);
+}
+
+/* Glassmorphism doar pe zona de text */
+.gallery-item div[style*="padding:15px"] {
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
+  border-radius: 0 0 12px 12px; /* doar colțurile de jos */
+  padding: 20px !important;
+  text-align: left !important; /* nu justify */
+  line-height: 1.6;
+  margin-top: auto; /* menține textul sub imagine */
+}
+
+/* Optional: Heading și text */
+.gallery-item h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.gallery-item p {
+  margin-bottom: 10px;
+}
+
+/* Grid-ul principal pentru echipă */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 carduri standard */
+  gap: 15px;
+}
+
+/* Primul rând – doar 2 carduri pentru fondatori */
+.gallery-item.founder:nth-child(1) {
+  grid-column: 1 / 2;
+}
+
+.gallery-item.founder:nth-child(2) {
+  grid-column: 2 / 3;
+}
+
+/* Restul cardurilor rămân implicit 3 pe rând */
+.gallery-item:not(.founder) {
+  grid-column: auto;
+}
+
+/* Responsive pentru mobil */
+@media (max-width: 768px) {
+  .gallery-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}
+
+
+
 </style>
 </head>
 <body>
@@ -197,16 +264,294 @@
 </header>
 
 <main>
-  <h1>Coming soon!</h1>
+  <h1>Meet the Team</h1>
   <div class="gallery-grid">
-    {% for img in images %}
-      <div class="gallery-item">
-        <img src="{{ url_for('static', filename='uploads/' + img.image_filename) }}" alt="Lichen observation">
-        <span>{{ img.species or 'Unknown' }} – {{ img.date_time.strftime('%Y‑%m‑%d') }}</span>
+
+    <!-- 1: Carla -->
+    <div class="gallery-item founder">
+      <div style="display:flex; flex-direction:column; height:100%;">
+        <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1759505547/WhatsApp_Image_2025-10-03_at_18.25.53_uqkkz8.jpg"
+             alt="Gheorghe Carla-Ioana"
+             style="height:300px; width:100%; object-fit:cover; object-position:center;">
+        <div style="padding:15px; text-align:left; color:white; background:rgba(0,0,0,0.3); flex-grow:1;">
+          <h3 style="margin:0 0 10px;">Gheorghe Carla-Ioana</h3>
+          <p style="margin:0 0 10px; font-style:italic;">Founder</p>
+          <p>Hello!! I'm Carla, a sophomore in high school from Buzău, Romania and I've started this project alongside my twin, Rareș!</p>
+          <p>I pretty much love anything that involves using my hands: from origamis, puzzles and legos to painting and crocheting.</p>
+          <p>Some of my other passions include learning foreign languages, geography and photography. I also have a thing for cats and hope to be getting one soon! When I'm not at school, I enjoy discovering anything new about nature, biology and the world around me - that's actually one of the main reasons I've decided to start Lichenary!</p>
+          <p>I'm open to learning new things and I can't wait for us to build a community of nature enthusiasts together!</p>
+        </div>
       </div>
-    {% endfor %}
+    </div>
+
+    <!-- 2: Rareș (image shifted down with object-position) -->
+    <div class="gallery-item founder">
+      <div style="display:flex; flex-direction:column; height:100%;">
+        <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1759505546/WhatsApp_Image_2025-10-03_at_18.25.54_zhqhki.jpg"
+             alt="Gheorghe Rareș-Răzvan"
+             style="height:300px; width:100%; object-fit:cover; object-position:center 20%;">
+        <div style="padding:15px; text-align:left; color:white; background:rgba(0,0,0,0.3); flex-grow:1;">
+          <h3 style="margin:0 0 10px;">Gheorghe Rareș-Răzvan</h3>
+          <p style="margin:0 0 10px; font-style:italic;">Founder</p>
+          <p>Hey! I'm Rareș, also a sophomore in Buzău, Romania. I'm passionate about sciences – be it earth science, chemistry, or biology, I always try to stay curious and find out more.</p>
+          <p>I started this project alongside my twin sister, Carla, as a way to promote environmental sciences in my community and to raise awareness on the impacts of climate change.</p>
+          <p>Lichens are (in a way) at the limit between plants and fungi, and their fragility makes for a perfect environmental project and also for interesting metaphors.</p>
+          <p>That being said, I wish we, through this project, will be able to make a difference and have a lasting impact on the planet.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3: Leonardo -->
+    <div class="gallery-item">
+      <div style="display:flex; flex-direction:column; height:100%;">
+        <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1759505534/WhatsApp_Image_2025-10-03_at_18.25.55_6_dyyf1o.jpg"
+             alt="Leonardo Leschanz"
+             style="height:300px; width:100%; object-fit:cover; object-position:center;">
+        <div style="padding:15px; text-align:left; color:white; background:rgba(0,0,0,0.3); flex-grow:1;">
+          <h3 style="margin:0 0 10px;">Leonardo Leschanz</h3>
+          <p style="margin:0 0 10px; font-style:italic;">Ambassador – Austria</p>
+          <p>Servus! I'm Leonardo from Austria.</p>
+          <p>In my free time, I love doing sports in Austria's beautiful nature and simply admiring its landscapes – whether by hiking, surfing, or paddling down one of Austria's main rivers. Lichenary has given me something new to look out for.</p>
+          <p>Since observation is where all science begins, I believe that cultivating curiosity in our day-to-day life is a great way to prepare ourselves for scientific studies. Moreover, embracing a spirit of discovery can make life more exciting and meaningful.</p>
+          <p>So, that's my reason for becoming an ambassador for Lichenary – now I'd love to know your reason for not becoming one!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4: Leonor -->
+    <div class="gallery-item">
+      <div style="display:flex; flex-direction:column; height:100%;">
+        <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1759505536/WhatsApp_Image_2025-10-03_at_18.25.54_2_noo2ys.jpg"
+             alt="Obando Umana Leonor"
+             style="height:300px; width:100%; object-fit:cover; object-position:center;">
+        <div style="padding:15px; text-align:left; color:white; background:rgba(0,0,0,0.3); flex-grow:1;">
+          <h3 style="margin:0 0 10px;">Obando Umana Leonor</h3>
+          <p style="margin:0 0 10px; font-style:italic;">Ambassador – Costa Rica</p>
+          <p>Hi, my name is Leonor and I'm from Costa Rica. I love science, my favorite one being chemistry.</p>
+          <p>I enjoy taking part in different olympiads, drawing, painting, playing volleyball, cooking and taking care of animals. I joined Lichenary because I think it's a wonderful way to learn so much about biology and it's a project that helps nature very much.</p>
+          <p>If more people get involved, I believe it could truly make an impact, because when people start to understand living beings, that's when they begin to care for them and take action to protect them. #joinlichenary</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5: Tomáš -->
+    <div class="gallery-item">
+      <div style="display:flex; flex-direction:column; height:100%;">
+        <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1759505535/WhatsApp_Image_2025-10-03_at_18.25.55_4_ahnwkw.jpg"
+             alt="Tomáš Kohoutek"
+             style="height:300px; width:100%; object-fit:cover; object-position:center;">
+        <div style="padding:15px; text-align:left; color:white; background:rgba(0,0,0,0.3); flex-grow:1;">
+          <h3 style="margin:0 0 10px;">Tomáš Kohoutek</h3>
+          <p style="margin:0 0 10px; font-style:italic;">Ambassador – Czechia</p>
+          <p>Hi, I'm Tomáš, 19 years old, from Říčany near Prague in Czechia.</p>
+          <p>I've always been curious about the natural sciences – chemistry, biology, geology, and geography – and since I'll be studying medicine, I'm especially fascinated by how the human body functions.</p>
+          <p>Outside of studying, I enjoy spending time outdoors: running, cycling, hiking, and even rock climbing. Music is also part of my life, and I love playing the guitar. I joined Lichenary because lichens are a brilliant way to connect science with everyday life.</p>
+          <p>They're simple to observe, yet powerful as indicators of air quality. I think this project is a unique way to engage people in protecting the environment around us!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6: Asger -->
+    <div class="gallery-item">
+      <div style="display:flex; flex-direction:column; height:100%;">
+        <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1759505533/WhatsApp_Image_2025-10-03_at_18.25.56_jpk2b6.jpg"
+             alt="Asger Krag Morild"
+             style="height:300px; width:100%; object-fit:cover; object-position:center;">
+        <div style="padding:15px; text-align:left; color:white; background:rgba(0,0,0,0.3); flex-grow:1;">
+          <h3 style="margin:0 0 10px;">Asger Krag Morild</h3>
+          <p style="margin:0 0 10px; font-style:italic;">Ambassador – Denmark</p>
+          <p>Hej! I'm Asger from Denmark. I've always been curious, and most of my free time is spent learning something new. Right now, that means diving into physics, exploring the beauty of mathematics and practicing piano whenever I can.</p>
+          <p>I also love languages – at the moment I'm studying Japanese and Spanish, which makes traveling even more exciting because every journey becomes a chance to connect with people in their own words. For me, curiosity isn't just a hobby, it's a mindset.</p>
+          <p>That's why I joined Lichenary: to share discoveries and keep learning together. I believe that when we explore the world with open minds, we not only grow ourselves, but also inspire those around us. And yes, being Danish, I guess you could say I'm still just building my future one "LEGO brick" at a time. :)</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7: Ville -->
+    <div class="gallery-item">
+      <div style="display:flex; flex-direction:column; height:100%;">
+        <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1759505534/WhatsApp_Image_2025-10-03_at_18.25.55_7_qu7osn.jpg"
+             alt="Ville Kauppinen"
+             style="height:300px; width:100%; object-fit:cover; object-position:center;">
+        <div style="padding:15px; text-align:left; color:white; background:rgba(0,0,0,0.3); flex-grow:1;">
+          <h3 style="margin:0 0 10px;">Ville Kauppinen</h3>
+          <p style="margin:0 0 10px; font-style:italic;">Ambassador – Finland</p>
+          <p>Hey there! I'm Ville from Finland. Science has always fascinated me—whether it's the beauty of physics, the puzzles of math, or the stories written in geology.</p>
+          <p>But I don't just live in books: I've hiked the highlands of Scotland, explored the mountains of Andorra, and always look forward to the next adventure, be it on the trail or on the golf course. Traveling keeps me curious, and wearing a sharp suit keeps me, well... unmistakably me.</p>
+          <p>I joined Lichenary because I believe curiosity connects us. By sharing discoveries, big and small, we can inspire each other and actually make a difference.</p>
+          <p>Together, science isn't just study—it becomes a way of living and changing the world.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8: Agostino -->
+    <div class="gallery-item">
+      <div style="display:flex; flex-direction:column; height:100%;">
+        <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1759505534/WhatsApp_Image_2025-10-03_at_18.25.56_1_f5u87f.jpg"
+             alt="Agostino Lacroix"
+             style="height:300px; width:100%; object-fit:cover; object-position:center;">
+        <div style="padding:15px; text-align:left; color:white; background:rgba(0,0,0,0.3); flex-grow:1;">
+          <h3 style="margin:0 0 10px;">Agostino Lacroix</h3>
+          <p style="margin:0 0 10px; font-style:italic;">Ambassador – France</p>
+          <p>Hiii, I'm Agostino from Paris and I'm 17!! I used to be the deeply annoying child that kept asking questions and now I developed a passion to discover new things.</p>
+          <p>If I'm not at school studying maths and physics you may likely find me outside with my friends or with my family discovering new places. I enjoy reading in parks, drawing silly characters, hiking in the wilds, eating new dishes, the petrichor, stepping on dry leaves, playing the piano in the evening or crazy fantasy roleplay games, hanging with the people I love and going on new adventures...</p>
+          <p>Finally, I decided to join lichenary for the great opportunity to work with other people my age in a global Science Project... Oh right! I forgot! I also make bad jokes ;)</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9: Madeleine -->
+    <div class="gallery-item">
+      <div style="display:flex; flex-direction:column; height:100%;">
+        <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1759505535/WhatsApp_Image_2025-10-03_at_18.25.55_1_pstk1m.jpg"
+             alt="Madeleine de Lamothe"
+             style="height:300px; width:100%; object-fit:cover; object-position:center;">
+        <div style="padding:15px; text-align:left; color:white; background:rgba(0,0,0,0.3); flex-grow:1;">
+          <h3 style="margin:0 0 10px;">Madeleine de Lamothe</h3>
+          <p style="margin:0 0 10px; font-style:italic;">Ambassador – France</p>
+          <p>Hello! I'm Madeleine, I live in France.</p>
+          <p>When I am not playing the trumpet, doing sports or just spending time with my family and friends, I like to study general sciences, but I am more interested in geosciences due to current environmental issues.</p>
+          <p>I like going on field trips to understand what measures should be taken to preserve the Earth, that's why I joined Lichenary. It will allow me to do science and to make a difference, while also participating in an international project driven by curiosity and mutual support.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10: Junzhe -->
+    <div class="gallery-item">
+      <div style="display:flex; flex-direction:column; height:100%;">
+        <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1759505535/WhatsApp_Image_2025-10-03_at_18.25.55_5_hjswzk.jpg"
+             alt="Junzhe Yao"
+             style="height:300px; width:100%; object-fit:cover; object-position:center;">
+        <div style="padding:15px; text-align:left; color:white; background:rgba(0,0,0,0.3); flex-grow:1;">
+          <h3 style="margin:0 0 10px;">Junzhe Yao</h3>
+          <p style="margin:0 0 10px; font-style:italic;">Ambassador – Germany</p>
+          <p>Hi, I'm Junzhe, from Bonn, Germany.</p>
+          <p>I'm passionate about chemistry, history and mathematics. In my free time I like to go swimming, draw stuff around me and forge useful tools. I joined the Lichenary team to promote environmental awareness, which in my opinion is one of the great challenges about to be faced by mankind.</p>
+          <p>P.S.: I think Pineapple on Pizza is a crime and that Carthage must be destroyed.</p>
+        </div>
+      </div>
+    </div>
+<!-- 11: Michael Hahn -->
+<div class="gallery-item">
+  <div style="display:flex; flex-direction:column; height:100%;">
+    <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1759505535/WhatsApp_Image_2025-10-03_at_18.25.55_3_zuibmh.jpg"
+         alt="Michael Hahn"
+         style="height:300px; width:100%; object-fit:cover; object-position:center;">
+    <div style="padding:15px; text-align:left; color:white; background:rgba(0,0,0,0.3); flex-grow:1;">
+      <h3 style="margin:0 0 10px;">Michael Hahn</h3>
+      <p style="margin:0 0 10px; font-style:italic;">Ambassador – Germany</p>
+      <p>Hi, I'm Michael! I live in the town of Meckenheim near Bonn in the west of Germany.</p>
+      <p>In my free time, I train for athletic competitions and google a lot of random things. During my runs, I can constantly discover new places around me. It's fascinating to explore a place you've never been before just a few kilometers from home! Being interested in both Earth Sciences and Chemistry, I decided to volunteer for Lichenary because I believe lichens are a great method to measure air pollution, as they can be observed by everyone.</p>
+      <p>Another reason is the great international community of the project! So let's start spreading the idea of Lichenary further!</p>
+    </div>
+  </div>
+</div>
+
+<!-- 12: Bains Charuvrat -->
+<div class="gallery-item">
+  <div style="display:flex; flex-direction:column; height:100%;">
+    <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1759505546/WhatsApp_Image_2025-10-03_at_18.25.54_1_dpq0ap.jpg"
+         alt="Bains Charuvrat"
+         style="height:300px; width:100%; object-fit:cover; object-position:center;">
+    <div style="padding:15px; text-align:left; color:white; background:rgba(0,0,0,0.3); flex-grow:1;">
+      <h3 style="margin:0 0 10px;">Bains Charuvrat</h3>
+      <p style="margin:0 0 10px; font-style:italic;">Ambassador – India</p>
+      <p>Hi, I'm Charuvrat! I live in Punjab, India.</p>
+      <p>I've always been fascinated by the tiny wonders of nature–how even the smallest things can reveal so much about our world.</p>
+      <p>In my free time, I enjoy swimming, sketching and experimenting with new baking recipes.</p>
+      <p>I joined Lichenary because it's a chance to explore the hidden stories of nature and to understand how everything around us is connected. Lichens are a perfect example - they may be small, but they tell powerful stories about our environment.</p>
+      <p>Being part of this project lets me work with others who share the same curiosity, and together, we can contribute to a healthier, more aware world.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 13: Priyanshi Ghanghas -->
+<div class="gallery-item">
+  <div style="display:flex; flex-direction:column; height:100%;">
+    <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1759505533/WhatsApp_Image_2025-10-03_at_18.29.32_ipwyam.jpg"
+         alt="Priyanshi Ghanghas"
+         style="height:300px; width:100%; object-fit:cover; object-position:center;">
+    <div style="padding:15px; text-align:left; color:white; background:rgba(0,0,0,0.3); flex-grow:1;">
+      <h3 style="margin:0 0 10px;">Priyanshi Ghanghas</h3>
+      <p style="margin:0 0 10px; font-style:italic;">Ambassador – India</p>
+      <p>Hi everyone, I'm Priyanshi Ghanghas, from Chandigarh, India, and I'm excited to be here!</p>
+      <p>My curiosity runs from the latest in tech to the quiet focus of painting and exploring the best artist: "nature". Lichens as I see are like nature's silent sentinels; they help us identify pollution parameters and reveal changes in the environment before we even notice. A lichen is actually a brilliant team-up between a fungus and an alga working together perfectly. Principle of diverse collaboration is key to my approach.</p>
+      <p>I'm looking forward to lending my energy and perspective to our projects, ensuring we produce clear, impactful work for our community. Let's build something great together!</p>
+    </div>
+  </div>
+</div>
+
+<!-- 14: Ben Herdianto -->
+<div class="gallery-item">
+  <div style="display:flex; flex-direction:column; height:100%;">
+    <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1759505534/WhatsApp_Image_2025-10-03_at_18.29.31_g8bcjg.jpg"
+         alt="Ben Herdianto"
+         style="height:300px; width:100%; object-fit:cover; object-position:center;">
+    <div style="padding:15px; text-align:left; color:white; background:rgba(0,0,0,0.3); flex-grow:1;">
+      <h3 style="margin:0 0 10px;">Ben Herdianto</h3>
+      <p style="margin:0 0 10px; font-style:italic;">Ambassador – Indonesia</p>
+      <p>Hey, I'm Ben. I live in Jakarta, Indonesia. I have always been fascinated by the way Earth systems and nature interact with one another, shaping the environment we live in. Jakarta, despite being a vibrant and dynamic city, is also well known as one of the most air-polluted cities in the world. This challenge motivates me to learn more about how science can provide solutions.</p>
+      <p>Driven by my love for Earth Science and for my city, I am very excited to join Lichenary and contribute actively to reducing air pollution!</p>
+    </div>
+  </div>
+</div>
+
+<!-- 15: Dario Boi -->
+<div class="gallery-item">
+  <div style="display:flex; flex-direction:column; height:100%;">
+    <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1759505534/WhatsApp_Image_2025-10-03_at_18.25.55_8_essimg.jpg"
+         alt="Dario Boi"
+         style="height:300px; width:100%; object-fit:cover; object-position:center;">
+    <div style="padding:15px; text-align:left; color:white; background:rgba(0,0,0,0.3); flex-grow:1;">
+      <h3 style="margin:0 0 10px;">Dario Boi</h3>
+      <p style="margin:0 0 10px; font-style:italic;">Ambassador – Italy</p>
+      <p>Hey! I'm Dario, from Palidoro, a small town near Rome. I'm really passionate about hiking and love studying geology and microbiology.</p>
+      <p>I also enjoy spending time with my friends, and in my free time, I dive into judo, travelling, reading, even blacksmithing!</p>
+      <p>I joined Lichenary because I want to transform my passion for microbiology into meaningful action and contribute to scientific progress. What fascinates me about science is its power to uncover nature's secrets—and I want to discover more of these secrets with one of the most intriguing life forms on Earth: lichens.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 16: Bryan Ng -->
+<div class="gallery-item">
+  <div style="display:flex; flex-direction:column; height:100%;">
+    <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1759505535/WhatsApp_Image_2025-10-03_at_18.25.55_d97sno.jpg"
+         alt="Bryan Ng"
+         style="height:300px; width:100%; object-fit:cover; object-position:center;">
+    <div style="padding:15px; text-align:left; color:white; background:rgba(0,0,0,0.3); flex-grow:1;">
+      <h3 style="margin:0 0 10px;">Bryan Ng</h3>
+      <p style="margin:0 0 10px; font-style:italic;">Ambassador – Malaysia</p>
+      <p>Hey everyone! I'm Bryan Ng from Malaysia.</p>
+      <p>Earth Science has never failed to pique my curiosity since I was young. In fact, it is the first subject that I found interest in.</p>
+      <p>I enjoy learning about different natural occurring processes because it enables me to better understand how nature moulds our homeland.</p>
+      <p>In recent decades, climate change has been increasingly discussed, with anthropogenic air pollution being one of its drivers. Good air quality is pivotal for a community's wellbeing. However, not all localities have access to air quality sensors. Thus, I think that Lichenary is a unique initiative that empowers communities to strive for a sustainable living environment by enabling them to directly estimate local air quality. I hope that through this project, more people will safeguard the world we live in.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 17: Minseo Kim -->
+<div class="gallery-item">
+  <div style="display:flex; flex-direction:column; height:100%;">
+    <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1759505535/WhatsApp_Image_2025-10-03_at_18.25.55_2_k3nuxf.jpg"
+         alt="Minseo Kim"
+         style="height:300px; width:100%; object-fit:cover; object-position:center;">
+    <div style="padding:15px; text-align:left; color:white; background:rgba(0,0,0,0.3); flex-grow:1;">
+      <h3 style="margin:0 0 10px;">Minseo Kim</h3>
+      <p style="margin:0 0 10px; font-style:italic;">Ambassador – South Korea</p>
+      <p>Hi! I'm Minseo, a second-year high school student from Jinju, South Korea.</p>
+      <p>I've always been fascinated by science, especially earth science and biology, and I dream of pursuing a career where I can observe climate change and help protect people's safety and happiness from its impacts.</p>
+      <p>By joining this project, I hope not only to raise awareness of the seriousness of climate change, but also to deepen my love for our planet. I believe that together, through small steps like this, we can make a real difference.</p>
+    </div>
+  </div>
+</div>
+
+
   </div>
 </main>
+
+
+
+
 
 <footer>
   © 2025 Lichenary • All rights reserved
