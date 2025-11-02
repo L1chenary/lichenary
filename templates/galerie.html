@@ -7,13 +7,11 @@
 
 <style>
   html, body {
-    margin: 0; padding: 0; height: 100%;
+    margin: 0; padding: 0;
     font-family: Arial, sans-serif;
     background-color: #1f2f1f;
     position: relative;
     overflow-x: hidden;
-    display: flex;
-    flex-direction: column;
   }
 
   #cloud-canvas {
@@ -83,7 +81,7 @@
       width: 100%;
       background-color: rgba(17, 61, 60, 0.9);
       position: absolute;
-      top: 56px; /* sub header */
+      top: 56px;
       left: 0;
       padding: 0 20px;
       border-radius: 0 0 8px 8px;
@@ -106,13 +104,12 @@
   }
 
   main {
-    max-width: 1000px;
+    max-width: 1100px;
     margin: 2rem auto;
     padding: 40px 20px;
     position: relative;
     z-index: 10;
     color: white;
-    flex: 1;
   }
 
   h1 {
@@ -122,47 +119,68 @@
     text-align: center;
   }
 
+  /* ======== MASONRY GALERIE ======== */
   .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-auto-rows: 10px; /* baza pentru JS */
     gap: 15px;
   }
 
   .gallery-item {
-    position: relative;
-    overflow: hidden;
-    border-radius: 8px;
-    background: rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.08);
+    border-radius: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
   .gallery-item img {
     width: 100%;
+    height: auto;
+    border-radius: 8px;
     display: block;
-    transition: transform 0.3s;
-  }
-
-  .gallery-item:hover img {
-    transform: scale(1.05);
   }
 
   .gallery-item span {
-    position: absolute;
-    bottom: 0; left: 0;
-    width: 100%;
-    padding: 8px;
-    background: rgba(0,0,0,0.6);
-    font-size: 0.9em;
+    display: block;
+    margin-top: 6px;
+    text-align: center;
     color: #fff;
-    text-align: left;
+    font-size: 0.95em;
+    opacity: 0.9;
+  }
+
+  .gallery-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255,255,255,0.3);
+    z-index: 5;
+  }
+
+  @media (max-width: 768px) {
+    .gallery-grid {
+      grid-template-columns: 1fr;
+      grid-auto-rows: auto;
+    }
+    .gallery-item {
+      max-width: 90%;
+    }
   }
 
   footer {
     background: rgba(17, 61, 60, 0.85);
     padding: 15px;
-    text-align: center;
+    text-align: left;
     z-index: 10;
     color: white;
+    position: relative;
+    margin-top: 40px;
+    text-align: center;
+}
+
   }
 </style>
 </head>
@@ -197,14 +215,170 @@
 </header>
 
 <main>
-  <h1>📸 Lichenary Gallery</h1>
-  <div class="gallery-grid">
-    {% for img in images %}
-      <div class="gallery-item">
-        <img src="{{ url_for('static', filename='uploads/' + img.image_filename) }}" alt="Lichen observation">
-        <span>{{ img.species or 'Unknown' }} – {{ img.date_time.strftime('%Y‑%m‑%d') }}</span>
-      </div>
-    {% endfor %}
+  <h1>Lichenary Gallery</h1>
+  <div class="gallery-grid" id="galleryGrid">
+
+    <div class="gallery-item">
+      <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1762068574/WhatsApp_Image_2025-11-02_at_09.26.58_p2vjds.jpg" alt="Figuae 1">
+      <span>Figure 1</span>
+    </div>
+
+    <div class="gallery-item">
+      <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1762068586/WhatsApp_Image_2025-11-02_at_09.26.57_t2avx5.jpg" alt="Figura 2">
+      <span>Figure 2</span>
+    </div>
+
+    <div class="gallery-item">
+      <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1762068590/WhatsApp_Image_2025-11-02_at_09.26.59_cmpete.jpg" alt="Figura 3">
+      <span>Figure 3</span>
+    </div>
+
+    <div class="gallery-item">
+      <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1762068595/WhatsApp_Image_2025-11-02_at_09.27.00_jhaoed.jpg" alt="Figura 4">
+      <span>Figure 4</span>
+    </div>
+
+    <div class="gallery-item">
+      <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1762068606/WhatsApp_Image_2025-11-02_at_09.27.08_awwp5q.jpg" alt="Figura 5">
+      <span>Figure 5</span>
+    </div>
+
+    <div class="gallery-item">
+      <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1762068610/WhatsApp_Image_2025-11-02_at_09.27.08_1_ibqtex.jpg" alt="Figura 6">
+      <span>Figure 6</span>
+    </div>
+
+    <div class="gallery-item">
+      <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1762068616/WhatsApp_Image_2025-11-02_at_09.27.09_ugoeko.jpg" alt="Figura 7">
+      <span>Figure 7</span>
+    </div>
+
+    <div class="gallery-item">
+      <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1762068621/WhatsApp_Image_2025-11-02_at_09.27.10_gz89je.jpg" alt="Figura 8">
+      <span>Figure 8</span>
+    </div>
+
+    <div class="gallery-item">
+      <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1762068624/WhatsApp_Image_2025-11-02_at_09.27.11_vrlkat.jpg" alt="Figura 9">
+      <span>Figure 9</span>
+    </div>
+
+    <div class="gallery-item">
+      <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1762068628/WhatsApp_Image_2025-11-02_at_09.27.11_1_cgrrdq.jpg" alt="Figura 10">
+      <span>Figure 10</span>
+    </div>
+<!-- imagini noi adăugate -->
+<div class="gallery-item">
+  <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1762068703/IMG_0871_1_zgbkrv.jpg" alt="Figura 11">
+  <span>Figure 11</span>
+</div>
+
+<div class="gallery-item">
+  <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1762068755/IMG_0867_1_xuxc2m.jpg" alt="Figura 12">
+  <span>Figure 12</span>
+</div>
+
+<div class="gallery-item">
+  <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1762068773/IMG_0874_1_jfedsn.jpg" alt="Figura 13">
+  <span>Figure 13</span>
+</div>
+
+<div class="gallery-item">
+  <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1762068869/IMG_0955_cl3nid.jpg" alt="Figura 14">
+  <span>Figure 14</span>
+</div>
+
+<div class="gallery-item">
+  <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1762068886/IMG_0973_rpbre9.jpg" alt="Figura 15">
+  <span>Figure 15</span>
+</div>
+
+<div class="gallery-item">
+  <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1762068917/IMG_1016_tnq4la.jpg" alt="Figura 16">
+  <span>Figure 16</span>
+</div>
+
+<div class="gallery-item">
+  <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1762068929/IMG_1020_1_ymqdu9.jpg" alt="Figura 17">
+  <span>Figure 17</span>
+</div>
+
+<div class="gallery-item">
+  <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1762068952/IMG_1045_zvzjto.jpg" alt="Figura 18">
+  <span>Figure 18</span>
+</div>
+
+<div class="gallery-item">
+  <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1762068981/IMG_1108_mluicd.jpg" alt="Figura 19">
+  <span>Figure 19</span>
+</div>
+
+<div class="gallery-item">
+  <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1762069003/IMG_1121_fzkeg8.jpg" alt="Figura 20">
+  <span>Figure 20</span>
+</div>
+
+<div class="gallery-item">
+  <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1762069026/IMG_1191_n7sot3.jpg" alt="Figura 21">
+  <span>Figure 21</span>
+</div>
+
+<div class="gallery-item">
+  <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1762069227/WhatsApp_Image_2025-11-02_at_09.38.18_cowxtb.jpg" alt="Figure 22">
+  <span>Figura 22</span>
+</div>
+
+<div class="gallery-item">
+  <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1762069231/WhatsApp_Image_2025-11-02_at_09.38.19_ogrnsl.jpg" alt="Figure 23">
+  <span>Figura 23</span>
+</div>
+
+<div class="gallery-item">
+  <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1762069234/WhatsApp_Image_2025-11-02_at_09.38.20_y94avg.jpg" alt="Figure 24">
+  <span>Figura 24</span>
+</div>
+
+<div class="gallery-item">
+  <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1762069238/WhatsApp_Image_2025-11-02_at_09.38.20_1_uzfnhv.jpg" alt="Figure 25">
+  <span>Figura 25</span>
+</div>
+
+<div class="gallery-item">
+  <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1762069241/WhatsApp_Image_2025-11-02_at_09.38.20_2_w5eudc.jpg" alt="Figure 26">
+  <span>Figura 26</span>
+</div>
+
+<div class="gallery-item">
+  <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1762069257/WhatsApp_Image_2025-11-02_at_09.38.22_mq81h4.jpg" alt="Figure 27">
+  <span>Figura 27</span>
+</div>
+
+<div class="gallery-item">
+  <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1762069260/WhatsApp_Image_2025-11-02_at_09.38.23_n4mc2q.jpg" alt="Figure 28">
+  <span>Figura 28</span>
+</div>
+
+<div class="gallery-item">
+  <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1762069509/WhatsApp_Image_2025-11-02_at_09.41.35_hkjkqs.jpg" alt="Figure 29">
+  <span>Figura 29</span>
+</div>
+
+<div class="gallery-item">
+  <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1762069513/WhatsApp_Image_2025-11-02_at_09.41.49_tovvss.jpg" alt="Figure 30">
+  <span>Figura 30</span>
+</div>
+
+<div class="gallery-item">
+  <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1762069522/WhatsApp_Image_2025-11-02_at_09.43.08_bbcbwl.jpg" alt="Figure 31">
+  <span>Figura 31</span>
+</div>
+
+<div class="gallery-item">
+  <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1762069526/WhatsApp_Image_2025-11-02_at_09.43.57_cnperv.jpg" alt="Figure 32">
+  <span>Figura 32</span>
+</div>
+
+
   </div>
 </main>
 
@@ -213,28 +387,24 @@
 </footer>
 
 <script>
+  // burger menu
   const burger = document.getElementById('burger');
   const navLinks = document.getElementById('nav-links');
-
   burger.addEventListener('click', () => {
     const isOpen = navLinks.classList.toggle('open');
     document.body.classList.toggle('menu-open', isOpen);
   });
-
-  // Închide meniul când se apasă un link (pe mobil)
   document.querySelectorAll('#nav-links a').forEach(link => {
     link.addEventListener('click', () => {
       navLinks.classList.remove('open');
       document.body.classList.remove('menu-open');
     });
   });
-</script>
 
-<script>
+  // background clouds
   const canvas = document.getElementById('cloud-canvas');
   const ctx = canvas.getContext('2d');
   let width, height;
-
   function resize() {
     width = window.innerWidth;
     height = window.innerHeight;
@@ -272,7 +442,6 @@
 
   const clouds = [];
   const cloudColors = ['rgba(180,220,180,0.3)', 'rgba(150,190,150,0.25)', 'rgba(120,160,120,0.2)'];
-
   for(let i=0; i<20; i++) {
     clouds.push(new Cloud(
       Math.random() * width,
@@ -282,7 +451,6 @@
       0.2 + Math.random() * 0.2
     ));
   }
-
   function animate() {
     ctx.clearRect(0, 0, width, height);
     clouds.forEach(cloud => {
@@ -292,6 +460,24 @@
     requestAnimationFrame(animate);
   }
   animate();
+
+  // MASONRY JS - ajustează row-span în funcție de imagine
+  function resizeMasonryItem(item){
+    const grid = document.getElementById('galleryGrid');
+    const rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
+    const rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('gap'));
+    const contentHeight = item.querySelector('img').getBoundingClientRect().height + item.querySelector('span').getBoundingClientRect().height + 16;
+    const rowSpan = Math.ceil((contentHeight + rowGap) / (rowHeight + rowGap));
+    item.style.gridRowEnd = `span ${rowSpan}`;
+  }
+
+  function resizeAllMasonryItems(){
+    const allItems = document.querySelectorAll('.gallery-item');
+    allItems.forEach(item => resizeMasonryItem(item));
+  }
+
+  window.addEventListener('load', resizeAllMasonryItems);
+  window.addEventListener('resize', resizeAllMasonryItems);
 </script>
 
 </body>
