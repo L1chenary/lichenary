@@ -1,0 +1,2695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  />
+
+  <title>Upload with AI – Lichenary</title>
+
+  <style>
+    /* =========================================================
+       LICHENARY — ORGANIC / EDITORIAL / CITIZEN SCIENCE
+       AI LICHEN OBSERVATION
+       ========================================================= */
+
+    :root {
+      --cream: #f5f3ea;
+      --cream-light: #fbfaf5;
+      --paper: #eeece1;
+
+      --forest: #173f35;
+      --forest-dark: #102f28;
+      --forest-soft: #315c4d;
+
+      --moss: #718d57;
+      --sage: #a8b89a;
+      --lichen: #d9e4bb;
+
+      --ink: #18231f;
+      --muted: #65716a;
+
+      --white: #ffffff;
+
+      --success-bg: #edf5e9;
+      --success-border: #c8dbbc;
+      --success-text: #315c3c;
+
+      --warning-bg: #fff7df;
+      --warning-border: #ead79a;
+      --warning-text: #755f1c;
+
+      --error-bg: #f8d7da;
+      --error-border: #f5c2c7;
+      --error-text: #721c24;
+
+      --radius-xl: 42px;
+      --radius-lg: 28px;
+      --radius-md: 18px;
+
+      --shadow-soft:
+        0 20px 60px rgba(23, 63, 53, 0.10);
+
+      --shadow-medium:
+        0 25px 65px rgba(23, 63, 53, 0.14);
+    }
+
+
+    /* =========================================================
+       RESET
+       ========================================================= */
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+
+      font-family:
+        "Segoe UI",
+        Tahoma,
+        Geneva,
+        Verdana,
+        sans-serif;
+
+      background: var(--cream);
+      color: var(--ink);
+
+      overflow-x: hidden;
+
+      position: relative;
+    }
+
+    a {
+      color: inherit;
+    }
+
+
+    /* =========================================================
+       CANVAS
+       ========================================================= */
+
+    #cloud-canvas {
+      position: fixed;
+
+      top: 0;
+      left: 0;
+
+      width: 100vw;
+      height: 100vh;
+
+      z-index: 0;
+      pointer-events: none;
+
+      opacity: 0.25;
+    }
+
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    header {
+      position: sticky;
+
+      top: 0;
+
+      z-index: 100;
+
+      width: 100%;
+
+      padding: 20px 5vw;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 30px;
+
+      background:
+        rgba(245, 243, 234, 0.88);
+
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+
+      border-bottom:
+        1px solid rgba(23, 63, 53, 0.08);
+    }
+
+
+    /* =========================================================
+       LOGO
+       ========================================================= */
+
+    .logo {
+      color: var(--forest);
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      font-size: 1.7rem;
+
+      font-weight: bold;
+
+      letter-spacing: -0.04em;
+
+      cursor: pointer;
+
+      transition:
+        transform 0.25s ease,
+        color 0.25s ease;
+    }
+
+    .logo:hover {
+      color: var(--moss);
+
+      transform:
+        translateY(-1px);
+    }
+
+
+    /* =========================================================
+       BURGER
+       ========================================================= */
+
+    .burger {
+      display: none;
+
+      flex-direction: column;
+
+      justify-content: center;
+
+      gap: 5px;
+
+      width: 42px;
+      height: 42px;
+
+      padding: 8px;
+
+      cursor: pointer;
+
+      border-radius: 50%;
+
+      background: var(--forest);
+
+      z-index: 30;
+    }
+
+    .burger div {
+      width: 100%;
+      height: 2px;
+
+      background: white;
+
+      border-radius: 10px;
+
+      transition:
+        transform 0.25s ease,
+        opacity 0.25s ease;
+    }
+
+
+    /* =========================================================
+       NAVIGATION
+       ========================================================= */
+
+    nav#nav-links {
+      display: flex;
+
+      align-items: center;
+      justify-content: flex-end;
+
+      gap: 5px;
+
+      z-index: 20;
+
+      flex-wrap: wrap;
+
+      transition:
+        max-height 0.4s ease,
+        padding 0.4s ease;
+    }
+
+    nav#nav-links a {
+      position: relative;
+
+      color: var(--forest);
+
+      text-decoration: none;
+
+      padding: 9px 12px;
+
+      font-size: 0.92rem;
+
+      font-weight: 500;
+
+      border-radius: 999px;
+
+      white-space: nowrap;
+
+      transition:
+        color 0.25s ease,
+        background 0.25s ease,
+        transform 0.25s ease;
+    }
+
+    nav#nav-links a:hover {
+      color: var(--forest);
+
+      background:
+        rgba(113, 141, 87, 0.14);
+
+      transform:
+        translateY(-1px);
+    }
+
+
+    /* =========================================================
+       ORGANIC TOP DIVIDER
+       ========================================================= */
+
+    .organic-divider {
+      width: 100%;
+
+      height: 75px;
+
+      margin: 55px auto 35px;
+
+      display: flex;
+
+      justify-content: center;
+
+      overflow: hidden;
+
+      position: relative;
+
+      z-index: 5;
+    }
+
+    .organic-divider svg {
+      width: min(700px, 80%);
+
+      height: 75px;
+
+      overflow: visible;
+    }
+
+    .organic-divider path {
+      fill: none;
+
+      stroke: var(--sage);
+
+      stroke-width: 2;
+
+      stroke-linecap: round;
+
+      stroke-dasharray: 4 9;
+    }
+
+
+    /* =========================================================
+       MAIN CARD
+       ========================================================= */
+
+    main {
+      position: relative;
+
+      z-index: 10;
+
+      width: calc(100% - 40px);
+
+      max-width: 900px;
+
+      margin: 0 auto;
+
+      padding: 65px 75px 85px;
+
+      background: var(--cream-light);
+
+      border-radius:
+        38px 95px 38px 75px;
+
+      border:
+        1px solid rgba(23, 63, 53, 0.08);
+
+      box-shadow: var(--shadow-soft);
+
+      overflow: hidden;
+
+      transition:
+        margin-top 0.3s ease;
+    }
+
+    main::before {
+      content: "";
+
+      position: absolute;
+
+      width: 330px;
+      height: 330px;
+
+      top: -150px;
+      right: -120px;
+
+      background: var(--lichen);
+
+      border-radius:
+        62% 38% 65% 35% /
+        40% 57% 43% 60%;
+
+      opacity: 0.45;
+
+      z-index: -1;
+    }
+
+    main::after {
+      content: "";
+
+      position: absolute;
+
+      width: 210px;
+      height: 210px;
+
+      left: -100px;
+      bottom: -100px;
+
+      background: var(--sage);
+
+      border-radius:
+        45% 55% 62% 38% /
+        60% 42% 58% 40%;
+
+      opacity: 0.22;
+
+      z-index: -1;
+    }
+
+
+    /* =========================================================
+       HEADING
+       ========================================================= */
+
+    h2 {
+      position: relative;
+
+      z-index: 2;
+
+      margin: 0 0 12px;
+
+      text-align: left;
+
+      color: var(--forest);
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      font-size:
+        clamp(2.6rem, 5vw, 4.2rem);
+
+      font-weight: normal;
+
+      line-height: 0.98;
+
+      letter-spacing: -0.05em;
+    }
+
+    .intro-text {
+      position: relative;
+
+      z-index: 2;
+
+      margin:
+        0 0 38px;
+
+      color: var(--muted);
+
+      font-size: 1rem;
+
+      line-height: 1.7;
+
+      max-width: 680px;
+    }
+
+
+    /* =========================================================
+       AI INFO CARD
+       ========================================================= */
+
+    .ai-info {
+      position: relative;
+
+      z-index: 2;
+
+      display: flex;
+
+      align-items: flex-start;
+
+      gap: 15px;
+
+      margin-bottom: 32px;
+
+      padding: 18px 20px;
+
+      background:
+        rgba(217, 228, 187, 0.38);
+
+      border:
+        1px solid rgba(113, 141, 87, 0.22);
+
+      border-radius:
+        20px 10px 20px 10px;
+
+      color: var(--forest-soft);
+
+      line-height: 1.55;
+
+      font-size: 0.94rem;
+    }
+
+    .ai-icon {
+      flex:
+        0 0 auto;
+
+      width: 36px;
+      height: 36px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 50%;
+
+      background: var(--forest);
+
+      color: white;
+
+      font-size: 1rem;
+
+      font-weight: bold;
+    }
+
+    .ai-info strong {
+      display: block;
+
+      margin-bottom: 3px;
+
+      color: var(--forest);
+    }
+
+
+    /* =========================================================
+       FORM
+       ========================================================= */
+
+    form {
+      position: relative;
+
+      z-index: 2;
+    }
+
+    label {
+      display: block;
+
+      margin-top: 1.35rem;
+
+      margin-bottom: 0.45rem;
+
+      color: var(--forest);
+
+      font-size: 0.92rem;
+
+      font-weight: 700;
+
+      letter-spacing: 0.01em;
+    }
+
+
+    /* =========================================================
+       PHOTO AREA
+       ========================================================= */
+
+    .photo-area {
+      position: relative;
+
+      padding: 25px;
+
+      border:
+        1px dashed rgba(23, 63, 53, 0.25);
+
+      border-radius:
+        24px 12px 24px 12px;
+
+      background:
+        rgba(255, 255, 255, 0.55);
+
+      transition:
+        border-color 0.25s ease,
+        background 0.25s ease;
+    }
+
+    .photo-area:hover {
+      border-color:
+        rgba(113, 141, 87, 0.65);
+
+      background:
+        rgba(255, 255, 255, 0.75);
+    }
+
+    .photo-help {
+      margin:
+        10px 0 0;
+
+      color: var(--muted);
+
+      font-size: 0.83rem;
+
+      line-height: 1.5;
+    }
+
+    input[type="file"] {
+      width: 100%;
+
+      padding: 0.72rem 0.9rem;
+
+      cursor: pointer;
+
+      border:
+        1px solid rgba(23, 63, 53, 0.15);
+
+      border-radius: 15px;
+
+      background:
+        rgba(255, 255, 255, 0.78);
+
+      color: var(--ink);
+
+      font-family:
+        "Segoe UI",
+        Tahoma,
+        Geneva,
+        Verdana,
+        sans-serif;
+
+      font-size: 1rem;
+
+      box-shadow:
+        0 8px 25px rgba(23, 63, 53, 0.045);
+
+      transition:
+        border-color 0.25s ease,
+        box-shadow 0.25s ease,
+        background 0.25s ease;
+    }
+
+    input[type="file"]:hover {
+      border-color:
+        rgba(113, 141, 87, 0.55);
+    }
+
+    input[type="file"]::file-selector-button {
+      margin-right: 12px;
+
+      padding: 8px 13px;
+
+      border: none;
+
+      border-radius: 999px;
+
+      background: var(--forest);
+
+      color: white;
+
+      font-family:
+        "Segoe UI",
+        Tahoma,
+        Geneva,
+        Verdana,
+        sans-serif;
+
+      font-weight: 600;
+
+      cursor: pointer;
+
+      transition:
+        background 0.25s ease,
+        transform 0.25s ease;
+    }
+
+    input[type="file"]::file-selector-button:hover {
+      background: var(--moss);
+
+      transform:
+        translateY(-1px);
+    }
+
+
+    /* =========================================================
+       PHOTO PREVIEW
+       ========================================================= */
+
+    .photo-preview {
+      display: none;
+
+      width: 100%;
+
+      max-height: 400px;
+
+      object-fit: contain;
+
+      margin-top: 20px;
+
+      border-radius:
+        18px 8px 18px 8px;
+
+      border:
+        1px solid rgba(23, 63, 53, 0.12);
+
+      background: var(--paper);
+
+      box-shadow:
+        0 15px 35px rgba(23, 63, 53, 0.08);
+    }
+
+    .photo-preview.visible {
+      display: block;
+    }
+
+
+    /* =========================================================
+       GPS / TIME STATUS
+       ========================================================= */
+
+    .automatic-data {
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+      gap: 14px;
+
+      margin-top: 25px;
+    }
+
+    .data-card {
+      padding: 18px;
+
+      background:
+        rgba(255, 255, 255, 0.68);
+
+      border:
+        1px solid rgba(23, 63, 53, 0.10);
+
+      border-radius:
+        18px 9px 18px 9px;
+
+      box-shadow:
+        0 8px 25px rgba(23, 63, 53, 0.045);
+    }
+
+    .data-label {
+      display: block;
+
+      margin-bottom: 6px;
+
+      color: var(--muted);
+
+      font-size: 0.76rem;
+
+      font-weight: 700;
+
+      text-transform: uppercase;
+
+      letter-spacing: 0.08em;
+    }
+
+    .data-value {
+      display: block;
+
+      color: var(--forest);
+
+      font-size: 0.95rem;
+
+      font-weight: 600;
+
+      word-break: break-word;
+    }
+
+    .status-pending {
+      color: var(--warning-text);
+    }
+
+    .status-success {
+      color: var(--success-text);
+    }
+
+    .status-error {
+      color: var(--error-text);
+    }
+
+
+    /* =========================================================
+       HIDDEN AUTOMATIC FIELDS
+       ========================================================= */
+
+    .hidden-field {
+      display: none;
+    }
+
+
+    /* =========================================================
+       AI RESULT SECTION
+       ========================================================= */
+
+    .ai-results {
+      position: relative;
+
+      z-index: 2;
+
+      margin-top: 32px;
+
+      padding: 25px;
+
+      background:
+        rgba(255, 255, 255, 0.62);
+
+      border:
+        1px solid rgba(23, 63, 53, 0.11);
+
+      border-radius:
+        24px 12px 24px 12px;
+
+      box-shadow:
+        0 12px 35px rgba(23, 63, 53, 0.055);
+    }
+
+    .results-heading {
+      margin: 0 0 6px;
+
+      color: var(--forest);
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      font-size: 1.7rem;
+
+      font-weight: normal;
+    }
+
+    .results-description {
+      margin: 0 0 20px;
+
+      color: var(--muted);
+
+      font-size: 0.88rem;
+
+      line-height: 1.5;
+    }
+
+    .result-grid {
+      display: grid;
+
+      grid-template-columns:
+        1fr 1fr;
+
+      gap: 15px;
+    }
+
+    .result-box {
+      padding: 17px;
+
+      background:
+        rgba(245, 243, 234, 0.72);
+
+      border:
+        1px solid rgba(23, 63, 53, 0.10);
+
+      border-radius:
+        16px 8px 16px 8px;
+    }
+
+    .result-box label {
+      margin: 0 0 7px;
+
+      font-size: 0.78rem;
+
+      text-transform: uppercase;
+
+      letter-spacing: 0.06em;
+
+      color: var(--muted);
+    }
+
+    .result-box input {
+      width: 100%;
+
+      padding: 0.85rem 0.9rem;
+
+      border:
+        1px solid rgba(23, 63, 53, 0.12);
+
+      border-radius: 12px;
+
+      background:
+        rgba(255, 255, 255, 0.80);
+
+      color: var(--forest);
+
+      font-size: 1rem;
+
+      font-weight: 700;
+    }
+
+    .result-box input[readonly] {
+      cursor: default;
+    }
+
+
+    /* =========================================================
+       CONFIDENCE
+       ========================================================= */
+
+    .confidence {
+      display: none;
+
+      margin-top: 15px;
+
+      padding: 13px 15px;
+
+      border-radius:
+        14px 7px 14px 7px;
+
+      background:
+        rgba(217, 228, 187, 0.28);
+
+      border:
+        1px solid rgba(113, 141, 87, 0.15);
+
+      color: var(--forest-soft);
+
+      font-size: 0.86rem;
+
+      line-height: 1.5;
+    }
+
+    .confidence.visible {
+      display: block;
+    }
+
+
+    /* =========================================================
+       BUTTONS
+       ========================================================= */
+
+    button {
+      position: relative;
+
+      z-index: 2;
+
+      width: 100%;
+
+      margin-top: 2rem;
+
+      background: var(--forest);
+
+      color: white;
+
+      border: none;
+
+      padding: 1rem 1.2rem;
+
+      font-family:
+        "Segoe UI",
+        Tahoma,
+        Geneva,
+        Verdana,
+        sans-serif;
+
+      font-size: 1.05rem;
+
+      font-weight: 700;
+
+      letter-spacing: 0.01em;
+
+      cursor: pointer;
+
+      border-radius:
+        16px 8px 16px 8px;
+
+      box-shadow:
+        0 14px 35px rgba(23, 63, 53, 0.18);
+
+      transition:
+        background 0.3s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        opacity 0.25s ease;
+    }
+
+    button:hover:not(:disabled) {
+      background: var(--forest-dark);
+
+      transform:
+        translateY(-2px);
+
+      box-shadow:
+        0 18px 40px rgba(23, 63, 53, 0.23);
+    }
+
+    button:active:not(:disabled) {
+      transform:
+        translateY(0);
+    }
+
+    button:disabled {
+      opacity: 0.48;
+
+      cursor: not-allowed;
+
+      box-shadow: none;
+    }
+
+    #submit-button {
+      display: none;
+    }
+
+    #submit-button.visible {
+      display: block;
+    }
+
+
+    /* =========================================================
+       LOADING
+       ========================================================= */
+
+    .loading {
+      display: none;
+
+      align-items: center;
+      justify-content: center;
+
+      gap: 10px;
+
+      margin-top: 18px;
+
+      color: var(--forest);
+
+      font-size: 0.9rem;
+
+      font-weight: 600;
+    }
+
+    .loading.visible {
+      display: flex;
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+
+      border:
+        2px solid rgba(23, 63, 53, 0.18);
+
+      border-top-color:
+        var(--forest);
+
+      border-radius: 50%;
+
+      animation:
+        spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+
+    /* =========================================================
+       FLASH / STATUS MESSAGE
+       ========================================================= */
+
+    .message {
+      display: none;
+
+      position: relative;
+
+      z-index: 2;
+
+      padding: 14px 18px;
+
+      margin-bottom: 20px;
+
+      border-radius:
+        18px 8px 18px 8px;
+
+      font-weight: 600;
+
+      line-height: 1.5;
+    }
+
+    .message.visible {
+      display: block;
+    }
+
+    .message.error {
+      background: var(--error-bg);
+
+      color: var(--error-text);
+
+      border:
+        1px solid var(--error-border);
+    }
+
+    .message.success {
+      background: var(--success-bg);
+
+      color: var(--success-text);
+
+      border:
+        1px solid var(--success-border);
+    }
+
+    .message.warning {
+      background: var(--warning-bg);
+
+      color: var(--warning-text);
+
+      border:
+        1px solid var(--warning-border);
+    }
+
+
+    /* =========================================================
+       FOOTER
+       ========================================================= */
+
+    footer {
+      position: relative;
+
+      width: 100%;
+
+      margin-top: 75px;
+
+      padding: 50px 20px;
+
+      background: var(--forest);
+
+      color:
+        rgba(255, 255, 255, 0.72);
+
+      text-align: center;
+
+      font-size: 0.85rem;
+
+      letter-spacing: 0.03em;
+
+      z-index: 10;
+    }
+
+    footer::before {
+      content: "";
+
+      position: absolute;
+
+      top: -35px;
+      left: 0;
+
+      width: 100%;
+      height: 70px;
+
+      background: var(--forest);
+
+      clip-path:
+        ellipse(55% 45% at 50% 100%);
+    }
+
+
+    /* =========================================================
+       RESPONSIVE — 1100px
+       ========================================================= */
+
+    @media (max-width: 1100px) {
+
+      header {
+        padding:
+          18px 4vw;
+      }
+
+      main {
+        padding: 60px;
+      }
+    }
+
+
+    /* =========================================================
+       RESPONSIVE — 850px
+       ========================================================= */
+
+    @media (max-width: 850px) {
+
+      header {
+        position: sticky;
+
+        flex-wrap: wrap;
+      }
+
+      .burger {
+        display: flex;
+      }
+
+      nav#nav-links {
+        position: absolute;
+
+        top: 100%;
+        left: 0;
+
+        width: 100%;
+
+        max-height: 0;
+
+        overflow: hidden;
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 4px;
+
+        padding: 0 5vw;
+
+        background:
+          rgba(245, 243, 234, 0.97);
+
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+
+        border-bottom:
+          1px solid rgba(23, 63, 53, 0.08);
+
+        transition:
+          max-height 0.45s ease,
+          padding 0.45s ease;
+      }
+
+      nav#nav-links.open {
+        max-height: 600px;
+
+        padding-top: 15px;
+        padding-bottom: 18px;
+      }
+
+      nav#nav-links a {
+        width: 100%;
+
+        padding: 13px 15px;
+
+        border-radius: 14px;
+      }
+
+      body.menu-open main {
+        margin-top: 250px;
+      }
+
+      .organic-divider {
+        margin-top: 45px;
+      }
+
+      main {
+        margin-top: 0;
+
+        padding: 55px;
+      }
+    }
+
+
+    /* =========================================================
+       RESPONSIVE — 600px
+       ========================================================= */
+
+    @media (max-width: 600px) {
+
+      header {
+        padding:
+          15px 20px;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+      }
+
+      main {
+        width:
+          calc(100% - 40px);
+
+        margin-top: 0;
+
+        padding:
+          50px 30px 55px;
+
+        border-radius:
+          28px 55px 28px 55px;
+      }
+
+      body.menu-open main {
+        margin-top: 250px;
+      }
+
+      main::before {
+        width: 220px;
+        height: 220px;
+
+        right: -100px;
+        top: -100px;
+      }
+
+      main::after {
+        width: 150px;
+        height: 150px;
+
+        left: -70px;
+        bottom: -70px;
+      }
+
+      .organic-divider {
+        height: 50px;
+
+        margin:
+          40px 0 30px;
+      }
+
+      .organic-divider svg {
+        width: 100%;
+        height: 50px;
+      }
+
+      h2 {
+        font-size: 2.7rem;
+
+        line-height: 0.98;
+
+        margin-bottom: 20px;
+      }
+
+      .automatic-data {
+        grid-template-columns: 1fr;
+      }
+
+      .result-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .ai-info {
+        padding: 16px;
+      }
+
+      .photo-area {
+        padding: 18px;
+      }
+
+      footer {
+        margin-top: 60px;
+
+        padding: 45px 20px;
+      }
+    }
+
+
+    /* =========================================================
+       REDUCED MOTION
+       ========================================================= */
+
+    @media (prefers-reduced-motion: reduce) {
+
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+
+      *::before,
+
+      *::after {
+        transition-duration:
+          0.01ms !important;
+
+        animation-duration:
+          0.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+
+<body>
+
+<canvas id="cloud-canvas"></canvas>
+
+
+<!-- =========================================================
+     HEADER
+     ========================================================= -->
+
+<header>
+
+  <div
+    class="logo"
+    onclick="window.location='/'"
+  >
+    Lichenary
+  </div>
+
+
+  <div
+    id="burger"
+    class="burger"
+    aria-label="Menu"
+    tabindex="0"
+  >
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+
+  <nav id="nav-links">
+
+    <a href="{{ url_for('home') }}">
+      Home
+    </a>
+
+    <a href="{{ url_for('despre') }}">
+      About
+    </a>
+
+    <a href="{{ url_for('participa') }}">
+      How to Participate
+    </a>
+
+    <a href="{{ url_for('galerie') }}">
+      Gallery
+    </a>
+
+    <a href="{{ url_for('harta') }}">
+      Map
+    </a>
+
+    <a href="{{ url_for('contact') }}">
+      Contact
+    </a>
+
+    {% if current_user.is_authenticated %}
+
+      <a href="{{ url_for('dashboard') }}">
+        Dashboard
+      </a>
+
+      <a href="{{ url_for('logout') }}">
+        Logout
+      </a>
+
+    {% else %}
+
+      <a href="{{ url_for('login') }}">
+        Login
+      </a>
+
+    {% endif %}
+
+  </nav>
+
+</header>
+
+
+<!-- =========================================================
+     ORGANIC DIVIDER
+     ========================================================= -->
+
+<div class="organic-divider">
+
+  <svg
+    viewBox="0 0 700 75"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+
+    <path
+      d="
+        M 5 38
+        C 70 10, 105 68, 170 38
+        S 270 8, 330 40
+        S 440 70, 500 35
+        S 620 10, 695 42
+      "
+    />
+
+  </svg>
+
+</div>
+
+
+<!-- =========================================================
+     MAIN AI UPLOAD CARD
+     ========================================================= -->
+
+<main>
+
+  <h2>
+    Upload with AI
+  </h2>
+
+
+  <p class="intro-text">
+    Take a photograph of a lichen and let Lichenary
+    automatically identify the species and determine
+    its pollution indicator. Your location and the
+    observation time are collected automatically.
+  </p>
+
+
+  <!-- AI EXPLANATION -->
+
+  <div class="ai-info">
+
+    <div class="ai-icon">
+      AI
+    </div>
+
+    <div>
+
+      <strong>
+        Faster observation upload
+      </strong>
+
+      The AI will analyze your photograph and suggest
+      the lichen species. The species will then be
+      matched with Lichenary's pollution-indicator
+      database.
+
+    </div>
+
+  </div>
+
+
+  <!-- STATUS MESSAGE -->
+
+  <div
+    id="message"
+    class="message"
+    role="alert"
+  ></div>
+
+
+  <!-- =======================================================
+       FORM
+       ======================================================= -->
+
+  <form
+    id="ai-observation-form"
+    method="POST"
+    enctype="multipart/form-data"
+    action="{{ url_for('upload_observation_ai') }}"
+  >
+
+    <!-- =====================================================
+         PHOTO
+         ===================================================== -->
+
+    <label for="photo">
+      Lichen Photo:
+    </label>
+
+    <div class="photo-area">
+
+      <input
+        type="file"
+        id="photo"
+        name="photo"
+        accept="image/*"
+        capture="environment"
+        required
+      >
+
+      <p class="photo-help">
+        On a phone, this can open the rear camera so
+        you can photograph the lichen directly.
+        For the best identification, keep the lichen
+        clearly visible and in focus.
+      </p>
+
+
+      <img
+        id="photo-preview"
+        class="photo-preview"
+        alt="Selected lichen photograph"
+      >
+
+    </div>
+
+
+    <!-- =====================================================
+         AUTOMATIC DATA
+         ===================================================== -->
+
+    <div class="automatic-data">
+
+      <div class="data-card">
+
+        <span class="data-label">
+          Date & Time
+        </span>
+
+        <span
+          id="datetime-display"
+          class="data-value status-pending"
+        >
+          Obtaining current time...
+        </span>
+
+      </div>
+
+
+      <div class="data-card">
+
+        <span class="data-label">
+          GPS
+        </span>
+
+        <span
+          id="gps-display"
+          class="data-value status-pending"
+        >
+          Waiting for permission...
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         HIDDEN AUTOMATIC FIELDS
+         ===================================================== -->
+
+    <input
+      type="hidden"
+      id="date_time"
+      name="date_time"
+    >
+
+    <input
+      type="hidden"
+      id="latitude"
+      name="latitude"
+    >
+
+    <input
+      type="hidden"
+      id="longitude"
+      name="longitude"
+    >
+
+    <input
+      type="hidden"
+      id="location"
+      name="location"
+    >
+
+
+    <!-- =====================================================
+         AI RESULTS
+         ===================================================== -->
+
+    <section
+      id="ai-results"
+      class="ai-results"
+    >
+
+      <h3 class="results-heading">
+        AI Identification
+      </h3>
+
+      <p class="results-description">
+        After analyzing your photograph, the AI result
+        will appear here. The pollution score is obtained
+        from Lichenary's species database.
+      </p>
+
+
+      <div class="result-grid">
+
+        <div class="result-box">
+
+          <label for="species">
+            Detected Species
+          </label>
+
+          <input
+            type="text"
+            id="species"
+            name="species"
+            placeholder="Not analyzed yet"
+            readonly
+          >
+
+        </div>
+
+
+        <div class="result-box">
+
+          <label for="pollution_level">
+            Pollution Indicator
+          </label>
+
+          <input
+            type="number"
+            id="pollution_level"
+            name="pollution_level"
+            min="1"
+            max="10"
+            placeholder="Not available"
+            readonly
+          >
+
+        </div>
+
+      </div>
+
+
+      <div
+        id="confidence"
+        class="confidence"
+      ></div>
+
+    </section>
+
+
+    <!-- =====================================================
+         AI ANALYZE BUTTON
+         ===================================================== -->
+
+    <button
+      type="button"
+      id="analyze-button"
+      disabled
+    >
+      Analyze Lichen with AI
+    </button>
+
+
+    <!-- =====================================================
+         LOADING
+         ===================================================== -->
+
+    <div
+      id="loading"
+      class="loading"
+      aria-live="polite"
+    >
+
+      <span class="spinner"></span>
+
+      <span>
+        AI is analyzing the photograph...
+      </span>
+
+    </div>
+
+
+    <!-- =====================================================
+         FINAL SUBMIT
+         ===================================================== -->
+
+    <button
+      type="submit"
+      id="submit-button"
+    >
+      Submit Observation
+    </button>
+
+  </form>
+
+</main>
+
+
+<!-- =========================================================
+     FOOTER
+     ========================================================= -->
+
+<footer>
+  &copy; 2025 Lichenary. All rights reserved.
+</footer>
+
+
+<!-- =========================================================
+     NAVIGATION SCRIPT
+     ========================================================= -->
+
+<script>
+
+  const burger =
+    document.getElementById('burger');
+
+  const navLinks =
+    document.getElementById('nav-links');
+
+
+  burger.addEventListener(
+    'click',
+    () => {
+
+      const isOpen =
+        navLinks.classList.toggle('open');
+
+      document.body.classList.toggle(
+        'menu-open',
+        isOpen
+      );
+
+    }
+  );
+
+
+  burger.addEventListener(
+    'keydown',
+    (event) => {
+
+      if (
+        event.key === 'Enter' ||
+        event.key === ' '
+      ) {
+
+        event.preventDefault();
+
+        burger.click();
+
+      }
+
+    }
+  );
+
+
+  document
+    .querySelectorAll('#nav-links a')
+    .forEach(
+      link => {
+
+        link.addEventListener(
+          'click',
+          () => {
+
+            navLinks.classList.remove('open');
+
+            document.body.classList.remove(
+              'menu-open'
+            );
+
+          }
+        );
+
+      }
+    );
+
+</script>
+
+
+<!-- =========================================================
+     AI OBSERVATION SCRIPT
+     ========================================================= -->
+
+<script>
+
+  const form =
+    document.getElementById(
+      'ai-observation-form'
+    );
+
+  const photoInput =
+    document.getElementById('photo');
+
+  const photoPreview =
+    document.getElementById(
+      'photo-preview'
+    );
+
+  const analyzeButton =
+    document.getElementById(
+      'analyze-button'
+    );
+
+  const submitButton =
+    document.getElementById(
+      'submit-button'
+    );
+
+  const loading =
+    document.getElementById('loading');
+
+  const message =
+    document.getElementById('message');
+
+  const speciesInput =
+    document.getElementById('species');
+
+  const pollutionInput =
+    document.getElementById(
+      'pollution_level'
+    );
+
+  const confidence =
+    document.getElementById(
+      'confidence'
+    );
+
+  const datetimeInput =
+    document.getElementById('date_time');
+
+  const latitudeInput =
+    document.getElementById('latitude');
+
+  const longitudeInput =
+    document.getElementById('longitude');
+
+  const locationInput =
+    document.getElementById('location');
+
+  const datetimeDisplay =
+    document.getElementById(
+      'datetime-display'
+    );
+
+  const gpsDisplay =
+    document.getElementById(
+      'gps-display'
+    );
+
+
+  let gpsReady = false;
+  let photoReady = false;
+  let aiReady = false;
+
+
+  /* =========================================================
+     MESSAGE HELPER
+     ========================================================= */
+
+  function showMessage(
+    text,
+    type = 'warning'
+  ) {
+
+    message.textContent = text;
+
+    message.className =
+      'message visible ' + type;
+
+  }
+
+
+  function clearMessage() {
+
+    message.textContent = '';
+
+    message.className =
+      'message';
+
+  }
+
+
+  /* =========================================================
+     CURRENT DATE / TIME
+     ========================================================= */
+
+  function setCurrentDateTime() {
+
+    const now = new Date();
+
+    /*
+      datetime-local expects:
+
+      YYYY-MM-DDTHH:MM
+
+      We deliberately use the user's
+      local browser time.
+    */
+
+    const year =
+      now.getFullYear();
+
+    const month =
+      String(
+        now.getMonth() + 1
+      ).padStart(2, '0');
+
+    const day =
+      String(
+        now.getDate()
+      ).padStart(2, '0');
+
+    const hours =
+      String(
+        now.getHours()
+      ).padStart(2, '0');
+
+    const minutes =
+      String(
+        now.getMinutes()
+      ).padStart(2, '0');
+
+
+    const value =
+      `${year}-${month}-${day}T${hours}:${minutes}`;
+
+
+    datetimeInput.value =
+      value;
+
+
+    datetimeDisplay.textContent =
+      now.toLocaleString(
+        undefined,
+        {
+          dateStyle: 'medium',
+          timeStyle: 'short'
+        }
+      );
+
+
+    datetimeDisplay.classList.remove(
+      'status-pending'
+    );
+
+    datetimeDisplay.classList.add(
+      'status-success'
+    );
+
+  }
+
+
+  setCurrentDateTime();
+
+
+  /* =========================================================
+     GPS
+     ========================================================= */
+
+  function requestGPS() {
+
+    if (!navigator.geolocation) {
+
+      gpsDisplay.textContent =
+        'GPS is not supported by this browser.';
+
+      gpsDisplay.classList.remove(
+        'status-pending'
+      );
+
+      gpsDisplay.classList.add(
+        'status-error'
+      );
+
+      showMessage(
+        'This browser does not provide GPS location access. Please use a modern mobile browser.',
+        'error'
+      );
+
+      return;
+
+    }
+
+
+    gpsDisplay.textContent =
+      'Requesting location permission...';
+
+
+    navigator.geolocation.getCurrentPosition(
+
+      function(position) {
+
+        const latitude =
+          position.coords.latitude;
+
+        const longitude =
+          position.coords.longitude;
+
+
+        latitudeInput.value =
+          latitude.toFixed(8);
+
+        longitudeInput.value =
+          longitude.toFixed(8);
+
+
+        /*
+          The exact coordinates are what the backend
+          should use as the authoritative location.
+
+          For now, the location field contains the
+          coordinates. The backend can later perform
+          reverse geocoding if a human-readable location
+          is required.
+        */
+
+        locationInput.value =
+          `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
+
+
+        gpsDisplay.textContent =
+          `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
+
+
+        gpsDisplay.classList.remove(
+          'status-pending',
+          'status-error'
+        );
+
+        gpsDisplay.classList.add(
+          'status-success'
+        );
+
+
+        gpsReady = true;
+
+        updateAnalyzeButton();
+
+      },
+
+      function(error) {
+
+        let errorMessage =
+          'Unable to obtain your location.';
+
+
+        if (
+          error.code ===
+          error.PERMISSION_DENIED
+        ) {
+
+          errorMessage =
+            'Location permission was denied. Please allow location access and try again.';
+
+        }
+
+        else if (
+          error.code ===
+          error.POSITION_UNAVAILABLE
+        ) {
+
+          errorMessage =
+            'Your location could not be determined. Please try again outdoors or with GPS enabled.';
+
+        }
+
+        else if (
+          error.code ===
+          error.TIMEOUT
+        ) {
+
+          errorMessage =
+            'The GPS request timed out. Please try again.';
+
+        }
+
+
+        gpsDisplay.textContent =
+          'Location unavailable';
+
+        gpsDisplay.classList.remove(
+          'status-pending'
+        );
+
+        gpsDisplay.classList.add(
+          'status-error'
+        );
+
+
+        showMessage(
+          errorMessage,
+          'error'
+        );
+
+
+        gpsReady = false;
+
+        updateAnalyzeButton();
+
+      },
+
+      {
+        enableHighAccuracy: true,
+
+        timeout: 15000,
+
+        maximumAge: 0
+
+      }
+
+    );
+
+  }
+
+
+  /*
+    Request GPS as soon as the page loads.
+
+    On supported phones, the browser will show
+    its normal location permission prompt.
+  */
+
+  requestGPS();
+
+
+  /* =========================================================
+     PHOTO SELECTION
+     ========================================================= */
+
+  photoInput.addEventListener(
+    'change',
+    () => {
+
+      clearMessage();
+
+      aiReady = false;
+
+      speciesInput.value = '';
+
+      pollutionInput.value = '';
+
+      confidence.textContent = '';
+
+      confidence.classList.remove(
+        'visible'
+      );
+
+      submitButton.classList.remove(
+        'visible'
+      );
+
+
+      if (
+        !photoInput.files ||
+        !photoInput.files.length
+      ) {
+
+        photoReady = false;
+
+        photoPreview.classList.remove(
+          'visible'
+        );
+
+        updateAnalyzeButton();
+
+        return;
+
+      }
+
+
+      const file =
+        photoInput.files[0];
+
+
+      if (
+        !file.type.startsWith('image/')
+      ) {
+
+        showMessage(
+          'Please select an image file.',
+          'error'
+        );
+
+        photoInput.value = '';
+
+        photoReady = false;
+
+        updateAnalyzeButton();
+
+        return;
+
+      }
+
+
+      photoReady = true;
+
+
+      /*
+        Show a local preview without uploading
+        anything yet.
+      */
+
+      const reader =
+        new FileReader();
+
+
+      reader.onload =
+        function(event) {
+
+          photoPreview.src =
+            event.target.result;
+
+          photoPreview.classList.add(
+            'visible'
+          );
+
+        };
+
+
+      reader.readAsDataURL(file);
+
+
+      updateAnalyzeButton();
+
+    }
+  );
+
+
+  /* =========================================================
+     ENABLE / DISABLE ANALYZE BUTTON
+     ========================================================= */
+
+  function updateAnalyzeButton() {
+
+    analyzeButton.disabled =
+      !(photoReady && gpsReady);
+
+  }
+
+
+  /* =========================================================
+     AI ANALYSIS
+     ========================================================= */
+
+  analyzeButton.addEventListener(
+    'click',
+    async () => {
+
+      clearMessage();
+
+
+      if (!photoReady) {
+
+        showMessage(
+          'Please take or select a lichen photograph first.',
+          'warning'
+        );
+
+        return;
+
+      }
+
+
+      if (!gpsReady) {
+
+        showMessage(
+          'Please allow GPS access before analyzing the observation.',
+          'warning'
+        );
+
+        requestGPS();
+
+        return;
+
+      }
+
+
+      const file =
+        photoInput.files[0];
+
+
+      const formData =
+        new FormData();
+
+
+      formData.append(
+        'photo',
+        file
+      );
+
+      formData.append(
+        'latitude',
+        latitudeInput.value
+      );
+
+      formData.append(
+        'longitude',
+        longitudeInput.value
+      );
+
+      formData.append(
+        'location',
+        locationInput.value
+      );
+
+      formData.append(
+        'date_time',
+        datetimeInput.value
+      );
+
+
+      analyzeButton.disabled = true;
+
+      analyzeButton.textContent =
+        'Analyzing...';
+
+
+      loading.classList.add(
+        'visible'
+      );
+
+
+      try {
+
+        /*
+          This endpoint will be created in app.py.
+
+          It should:
+          1. receive the image;
+          2. send it to Gemini;
+          3. receive the predicted species;
+          4. compare the species against the
+             pollution database;
+          5. return JSON.
+
+          Expected response:
+
+          {
+            "success": true,
+            "species": "Xanthoria parietina",
+            "pollution_level": 10,
+            "confidence": 0.91
+          }
+        */
+
+        const response =
+          await fetch(
+            "{{ url_for('analyze_observation_ai') }}",
+            {
+              method: 'POST',
+
+              body: formData
+            }
+          );
+
+
+        let data;
+
+        try {
+
+          data =
+            await response.json();
+
+        }
+
+        catch (jsonError) {
+
+          throw new Error(
+            'The server returned an invalid response.'
+          );
+
+        }
+
+
+        if (
+          !response.ok ||
+          !data.success
+        ) {
+
+          throw new Error(
+            data.message ||
+            'The AI could not analyze this photograph.'
+          );
+
+        }
+
+
+        /*
+          Populate AI results.
+        */
+
+        speciesInput.value =
+          data.species || 'Unknown';
+
+
+        if (
+          data.pollution_level !== null &&
+          data.pollution_level !== undefined
+        ) {
+
+          pollutionInput.value =
+            data.pollution_level;
+
+        }
+
+        else {
+
+          pollutionInput.value =
+            '';
+
+        }
+
+
+        /*
+          Optional AI confidence value.
+        */
+
+        if (
+          data.confidence !== undefined &&
+          data.confidence !== null
+        ) {
+
+          const percentage =
+            Math.round(
+              Number(data.confidence) * 100
+            );
+
+
+          confidence.textContent =
+            `AI identification confidence: ${percentage}%. ` +
+            `Please remember that AI identification is a suggestion and observations are still reviewed before approval.`;
+
+
+          confidence.classList.add(
+            'visible'
+          );
+
+        }
+
+        else {
+
+          confidence.textContent =
+            'The AI identification is a suggestion and the observation will still be reviewed before approval.';
+
+          confidence.classList.add(
+            'visible'
+          );
+
+        }
+
+
+        aiReady = true;
+
+
+        showMessage(
+          'The photograph has been analyzed successfully. Please review the result and submit the observation.',
+          'success'
+        );
+
+
+        submitButton.classList.add(
+          'visible'
+        );
+
+      }
+
+      catch (error) {
+
+        aiReady = false;
+
+        submitButton.classList.remove(
+          'visible'
+        );
+
+
+        showMessage(
+          error.message ||
+          'Something went wrong while analyzing the photograph.',
+          'error'
+        );
+
+      }
+
+      finally {
+
+        loading.classList.remove(
+          'visible'
+        );
+
+        analyzeButton.disabled = false;
+
+        analyzeButton.textContent =
+          'Analyze Lichen with AI';
+
+
+        updateAnalyzeButton();
+
+      }
+
+    }
+  );
+
+
+  /* =========================================================
+     FINAL SUBMISSION
+     ========================================================= */
+
+  form.addEventListener(
+    'submit',
+    function(event) {
+
+      /*
+        The user should not be able to submit an AI
+        observation before the AI has returned a result.
+      */
+
+      if (!aiReady) {
+
+        event.preventDefault();
+
+        showMessage(
+          'Please analyze the lichen photograph before submitting the observation.',
+          'warning'
+        );
+
+        return;
+
+      }
+
+
+      if (!speciesInput.value.trim()) {
+
+        event.preventDefault();
+
+        showMessage(
+          'No species was identified. The observation cannot be submitted yet.',
+          'error'
+        );
+
+        return;
+
+      }
+
+
+      if (!pollutionInput.value) {
+
+        event.preventDefault();
+
+        showMessage(
+          'No pollution indicator was found for this species.',
+          'error'
+        );
+
+        return;
+
+      }
+
+
+      if (!gpsReady) {
+
+        event.preventDefault();
+
+        showMessage(
+          'GPS location is required for this observation.',
+          'error'
+        );
+
+        return;
+
+      }
+
+    }
+  );
+
+</script>
+
+
+<!-- =========================================================
+     BACKGROUND CANVAS
+     ========================================================= -->
+
+<script>
+
+  const canvas =
+    document.getElementById(
+      'cloud-canvas'
+    );
+
+  const ctx =
+    canvas.getContext('2d');
+
+  let width;
+  let height;
+
+
+  function resize() {
+
+    width =
+      window.innerWidth;
+
+    height =
+      window.innerHeight;
+
+
+    canvas.width =
+      width;
+
+    canvas.height =
+      height;
+
+  }
+
+
+  window.addEventListener(
+    'resize',
+    resize
+  );
+
+
+  resize();
+
+
+  /*
+    Canvas kept for compatibility
+    with the original template.
+
+    Moving cloud animation has been
+    removed.
+  */
+
+  ctx.clearRect(
+    0,
+    0,
+    width,
+    height
+  );
+
+</script>
+
+
+</body>
+</html>

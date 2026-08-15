@@ -13,9 +13,21 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
+# =========================================================
+# AI ADDITION — GEMINI
+# =========================================================
+
+from google import genai
+from google.genai import types
+
+
+# =========================================================
 # Configurare aplicație
+# =========================================================
+
 app = Flask(__name__)
 app.secret_key = 'lichena-foarte-secret-key'
+
 
 # Configurare DB SQLite
 db_url = os.environ.get("DATABASE_URL")
@@ -25,6 +37,8 @@ else:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///lichenary.db'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+
 cloudinary.config(
     cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
     api_key=os.getenv('CLOUDINARY_API_KEY'),
@@ -32,19 +46,388 @@ cloudinary.config(
     secure=True
 )
 
+
 # Configurare folder upload
 UPLOAD_FOLDER = os.path.join(app.root_path, 'static', 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+
 db = SQLAlchemy(app)
+
 
 # Flask-Login setup
 login_manager = LoginManager()
 login_manager.login_view = 'login'
 login_manager.init_app(app)
 
+
+# =========================================================
+# AI ADDITION — GEMINI CLIENT
+# =========================================================
+
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+gemini_client = None
+
+if GEMINI_API_KEY:
+    gemini_client = genai.Client(api_key=GEMINI_API_KEY)
+
+
+# =========================================================
+# AI ADDITION — LICHEN POLLUTION DATABASE
+#
+# 10 = very pollution tolerant
+# 1  = very pollution sensitive
+# =========================================================
+
+LICHEN_POLLUTION_DATABASE = {
+
+    "Amandinea punctata": 10,
+    "Dirinaria picta": 10,
+    "Lecanora conizaeoides": 10,
+    "Pyxine cocoes": 10,
+    "Rinodina sophodes": 10,
+    "Xanthoria parietina": 10,
+
+    "Caloplaca citrina": 9,
+    "Candelariella xanthostigma": 9,
+    "Chrysothrix candelaris": 9,
+    "Gyalolechia flavorubescens": 9,
+    "Physcia adscendens": 9,
+    "Physcia biziana": 9,
+
+    "Hyperphyscia adglutinata": 8,
+    "Lecanora dispersa": 8,
+    "Phaeophyscia orbicularis": 8,
+    "Physcia millegrana": 8,
+    "Physcia stellaris": 8,
+    "Polycauliona candelaria": 8,
+    "Pyxine berteriana": 8,
+    "Xanthomendoza fallax": 8,
+
+    "Bacidia inquinans": 7,
+    "Candelaria concolor": 7,
+    "Dirina indica": 7,
+    "Dirinaria aspera": 7,
+    "Parmelia sulcata": 7,
+    "Parmotrema tinctorum": 7,
+    "Phaeophyscia pusilloides": 7,
+    "Physcia dubia": 7,
+    "Punctelia rudecta": 7,
+
+    "Bulbothrix coronata": 6,
+    "Heterodermia speciosa": 6,
+    "Lecanora carpinea": 6,
+    "Lepraria incana": 6,
+    "Melanelixia glabratula": 6,
+    "Myelochroa aurulenta": 6,
+    "Parmelia saxatilis": 6,
+    "Parmotrema crinitum": 6,
+    "Ramalina ecklonii": 6,
+    "Xanthoparmelia cumberlandia": 6,
+
+    "Cladonia coniocraea": 5,
+    "Flavoparmelia caperata": 5,
+    "Graphis scripta": 5,
+    "Heterodermia japonica": 5,
+    "Hypogymnia physodes": 5,
+    "Hypogymnia tubulosa": 5,
+    "Phlyctis argena": 5,
+    "Punctelia subrudecta": 5,
+    "Ramalina celastri": 5,
+
+    "Cladonia cristatella": 4,
+    "Evernia prunastri": 4,
+    "Melanohalea exasperatula": 4,
+    "Pertusaria albescens": 4,
+    "Physconia distorta": 4,
+    "Physconia perisidiosa": 4,
+    "Ramalina farinacea": 4,
+    "Ramalina linearis": 4,
+    "Usnea baileyi": 4,
+    "Usnea strigosa": 4,
+
+    "Anaptychia ciliaris": 3,
+    "Anaptychia crinalis": 3,
+    "Hypogymnia imshaugii": 3,
+    "Leptogium cyanescens": 3,
+    "Pannaria conoplea": 3,
+    "Pseudevernia furfuracea": 3,
+    "Ramalina europaea": 3,
+    "Ramalina sinensis": 3,
+    "Sticta fuliginosa": 3,
+    "Sticta weigelii": 3,
+    "Usnea ceratina": 3,
+
+    "Cladonia fimbriata": 2,
+    "Cladonia stellaris": 2,
+    "Evernia mesomorpha": 2,
+    "Lobaria pulmonaria": 2,
+    "Lobaria quercizans": 2,
+    "Nephroma resupinatum": 2,
+    "Peltigera canina": 2,
+    "Sphaerophorus globosus": 2,
+    "Teloschistes chrysophthalmus": 2,
+    "Teloschistes flavicans": 2,
+    "Usnea longissima": 2,
+    "Usnea subfloridana": 2,
+
+    "Anzia centripeta": 1,
+    "Bryoria fremontii": 1,
+    "Bryoria fuscescens": 1,
+    "Bunodophoron melanocarpum": 1,
+    "Cetrelia olivetorum": 1,
+    "Cladonia rangiferina": 1,
+    "Coenogonium pineti": 1,
+    "Degelia plumbea": 1,
+    "Erioderma pedicellatum": 1,
+    "Heterodermia leucomela": 1,
+    "Hypogymnia occidentalis": 1,
+    "Lathagrium auriforme": 1,
+    "Lobaria scrobiculata": 1,
+    "Menegazzia subsimilis": 1,
+    "Menegazzia terebrata": 1,
+    "Pannaria rubiginosa": 1,
+    "Pseudocyphellaria crocata": 1
+}
+
+
+# =========================================================
+# AI ADDITION — NORMALIZE SPECIES NAME
+# =========================================================
+
+def normalize_species_name(species):
+    """
+    Cleans the species returned by Gemini so that it can
+    be matched safely against the Lichenary database.
+    """
+
+    if not species:
+        return None
+
+    species = species.strip()
+
+    # Remove accidental surrounding quotes
+    species = species.strip('"').strip("'")
+
+    # Remove markdown formatting if Gemini adds it
+    species = species.replace("**", "")
+    species = species.replace("*", "")
+
+    # Remove common prefixes
+    prefixes = [
+        "species:",
+        "identified species:",
+        "scientific name:",
+        "answer:",
+    ]
+
+    lower_species = species.lower()
+
+    for prefix in prefixes:
+        if lower_species.startswith(prefix):
+            species = species[len(prefix):].strip()
+            break
+
+    # Exact database match first
+    if species in LICHEN_POLLUTION_DATABASE:
+        return species
+
+    # Case-insensitive exact match
+    for known_species in LICHEN_POLLUTION_DATABASE:
+        if known_species.lower() == species.lower():
+            return known_species
+
+    return species
+
+
+# =========================================================
+# AI ADDITION — GEMINI SPECIES IDENTIFICATION
+# =========================================================
+
+def identify_lichen_species(image_bytes, mime_type):
+    """
+    Sends the photograph to Gemini.
+
+    Gemini is ONLY responsible for identifying the species.
+
+    It is NOT asked to calculate pollution.
+
+    The returned species is later matched against the
+    Lichenary pollution database.
+    """
+
+    if not gemini_client:
+        raise RuntimeError(
+            "GEMINI_API_KEY is not configured on the server."
+        )
+
+    if not image_bytes:
+        raise ValueError("The uploaded image is empty.")
+
+    if not mime_type or not mime_type.startswith("image/"):
+        raise ValueError("The uploaded file is not a valid image.")
+
+    prompt = """
+You are the lichen identification component of the Lichenary
+citizen-science project.
+
+Analyze the attached photograph carefully.
+
+Your ONLY task is to identify the lichen species visible in
+the photograph.
+
+The species MUST be one of the following species from the
+Lichenary reference database:
+
+Amandinea punctata
+Dirinaria picta
+Lecanora conizaeoides
+Pyxine cocoes
+Rinodina sophodes
+Xanthoria parietina
+Caloplaca citrina
+Candelariella xanthostigma
+Chrysothrix candelaris
+Gyalolechia flavorubescens
+Physcia adscendens
+Physcia biziana
+Hyperphyscia adglutinata
+Lecanora dispersa
+Phaeophyscia orbicularis
+Physcia millegrana
+Physcia stellaris
+Polycauliona candelaria
+Pyxine berteriana
+Xanthomendoza fallax
+Bacidia inquinans
+Candelaria concolor
+Dirina indica
+Dirinaria aspera
+Parmelia sulcata
+Parmotrema tinctorum
+Phaeophyscia pusilloides
+Physcia dubia
+Punctelia rudecta
+Bulbothrix coronata
+Heterodermia speciosa
+Lecanora carpinea
+Lepraria incana
+Melanelixia glabratula
+Myelochroa aurulenta
+Parmelia saxatilis
+Parmotrema crinitum
+Ramalina ecklonii
+Xanthoparmelia cumberlandia
+Cladonia coniocraea
+Flavoparmelia caperata
+Graphis scripta
+Heterodermia japonica
+Hypogymnia physodes
+Hypogymnia tubulosa
+Phlyctis argena
+Punctelia subrudecta
+Ramalina celastri
+Cladonia cristatella
+Evernia prunastri
+Melanohalea exasperatula
+Pertusaria albescens
+Physconia distorta
+Physconia perisidiosa
+Ramalina farinacea
+Ramalina linearis
+Usnea baileyi
+Usnea strigosa
+Anaptychia ciliaris
+Anaptychia crinalis
+Hypogymnia imshaugii
+Leptogium cyanescens
+Pannaria conoplea
+Pseudevernia furfuracea
+Ramalina europaea
+Ramalina sinensis
+Sticta fuliginosa
+Sticta weigelii
+Usnea ceratina
+Cladonia fimbriata
+Cladonia stellaris
+Evernia mesomorpha
+Lobaria pulmonaria
+Lobaria quercizans
+Nephroma resupinatum
+Peltigera canina
+Sphaerophorus globosus
+Teloschistes chrysophthalmus
+Teloschistes flavicans
+Usnea longissima
+Usnea subfloridana
+Anzia centripeta
+Bryoria fremontii
+Bryoria fuscescens
+Bunodophoron melanocarpum
+Cetrelia olivetorum
+Cladonia rangiferina
+Coenogonium pineti
+Degelia plumbea
+Erioderma pedicellatum
+Heterodermia leucomela
+Hypogymnia occidentalis
+Lathagrium auriforme
+Lobaria scrobiculata
+Menegazzia subsimilis
+Menegazzia terebrata
+Pannaria rubiginosa
+Pseudocyphellaria crocata
+
+IMPORTANT:
+
+- Return ONLY the scientific species name.
+- Do not return explanations.
+- Do not return a pollution score.
+- Do not invent a species outside the reference list.
+- If the photograph is not sufficiently clear to identify a species,
+  return exactly: UNKNOWN
+"""
+
+    response = gemini_client.models.generate_content(
+        model="gemini-3.6-flash",
+        contents=[
+            types.Part.from_bytes(
+                data=image_bytes,
+                mime_type=mime_type
+            ),
+            prompt
+        ],
+        config=types.GenerateContentConfig(
+            temperature=0
+        )
+    )
+
+    species = response.text.strip()
+
+    if not species:
+        raise RuntimeError(
+            "Gemini returned an empty identification."
+        )
+
+    species = normalize_species_name(species)
+
+    if not species:
+        raise RuntimeError(
+            "Gemini could not identify the species."
+        )
+
+    if species.upper() == "UNKNOWN":
+        return None
+
+    return species
+
+
+# =========================================================
 # Model User
+# =========================================================
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True, nullable=False)
@@ -57,6 +440,7 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
 
 # Model Observation
 class Observation(db.Model):
@@ -72,45 +456,71 @@ class Observation(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship('User')
 
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+
 def create_tables_and_admin():
     db.create_all()
+
     admin = User.query.filter_by(username='admin').first()
+
     if not admin:
-        admin = User(username='admin', email='admin@example.com', is_approved=True)
+        admin = User(
+            username='admin',
+            email='admin@example.com',
+            is_approved=True
+        )
+
         db.session.add(admin)
-        admin_password = os.getenv("ADMIN_PASSWORD", "parola123")  # fallback dacă nu există
+
+        admin_password = os.getenv(
+            "ADMIN_PASSWORD",
+            "parola123"
+        )
+
         admin.set_password(admin_password)
+
     db.session.commit()
+
     print("Admin created or updated!")
+
 
 if os.environ.get("RENDER"):
     with app.app_context():
         create_tables_and_admin()
 
+
+# =========================================================
 # Routes
+# =========================================================
+
 @app.route('/')
 def home():
     return render_template('index.html')
+
 
 @app.route('/despre')
 def despre():
     return render_template('despre.html')
 
+
 @app.route('/participa')
 def participa():
     return render_template('participa.html')
+
 
 @app.route('/galerie')
 def galerie():
     return render_template('galerie.html')
 
+
 @app.route('/harta')
 def harta():
     return render_template('harta.html')
+
 
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
@@ -120,57 +530,84 @@ def contact():
         message = request.form.get('mesaj')
 
         try:
-            send_contact_email(name, sender_email, message)
-            flash('Message sent successfully! Thank you.', 'success')
+            send_contact_email(
+                name,
+                sender_email,
+                message
+            )
+
+            flash(
+                'Message sent successfully! Thank you.',
+                'success'
+            )
+
         except Exception as e:
             print(f"Email send failed: {e}")
-            flash('There was an error sending your message. Please try again later.', 'error')
+
+            flash(
+                'There was an error sending your message. Please try again later.',
+                'error'
+            )
 
         return redirect(url_for('contact'))
 
     return render_template('contact.html')
+
 
 # Subpages
 @app.route('/despre/proiect_si_rol')
 def despre_proiect_si_rol():
     return render_template('despre_proiect_si_rol.html')
 
+
 @app.route('/despre/poluare_atmosferica')
 def despre_pol_atmosferica():
     return render_template('despre_pol_atmosferica.html')
+
 
 @app.route('/despre/licheni')
 def despre_licheni():
     return render_template('despre_licheni.html')
 
+
 @app.route('/despre/echipa')
 def despre_echipa():
     return render_template('despre_echipa.html')
+
 
 @app.route('/despre/timeline')
 def despre_timeline():
     return render_template('despre_timeline.html')
 
+
 @app.route('/despre/resurse')
 def despre_resurse():
     return render_template('despre_resurse.html')
+
 
 @app.route('/despre/parteneri')
 def despre_parteneri():
     return render_template('despre_parteneri.html')
 
+
 @app.route('/participa/voluntariezi')
 def participa_voluntariez():
     return render_template('participa_voluntariez.html')
+
 
 @app.route('/participa/ambasador')
 def participa_ambasador():
     return render_template('participa_ambasador.html')
 
+
+# =========================================================
 # Register
+# =========================================================
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
+
         username = request.form.get('username').strip()
         email = request.form.get('email').strip()
         password = request.form.get('password')
@@ -184,99 +621,226 @@ def register():
             flash('Passwords do not match.', 'error')
             return redirect(url_for('register'))
 
-        if User.query.filter((User.username == username) | (User.email == email)).first():
-            flash('Username or email already used.', 'error')
+        if User.query.filter(
+            (User.username == username) |
+            (User.email == email)
+        ).first():
+
+            flash(
+                'Username or email already used.',
+                'error'
+            )
+
             return redirect(url_for('register'))
 
-        new_user = User(username=username, email=email)
+        new_user = User(
+            username=username,
+            email=email
+        )
+
         new_user.set_password(password)
+
         db.session.add(new_user)
         db.session.commit()
 
-        flash('Registration successful! Your account will be approved soon.')
+        flash(
+            'Registration successful! Your account will be approved soon.'
+        )
+
         return redirect(url_for('login'))
 
     return render_template('register.html')
 
+
+# =========================================================
 # Login
+# =========================================================
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+
     if request.method == 'POST':
+
         username = request.form.get('username').strip()
         password = request.form.get('password')
-        user = User.query.filter_by(username=username).first()
+
+        user = User.query.filter_by(
+            username=username
+        ).first()
+
         if user and user.check_password(password):
+
             if not user.is_approved:
-                flash('Your account is not approved yet.', 'error')
+
+                flash(
+                    'Your account is not approved yet.',
+                    'error'
+                )
+
                 return redirect(url_for('login'))
+
             login_user(user)
-            flash(f'Welcome, {username}!')
+
+            flash(
+                f'Welcome, {username}!'
+            )
+
             return redirect(url_for('dashboard'))
+
         else:
-            flash('Invalid username or password.', 'error')
+
+            flash(
+                'Invalid username or password.',
+                'error'
+            )
+
             return redirect(url_for('login'))
+
     return render_template('login.html')
+
+
+# =========================================================
+# Logout
+# =========================================================
 
 @app.route('/logout')
 @login_required
 def logout():
+
     logout_user()
-    flash('You have been logged out.')
+
+    flash(
+        'You have been logged out.'
+    )
+
     return redirect(url_for('home'))
+
+
+# =========================================================
+# Dashboard
+# =========================================================
 
 @app.route('/dashboard')
 @login_required
 def dashboard():
     return render_template('dashboard.html')
 
+
+# =========================================================
+# EXISTING NORMAL UPLOAD
+# =========================================================
+
 from cloudinary.uploader import upload
+
 
 @app.route('/upload', methods=['GET', 'POST'])
 @login_required
 def upload_observation():
+
     if request.method == 'POST':
+
         if 'photo' not in request.files:
-            flash('No photo selected.', 'error')
+
+            flash(
+                'No photo selected.',
+                'error'
+            )
+
             return redirect(request.url)
 
         photo = request.files['photo']
+
         if not photo.filename:
-            flash('No photo selected.', 'error')
+
+            flash(
+                'No photo selected.',
+                'error'
+            )
+
             return redirect(request.url)
 
         # Upload imaginea pe Cloudinary
         result = upload(photo)
-        image_url = result['secure_url']  # link-ul imaginii de pe Cloudinary
+
+        image_url = result['secure_url']
 
         # Preia datele din formular
         date_time_str = request.form.get('date_time')
-        location = request.form.get('location').strip()
+
+        location = request.form.get(
+            'location'
+        ).strip()
+
         latitude = request.form.get('latitude')
         longitude = request.form.get('longitude')
-        species = request.form.get('species').strip() if request.form.get('species') else None
-        pollution_level_str = request.form.get('pollution_level')
+
+        species = (
+            request.form.get('species').strip()
+            if request.form.get('species')
+            else None
+        )
+
+        pollution_level_str = request.form.get(
+            'pollution_level'
+        )
 
         # Validări date
-        if not date_time_str or not location or not latitude or not longitude:
-            flash('Please fill in all required fields.', 'error')
+        if (
+            not date_time_str
+            or not location
+            or not latitude
+            or not longitude
+        ):
+
+            flash(
+                'Please fill in all required fields.',
+                'error'
+            )
+
             return redirect(request.url)
 
         try:
-            date_time = datetime.strptime(date_time_str, "%Y-%m-%dT%H:%M")
+
+            date_time = datetime.strptime(
+                date_time_str,
+                "%Y-%m-%dT%H:%M"
+            )
+
             latitude = float(latitude)
             longitude = float(longitude)
+
         except ValueError:
-            flash('Invalid date or coordinates.', 'error')
+
+            flash(
+                'Invalid date or coordinates.',
+                'error'
+            )
+
             return redirect(request.url)
 
         pollution_level = None
+
         if pollution_level_str:
+
             try:
-                pollution_level = int(pollution_level_str)
-                if pollution_level < 1 or pollution_level > 10:
+
+                pollution_level = int(
+                    pollution_level_str
+                )
+
+                if (
+                    pollution_level < 1
+                    or pollution_level > 10
+                ):
                     raise ValueError()
+
             except ValueError:
-                flash('Pollution level must be a number between 1 and 10.', 'error')
+
+                flash(
+                    'Pollution level must be a number between 1 and 10.',
+                    'error'
+                )
+
                 return redirect(request.url)
 
         # Creează observația cu link-ul imaginii din Cloudinary
@@ -295,24 +859,441 @@ def upload_observation():
         db.session.add(obs)
         db.session.commit()
 
-        flash('Observation uploaded successfully. Thank you!')
-        return redirect(url_for('view_observations'))
+        flash(
+            'Observation uploaded successfully. Thank you!'
+        )
 
-    return render_template('upload_observation.html')
+        return redirect(
+            url_for('view_observations')
+        )
 
+    return render_template(
+        'upload_observation.html'
+    )
+
+
+# =========================================================
+# AI ADDITION — ANALYZE OBSERVATION
+#
+# This is the endpoint already called by your HTML:
+#
+# {{ url_for('analyze_observation_ai') }}
+#
+# Gemini identifies species.
+# Python determines pollution level.
+# =========================================================
+
+@app.route('/analyze-observation-ai', methods=['POST'])
+@login_required
+def analyze_observation_ai():
+
+    try:
+
+        # -------------------------------------------------
+        # Check image
+        # -------------------------------------------------
+
+        if 'photo' not in request.files:
+
+            return jsonify({
+                'success': False,
+                'message': 'No photograph was uploaded.'
+            }), 400
+
+        photo = request.files['photo']
+
+        if not photo or not photo.filename:
+
+            return jsonify({
+                'success': False,
+                'message': 'No photograph was selected.'
+            }), 400
+
+        if not photo.mimetype.startswith('image/'):
+
+            return jsonify({
+                'success': False,
+                'message': 'The uploaded file is not an image.'
+            }), 400
+
+
+        # -------------------------------------------------
+        # Read image
+        # -------------------------------------------------
+
+        image_bytes = photo.read()
+
+        if not image_bytes:
+
+            return jsonify({
+                'success': False,
+                'message': 'The photograph is empty.'
+            }), 400
+
+
+        # -------------------------------------------------
+        # Gemini identifies ONLY the species
+        # -------------------------------------------------
+
+        species = identify_lichen_species(
+            image_bytes,
+            photo.mimetype
+        )
+
+
+        if not species:
+
+            return jsonify({
+                'success': False,
+                'message': (
+                    'The AI could not confidently identify '
+                    'a lichen species from this photograph.'
+                )
+            }), 422
+
+
+        # -------------------------------------------------
+        # IMPORTANT:
+        #
+        # Gemini does NOT determine pollution.
+        #
+        # Python looks up the species in the fixed
+        # Lichenary database.
+        # -------------------------------------------------
+
+        pollution_level = LICHEN_POLLUTION_DATABASE.get(
+            species
+        )
+
+
+        # -------------------------------------------------
+        # Species recognized by Gemini but not present
+        # in our database.
+        # -------------------------------------------------
+
+        if pollution_level is None:
+
+            return jsonify({
+                'success': False,
+                'message': (
+                    f'The AI identified "{species}", '
+                    'but this species is not present in '
+                    'the Lichenary pollution database.'
+                )
+            }), 422
+
+
+        # -------------------------------------------------
+        # Success
+        # -------------------------------------------------
+
+        return jsonify({
+
+            'success': True,
+
+            'species': species,
+
+            'pollution_level': pollution_level,
+
+            # This is deliberately NOT an AI confidence
+            # score. Your current HTML supports it, so we
+            # provide a simple informational value.
+            #
+            # The species identification itself is what
+            # Gemini produced.
+            'confidence': None
+
+        })
+
+
+    except Exception as e:
+
+        print(
+            f"AI observation analysis failed: {e}"
+        )
+
+        return jsonify({
+
+            'success': False,
+
+            'message': (
+                'The AI analysis failed. '
+                'Please try another clear photograph.'
+            )
+
+        }), 500
+
+
+# =========================================================
+# AI ADDITION — FINAL AI UPLOAD
+#
+# This is the endpoint already called by your HTML:
+#
+# {{ url_for('upload_observation_ai') }}
+#
+# It uploads the image to Cloudinary and saves the
+# already-determined species + pollution score.
+# =========================================================
+
+@app.route('/upload-observation-ai', methods=['POST'])
+@login_required
+def upload_observation_ai():
+
+    try:
+
+        # -------------------------------------------------
+        # Photo
+        # -------------------------------------------------
+
+        if 'photo' not in request.files:
+
+            flash(
+                'No photo selected.',
+                'error'
+            )
+
+            return redirect(request.referrer or url_for('dashboard'))
+
+        photo = request.files['photo']
+
+        if not photo or not photo.filename:
+
+            flash(
+                'No photo selected.',
+                'error'
+            )
+
+            return redirect(request.referrer or url_for('dashboard'))
+
+
+        # -------------------------------------------------
+        # Form values
+        # -------------------------------------------------
+
+        date_time_str = request.form.get(
+            'date_time'
+        )
+
+        location = (
+            request.form.get('location') or ''
+        ).strip()
+
+        latitude_str = request.form.get(
+            'latitude'
+        )
+
+        longitude_str = request.form.get(
+            'longitude'
+        )
+
+        species = (
+            request.form.get('species') or ''
+        ).strip()
+
+        pollution_level_str = request.form.get(
+            'pollution_level'
+        )
+
+
+        # -------------------------------------------------
+        # Required data
+        # -------------------------------------------------
+
+        if (
+            not date_time_str
+            or not location
+            or not latitude_str
+            or not longitude_str
+            or not species
+            or not pollution_level_str
+        ):
+
+            flash(
+                'Please complete the AI analysis and location data before submitting.',
+                'error'
+            )
+
+            return redirect(
+                request.referrer or url_for('dashboard')
+            )
+
+
+        # -------------------------------------------------
+        # Validate date
+        # -------------------------------------------------
+
+        try:
+
+            date_time = datetime.strptime(
+                date_time_str,
+                "%Y-%m-%dT%H:%M"
+            )
+
+        except ValueError:
+
+            flash(
+                'Invalid date or time.',
+                'error'
+            )
+
+            return redirect(
+                request.referrer or url_for('dashboard')
+            )
+
+
+        # -------------------------------------------------
+        # Validate coordinates
+        # -------------------------------------------------
+
+        try:
+
+            latitude = float(
+                latitude_str
+            )
+
+            longitude = float(
+                longitude_str
+            )
+
+        except ValueError:
+
+            flash(
+                'Invalid GPS coordinates.',
+                'error'
+            )
+
+            return redirect(
+                request.referrer or url_for('dashboard')
+            )
+
+
+        # -------------------------------------------------
+        # Validate species AGAINST OUR DATABASE
+        #
+        # This prevents a manipulated browser request
+        # from submitting an arbitrary pollution score.
+        # -------------------------------------------------
+
+        normalized_species = normalize_species_name(
+            species
+        )
+
+        pollution_level = LICHEN_POLLUTION_DATABASE.get(
+            normalized_species
+        )
+
+
+        if pollution_level is None:
+
+            flash(
+                'The selected species is not present in the Lichenary pollution database.',
+                'error'
+            )
+
+            return redirect(
+                request.referrer or url_for('dashboard')
+            )
+
+
+        # -------------------------------------------------
+        # Upload image to Cloudinary
+        # -------------------------------------------------
+
+        result = upload(photo)
+
+        image_url = result['secure_url']
+
+
+        # -------------------------------------------------
+        # Create observation
+        # -------------------------------------------------
+
+        obs = Observation(
+
+            image_filename=image_url,
+
+            date_time=date_time,
+
+            location=location,
+
+            latitude=latitude,
+
+            longitude=longitude,
+
+            species=normalized_species,
+
+            pollution_level=pollution_level,
+
+            user_id=current_user.id,
+
+            is_approved=False
+        )
+
+
+        db.session.add(obs)
+        db.session.commit()
+
+
+        flash(
+            'AI observation uploaded successfully. Thank you!'
+        )
+
+
+        return redirect(
+            url_for('view_observations')
+        )
+
+
+    except Exception as e:
+
+        print(
+            f"AI observation upload failed: {e}"
+        )
+
+        db.session.rollback()
+
+        flash(
+            'There was an error submitting the AI observation.',
+            'error'
+        )
+
+        return redirect(
+            request.referrer or url_for('dashboard')
+        )
+
+
+# =========================================================
+# Observations
+# =========================================================
 
 @app.route('/observations')
 @login_required
 def view_observations():
-    observations = Observation.query.filter_by(user_id=current_user.id).order_by(Observation.date_time.desc()).all()
-    return render_template('observations.html', observations=observations)
+
+    observations = Observation.query.filter_by(
+        user_id=current_user.id
+    ).order_by(
+        Observation.date_time.desc()
+    ).all()
+
+    return render_template(
+        'observations.html',
+        observations=observations
+    )
+
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+    return send_from_directory(
+        app.config['UPLOAD_FOLDER'],
+        filename
+    )
+
 
 @app.route('/api/observations')
 def api_observations():
+
     observations = Observation.query.filter(
         Observation.latitude != None,
         Observation.longitude != None,
@@ -321,134 +1302,345 @@ def api_observations():
     ).all()
 
     data = [
+
         {
             'id': obs.id,
             'latitude': obs.latitude,
             'longitude': obs.longitude,
             'pollution_level': obs.pollution_level,
             'species': obs.species,
-            'date_time': obs.date_time.strftime('%Y-%m-%d %H:%M'),
-             'location': obs.location,
-            'image_filename': obs.image_filename  # ✅ adăugat aici
+            'date_time': obs.date_time.strftime(
+                '%Y-%m-%d %H:%M'
+            ),
+            'location': obs.location,
+            'image_filename': obs.image_filename
         }
+
         for obs in observations
     ]
+
     return jsonify(data)
 
+
+# =========================================================
 # Admin routes
+# =========================================================
+
 @app.route('/admin/users')
 @login_required
 def admin_users():
+
     if current_user.username != 'admin':
-        flash('Access denied.', 'error')
-        return redirect(url_for('dashboard'))
 
-    unapproved_users = User.query.filter_by(is_approved=False).all()
-    approved_users = User.query.filter(User.is_approved == True, User.username != 'admin').all()
+        flash(
+            'Access denied.',
+            'error'
+        )
 
-    return render_template('admin_users.html', users=unapproved_users, approved_users=approved_users)
+        return redirect(
+            url_for('dashboard')
+        )
 
-@app.route('/admin/users/disapprove/<int:user_id>', methods=['POST'])
+    unapproved_users = User.query.filter_by(
+        is_approved=False
+    ).all()
+
+    approved_users = User.query.filter(
+        User.is_approved == True,
+        User.username != 'admin'
+    ).all()
+
+    return render_template(
+        'admin_users.html',
+        users=unapproved_users,
+        approved_users=approved_users
+    )
+
+
+@app.route(
+    '/admin/users/disapprove/<int:user_id>',
+    methods=['POST']
+)
 @login_required
 def disapprove_user(user_id):
+
     if current_user.username != 'admin':
-        flash('Access denied.', 'error')
-        return redirect(url_for('dashboard'))
+
+        flash(
+            'Access denied.',
+            'error'
+        )
+
+        return redirect(
+            url_for('dashboard')
+        )
 
     user = User.query.get(user_id)
-    if user:
-        user.is_approved = False
-        db.session.commit()
-        flash(f'User {user.username} disapproved.')
-    else:
-        flash('User not found.', 'error')
-    return redirect(url_for('admin_users'))
 
-@app.route('/admin/users/approve/<int:user_id>', methods=['POST'])
+    if user:
+
+        user.is_approved = False
+
+        db.session.commit()
+
+        flash(
+            f'User {user.username} disapproved.'
+        )
+
+    else:
+
+        flash(
+            'User not found.',
+            'error'
+        )
+
+    return redirect(
+        url_for('admin_users')
+    )
+
+
+@app.route(
+    '/admin/users/approve/<int:user_id>',
+    methods=['POST']
+)
 @login_required
 def approve_user(user_id):
+
     if current_user.username != 'admin':
-        flash('Access denied.', 'error')
-        return redirect(url_for('dashboard'))
+
+        flash(
+            'Access denied.',
+            'error'
+        )
+
+        return redirect(
+            url_for('dashboard')
+        )
+
     user = User.query.get(user_id)
+
     if user:
+
         user.is_approved = True
+
         db.session.commit()
-        flash(f'User {user.username} approved.')
+
+        flash(
+            f'User {user.username} approved.'
+        )
+
     else:
-        flash('User not found.', 'error')
-    return redirect(url_for('admin_users'))
+
+        flash(
+            'User not found.',
+            'error'
+        )
+
+    return redirect(
+        url_for('admin_users')
+    )
+
 
 @app.route('/admin/observations')
 @login_required
 def admin_observations():
+
     if current_user.username != 'admin':
-        flash('Access denied.', 'error')
-        return redirect(url_for('dashboard'))
-    observations = Observation.query.filter_by(is_approved=False).order_by(Observation.date_time.desc()).all()
-    return render_template('admin_observations.html', observations=observations)
+
+        flash(
+            'Access denied.',
+            'error'
+        )
+
+        return redirect(
+            url_for('dashboard')
+        )
+
+    observations = Observation.query.filter_by(
+        is_approved=False
+    ).order_by(
+        Observation.date_time.desc()
+    ).all()
+
+    return render_template(
+        'admin_observations.html',
+        observations=observations
+    )
+
 
 @app.route('/admin/observations/approved')
 @login_required
 def admin_approved_observations():
-    if current_user.username != 'admin':
-        flash('Access denied.', 'error')
-        return redirect(url_for('dashboard'))
-    observations = Observation.query.filter_by(is_approved=True).order_by(Observation.date_time.desc()).all()
-    return render_template('admin_approved_observations.html', observations=observations)
 
-@app.route('/admin/observations/approve/<int:obs_id>', methods=['POST'])
+    if current_user.username != 'admin':
+
+        flash(
+            'Access denied.',
+            'error'
+        )
+
+        return redirect(
+            url_for('dashboard')
+        )
+
+    observations = Observation.query.filter_by(
+        is_approved=True
+    ).order_by(
+        Observation.date_time.desc()
+    ).all()
+
+    return render_template(
+        'admin_approved_observations.html',
+        observations=observations
+    )
+
+
+@app.route(
+    '/admin/observations/approve/<int:obs_id>',
+    methods=['POST']
+)
 @login_required
 def approve_observation(obs_id):
-    if current_user.username != 'admin':
-        flash('Access denied.', 'error')
-        return redirect(url_for('dashboard'))
-    observation = Observation.query.get(obs_id)
-    if observation:
-        observation.is_approved = True
-        db.session.commit()
-        flash('Observation approved.')
-    else:
-        flash('Observation not found.', 'error')
-    return redirect(url_for('admin_observations'))
 
-@app.route('/admin/observations/<int:obs_id>/edit', methods=['GET', 'POST'])
+    if current_user.username != 'admin':
+
+        flash(
+            'Access denied.',
+            'error'
+        )
+
+        return redirect(
+            url_for('dashboard')
+        )
+
+    observation = Observation.query.get(obs_id)
+
+    if observation:
+
+        observation.is_approved = True
+
+        db.session.commit()
+
+        flash(
+            'Observation approved.'
+        )
+
+    else:
+
+        flash(
+            'Observation not found.',
+            'error'
+        )
+
+    return redirect(
+        url_for('admin_observations')
+    )
+
+
+@app.route(
+    '/admin/observations/<int:obs_id>/edit',
+    methods=['GET', 'POST']
+)
 @login_required
 def edit_observation(obs_id):
-    if current_user.username != 'admin':
-        flash('Access denied.', 'error')
-        return redirect(url_for('dashboard'))
 
-    observation = Observation.query.get_or_404(obs_id)
+    if current_user.username != 'admin':
+
+        flash(
+            'Access denied.',
+            'error'
+        )
+
+        return redirect(
+            url_for('dashboard')
+        )
+
+    observation = Observation.query.get_or_404(
+        obs_id
+    )
 
     if request.method == 'POST':
-        date_time_str = request.form.get('date_time')
-        location = request.form.get('location').strip()
-        latitude = request.form.get('latitude')
-        longitude = request.form.get('longitude')
-        species = request.form.get('species').strip()
-        pollution_level_str = request.form.get('pollution_level')
 
-        if not date_time_str or not location or not latitude or not longitude:
-            flash('All fields are required.', 'error')
+        date_time_str = request.form.get(
+            'date_time'
+        )
+
+        location = (
+            request.form.get('location')
+        ).strip()
+
+        latitude = request.form.get(
+            'latitude'
+        )
+
+        longitude = request.form.get(
+            'longitude'
+        )
+
+        species = (
+            request.form.get('species')
+        ).strip()
+
+        pollution_level_str = request.form.get(
+            'pollution_level'
+        )
+
+        if (
+            not date_time_str
+            or not location
+            or not latitude
+            or not longitude
+        ):
+
+            flash(
+                'All fields are required.',
+                'error'
+            )
+
             return redirect(request.url)
 
         try:
-            date_time = datetime.strptime(date_time_str, "%Y-%m-%dT%H:%M")
+
+            date_time = datetime.strptime(
+                date_time_str,
+                "%Y-%m-%dT%H:%M"
+            )
+
             latitude = float(latitude)
             longitude = float(longitude)
+
         except ValueError:
-            flash('Invalid data.', 'error')
+
+            flash(
+                'Invalid data.',
+                'error'
+            )
+
             return redirect(request.url)
 
         pollution_level = None
+
         if pollution_level_str:
+
             try:
-                pollution_level = int(pollution_level_str)
-                if pollution_level < 1 or pollution_level > 10:
+
+                pollution_level = int(
+                    pollution_level_str
+                )
+
+                if (
+                    pollution_level < 1
+                    or pollution_level > 10
+                ):
                     raise ValueError()
+
             except ValueError:
-                flash('Pollution level must be 1-10.', 'error')
+
+                flash(
+                    'Pollution level must be 1-10.',
+                    'error'
+                )
+
                 return redirect(request.url)
 
         observation.date_time = date_time
@@ -459,60 +1651,154 @@ def edit_observation(obs_id):
         observation.pollution_level = pollution_level
 
         db.session.commit()
-        flash('Observation updated.')
-        return redirect(url_for('admin_observations'))
 
-    return render_template('admin_edit_observation.html', observation=observation)
+        flash(
+            'Observation updated.'
+        )
 
-@app.route('/admin/observations/disapprove/<int:obs_id>', methods=['POST'])
+        return redirect(
+            url_for('admin_observations')
+        )
+
+    return render_template(
+        'admin_edit_observation.html',
+        observation=observation
+    )
+
+
+@app.route(
+    '/admin/observations/disapprove/<int:obs_id>',
+    methods=['POST']
+)
 @login_required
 def disapprove_observation(obs_id):
-    if current_user.username != 'admin':
-        flash('Access denied.', 'error')
-        return redirect(url_for('dashboard'))
 
-    obs = Observation.query.get_or_404(obs_id)
+    if current_user.username != 'admin':
+
+        flash(
+            'Access denied.',
+            'error'
+        )
+
+        return redirect(
+            url_for('dashboard')
+        )
+
+    obs = Observation.query.get_or_404(
+        obs_id
+    )
+
     obs.is_approved = False
+
     db.session.commit()
-    flash('Observation disapproved.', 'success')
-    return redirect(url_for('admin_approved_observations'))
-@app.route('/admin/observations/delete/<int:obs_id>', methods=['POST'])
+
+    flash(
+        'Observation disapproved.',
+        'success'
+    )
+
+    return redirect(
+        url_for('admin_approved_observations')
+    )
+
+
+@app.route(
+    '/admin/observations/delete/<int:obs_id>',
+    methods=['POST']
+)
 @login_required
 def delete_observation(obs_id):
-    if current_user.username != 'admin':
-        flash('Access denied.', 'error')
-        return redirect(url_for('dashboard'))
 
-    observation = Observation.query.get_or_404(obs_id)
+    if current_user.username != 'admin':
+
+        flash(
+            'Access denied.',
+            'error'
+        )
+
+        return redirect(
+            url_for('dashboard')
+        )
+
+    observation = Observation.query.get_or_404(
+        obs_id
+    )
+
     db.session.delete(observation)
     db.session.commit()
-    flash('Observation deleted.', 'success')
-    return redirect(url_for('admin_observations'))
 
-# ↓ Add this above if __name__ == '__main__':
-def send_contact_email(name, sender_email, message):
+    flash(
+        'Observation deleted.',
+        'success'
+    )
+
+    return redirect(
+        url_for('admin_observations')
+    )
+
+
+# =========================================================
+# Contact email
+# =========================================================
+
+def send_contact_email(
+    name,
+    sender_email,
+    message
+):
+
     recipient_email = "lichenary@gmail.com"
 
     msg = MIMEMultipart()
+
     msg['From'] = sender_email
     msg['To'] = recipient_email
-    msg['Subject'] = f"New message from {name} via Lichenary contact form"
 
-    body = f"Name: {name}\nEmail: {sender_email}\n\nMessage:\n{message}"
-    msg.attach(MIMEText(body, 'plain'))
+    msg['Subject'] = (
+        f"New message from {name} via Lichenary contact form"
+    )
+
+    body = (
+        f"Name: {name}\n"
+        f"Email: {sender_email}\n\n"
+        f"Message:\n{message}"
+    )
+
+    msg.attach(
+        MIMEText(body, 'plain')
+    )
 
     smtp_server = "smtp.gmail.com"
     smtp_port = 587
-    your_gmail = "lichenary@gmail.com"
-    your_password = os.getenv("EMAIL_APP_PASSWORD")
 
-    with smtplib.SMTP(smtp_server, smtp_port) as server:
+    your_gmail = "lichenary@gmail.com"
+
+    your_password = os.getenv(
+        "EMAIL_APP_PASSWORD"
+    )
+
+    with smtplib.SMTP(
+        smtp_server,
+        smtp_port
+    ) as server:
+
         server.starttls()
-        server.login(your_gmail, your_password)
+
+        server.login(
+            your_gmail,
+            your_password
+        )
+
         server.send_message(msg)
 
 
+# =========================================================
+# Run
+# =========================================================
+
 if __name__ == '__main__':
+
     with app.app_context():
         create_tables_and_admin()
+
     app.run(debug=True)
