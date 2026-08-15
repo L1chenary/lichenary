@@ -1035,12 +1035,14 @@ def analyze_observation_ai():
 # already-determined species + pollution score.
 # =========================================================
 
-@app.route('/upload-observation-ai', methods=['POST'])
+@app.route('/upload-observation-ai', methods=['GET', 'POST'])
 @login_required
 def upload_observation_ai():
 
-    try:
+    if request.method == 'GET':
+        return render_template('upload_observation_ai.html')
 
+    try:
         # -------------------------------------------------
         # Photo
         # -------------------------------------------------
