@@ -4,179 +4,630 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Contact – Lichenary</title>
+
   <style>
-    html, body {
-      margin: 0; padding: 0;
-      height: 100%;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #1f2f1f;
-      color: white;
-      overflow-x: hidden;
-      position: relative; /* adaugat pentru compatibilitate */
+    :root {
+      --forest: #173f36;
+      --forest-dark: #102f29;
+      --forest-light: #2b6657;
+      --sage: #91a998;
+      --cream: #f3f0e7;
+      --cream-light: #faf9f4;
+      --white: #ffffff;
+      --text: #17342d;
+      --muted: #63756d;
+      --accent: #c8d9c8;
+      --border: rgba(23, 63, 54, 0.12);
+      --shadow: 0 25px 70px rgba(19, 53, 45, 0.14);
     }
 
-    #cloud-canvas {
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(200, 217, 200, 0.5), transparent 30%),
+        radial-gradient(circle at 90% 80%, rgba(211, 224, 211, 0.55), transparent 32%),
+        var(--cream);
+      color: var(--text);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Decorative organic background */
+
+    body::before {
+      content: "";
       position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
+      width: 420px;
+      height: 420px;
+      border-radius: 48% 52% 63% 37% / 42% 36% 64% 58%;
+      background: rgba(145, 169, 152, 0.12);
+      top: -160px;
+      left: -140px;
+      z-index: 0;
+      pointer-events: none;
+      filter: blur(1px);
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      width: 500px;
+      height: 500px;
+      border-radius: 63% 37% 44% 56% / 58% 48% 52% 42%;
+      background: rgba(190, 210, 193, 0.15);
+      right: -200px;
+      bottom: -180px;
       z-index: 0;
       pointer-events: none;
     }
 
+    #cloud-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.35;
+    }
+
+    /* Header */
+
     header {
-      background-color: rgba(17, 61, 60, 0.85);
-      padding: 15px 20px;
-      color: white;
+      position: relative;
+      z-index: 20;
+      width: 100%;
+      padding: 20px 5%;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap; /* adaugat pentru mobile */
-      position: relative;
-      z-index: 20;
+      gap: 30px;
+
+      background: rgba(250, 249, 244, 0.82);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+
+      border-bottom: 1px solid rgba(23, 63, 54, 0.08);
     }
 
     .logo {
-      font-size: 1.5em;
-      font-weight: bold;
+      font-size: 1.65rem;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      color: var(--forest);
       cursor: pointer;
-      color: white;
+      white-space: nowrap;
+      transition: opacity 0.25s ease;
+    }
+
+    .logo:hover {
+      opacity: 0.7;
     }
 
     nav {
       display: flex;
-      gap: 10px;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 5px;
       z-index: 20;
+      flex-wrap: wrap;
     }
 
     nav a {
-      color: white;
+      color: var(--forest);
       text-decoration: none;
-      padding: 6px 10px;
-      border-radius: 4px;
+      padding: 9px 13px;
+      border-radius: 999px;
+      white-space: nowrap;
+      font-size: 0.92rem;
+      font-weight: 500;
+      transition:
+        background 0.25s ease,
+        color 0.25s ease,
+        transform 0.25s ease;
     }
 
     nav a:hover {
-      background-color: #1d5957;
+      background: rgba(43, 102, 87, 0.1);
+      color: var(--forest-light);
+      transform: translateY(-1px);
     }
+
+    /* Burger */
 
     .burger {
       display: none;
       flex-direction: column;
+      justify-content: center;
+      align-items: center;
       cursor: pointer;
       gap: 5px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(23, 63, 54, 0.08);
       z-index: 30;
     }
 
     .burger div {
-      width: 25px;
-      height: 3px;
-      background-color: white;
+      width: 20px;
+      height: 2px;
+      background-color: var(--forest);
       border-radius: 2px;
+      transition: transform 0.25s ease;
+    }
+
+    /* Main */
+
+    main {
+      position: relative;
+      z-index: 10;
+      width: min(1180px, 90%);
+      margin: 0 auto;
+      padding: 75px 0 90px;
+    }
+
+    .contact-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(360px, 0.85fr);
+      gap: 55px;
+      align-items: stretch;
+    }
+
+    /* Left side */
+
+    .contact-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 20px 0;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 22px;
+      color: var(--forest-light);
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 28px;
+      height: 1px;
+      background: var(--forest-light);
+    }
+
+    h1 {
+      margin: 0 0 22px;
+      max-width: 650px;
+      color: var(--forest-dark);
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      line-height: 0.98;
+      letter-spacing: -0.065em;
+      font-weight: 700;
+    }
+
+    .intro {
+      max-width: 600px;
+      margin: 0 0 38px;
+      color: var(--muted);
+      font-size: 1.15rem;
+      line-height: 1.8;
+    }
+
+    /* Form */
+
+    form {
+      width: 100%;
+      max-width: 650px;
+      padding: 30px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(23, 63, 54, 0.08);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+    }
+
+    .form-group {
+      margin-bottom: 17px;
+    }
+
+    form input,
+    form textarea {
+      display: block;
+      width: 100%;
+      border: 1px solid var(--border);
+      outline: none;
+      background: rgba(243, 240, 231, 0.65);
+      color: var(--text);
+      padding: 15px 17px;
+      border-radius: 14px;
+      font-family: inherit;
+      font-size: 0.98rem;
+      transition:
+        border 0.25s ease,
+        background 0.25s ease,
+        box-shadow 0.25s ease;
+    }
+
+    form input::placeholder,
+    form textarea::placeholder {
+      color: #829089;
+    }
+
+    form input:focus,
+    form textarea:focus {
+      border-color: rgba(43, 102, 87, 0.5);
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 0 0 4px rgba(43, 102, 87, 0.08);
+    }
+
+    form textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    form button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: auto;
+      min-width: 165px;
+      margin-top: 5px;
+      padding: 14px 24px;
+
+      border: none;
+      border-radius: 999px;
+
+      background: var(--forest);
+      color: white;
+
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+
+      cursor: pointer;
+
+      box-shadow: 0 10px 25px rgba(23, 63, 54, 0.18);
+
+      transition:
+        transform 0.25s ease,
+        background 0.25s ease,
+        box-shadow 0.25s ease;
+    }
+
+    form button:hover {
+      background: var(--forest-light);
+      transform: translateY(-3px);
+      box-shadow: 0 14px 30px rgba(23, 63, 54, 0.22);
+    }
+
+    form button:active {
+      transform: translateY(-1px);
+    }
+
+    /* Contact info */
+
+    .contact-info {
+      margin-top: 28px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .contact-info p {
+      margin: 0;
+      line-height: 1.7;
+    }
+
+    .contact-info a {
+      color: var(--forest-light);
+      font-weight: 600;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(43, 102, 87, 0.3);
+      transition:
+        color 0.2s ease,
+        border-color 0.2s ease;
+    }
+
+    .contact-info a:hover {
+      color: var(--forest-dark);
+      border-color: var(--forest-dark);
+    }
+
+    /* Image */
+
+    .contact-image-wrapper {
+      position: relative;
+      min-height: 650px;
+      border-radius: 45% 55% 52% 48% / 43% 40% 60% 57%;
+      overflow: hidden;
+      box-shadow: 0 30px 80px rgba(23, 63, 54, 0.2);
+      background: var(--forest);
+    }
+
+    .contact-image-wrapper::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(16, 47, 41, 0.02) 20%,
+          rgba(16, 47, 41, 0.35) 100%
+        );
+      pointer-events: none;
+    }
+
+    .contact-image {
+      width: 100%;
+      height: 100%;
+      min-height: 650px;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      transform: scale(1.02);
+      transition: transform 1.2s ease;
+    }
+
+    .contact-image-wrapper:hover .contact-image {
+      transform: scale(1.07);
+    }
+
+    /* Floating label */
+
+    .image-note {
+      position: absolute;
+      z-index: 5;
+      left: 28px;
+      bottom: 28px;
+      max-width: 280px;
+      padding: 17px 20px;
+      border-radius: 18px;
+
+      background: rgba(250, 249, 244, 0.88);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+
+      color: var(--forest);
+      font-size: 0.9rem;
+      line-height: 1.5;
+
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+    }
+
+    .image-note strong {
+      display: block;
+      margin-bottom: 3px;
+      font-size: 1rem;
+    }
+
+    /* Footer */
+
+    footer {
+      position: relative;
+      z-index: 10;
+      padding: 24px 20px;
+      background: var(--forest);
+      color: rgba(255, 255, 255, 0.72);
+      text-align: center;
+      font-size: 0.85rem;
+      letter-spacing: 0.01em;
+    }
+
+    /* Responsive */
+
+    @media (max-width: 1050px) {
+      header {
+        padding-left: 4%;
+        padding-right: 4%;
+      }
+
+      .contact-layout {
+        grid-template-columns: minmax(0, 1fr) minmax(320px, 0.8fr);
+        gap: 35px;
+      }
+
+      .contact-image-wrapper,
+      .contact-image {
+        min-height: 580px;
+      }
+
+      nav {
+        gap: 2px;
+      }
+
+      nav a {
+        padding: 8px 9px;
+        font-size: 0.86rem;
+      }
     }
 
     @media (max-width: 768px) {
-      nav {
-        max-height: 0;
-        overflow: hidden;
-        flex-direction: column;
-        width: 100%;
-        background-color: rgba(17, 61, 60, 0.9);
-        position: absolute;
-        top: 56px;
-        left: 0;
-        padding: 0 20px;
-        border-radius: 0 0 8px 8px;
-        box-sizing: border-box;
-        transition: max-height 0.4s ease, padding 0.4s ease;
-      }
-      nav.open {
-        max-height: 500px;
-        padding: 10px 20px;
+      header {
+        padding: 15px 20px;
       }
 
-      body.menu-open main {
-        margin-top: 250px;
-        transition: margin-top 0.3s ease;
+      .logo {
+        font-size: 1.45rem;
       }
 
       .burger {
         display: flex;
       }
+
+      nav {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+
+        max-height: 0;
+        overflow: hidden;
+
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4px;
+
+        padding: 0 20px;
+
+        background: rgba(250, 249, 244, 0.96);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+
+        border-bottom: 1px solid rgba(23, 63, 54, 0.08);
+
+        transition:
+          max-height 0.4s ease,
+          padding 0.4s ease;
+      }
+
+      nav.open {
+        max-height: 600px;
+        padding: 12px 20px 18px;
+      }
+
+      nav a {
+        width: 100%;
+        padding: 12px 14px;
+        border-radius: 12px;
+      }
+
+      body.menu-open main {
+        margin-top: 0;
+      }
+
+      main {
+        width: min(92%, 620px);
+        padding: 50px 0 65px;
+      }
+
+      .contact-layout {
+        display: flex;
+        flex-direction: column;
+        gap: 45px;
+      }
+
+      .contact-content {
+        padding: 0;
+      }
+
+      h1 {
+        font-size: clamp(3rem, 14vw, 4.5rem);
+      }
+
+      .intro {
+        font-size: 1.05rem;
+        line-height: 1.7;
+      }
+
+      form {
+        padding: 23px;
+        border-radius: 23px;
+      }
+
+      .contact-image-wrapper {
+        min-height: 430px;
+        border-radius: 38% 62% 55% 45% / 42% 45% 55% 58%;
+      }
+
+      .contact-image {
+        min-height: 430px;
+      }
+
+      .image-note {
+        left: 20px;
+        bottom: 20px;
+      }
     }
 
-    main {
-      position: relative;
-      z-index: 10;
-      max-width: 800px;
-      margin: 60px auto 30px;
-      padding: 20px;
-      text-align: center;
+    @media (max-width: 480px) {
+      main {
+        width: 90%;
+        padding-top: 38px;
+      }
+
+      h1 {
+        font-size: 3.2rem;
+      }
+
+      .eyebrow {
+        font-size: 0.7rem;
+      }
+
+      .intro {
+        margin-bottom: 28px;
+      }
+
+      form {
+        padding: 18px;
+        border-radius: 20px;
+      }
+
+      form input,
+      form textarea {
+        padding: 13px 14px;
+      }
+
+      form button {
+        width: 100%;
+      }
+
+      .contact-image-wrapper,
+      .contact-image {
+        min-height: 360px;
+      }
+
+      .image-note {
+        right: 20px;
+        max-width: none;
+      }
     }
 
-    h1 {
-      font-size: 2.2em;
-      margin-bottom: 20px;
-    }
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
 
-    p {
-      font-size: 1.1em;
-      margin-bottom: 25px;
-      line-height: 1.6;
-    }
-
-    form {
-      background: rgba(255, 255, 255, 0.08);
-      padding: 25px;
-      border-radius: 10px;
-      backdrop-filter: blur(6px);
-      box-shadow: 0 0 12px rgba(0,0,0,0.25);
-    }
-
-    form input, form textarea {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 15px;
-      border: none;
-      border-radius: 6px;
-      font-size: 1em;
-    }
-
-    form button {
-      background-color: #1d5957;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 6px;
-      font-size: 1em;
-      cursor: pointer;
-    }
-
-    form button:hover {
-      background-color: #218b87;
-    }
-
-    .contact-info {
-      margin-top: 40px;
-      font-size: 0.95em;
-      line-height: 1.8;
-    }
-
-    footer {
-      background-color: rgba(17, 61, 60, 0.85);
-      color: white;
-      text-align: center;
-      padding: 15px;
-      position: relative;
-      z-index: 10;
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
     }
   </style>
 </head>
+
 <body>
 
 <canvas id="cloud-canvas"></canvas>
 
 <header>
-  <div class="logo" onclick="window.location='{{ url_for('home') }}'">Lichenary</div>
+  <div class="logo" onclick="window.location='{{ url_for('home') }}'">
+    Lichenary
+  </div>
 
   <div id="burger" class="burger" aria-label="Menu" tabindex="0">
     <div></div>
@@ -191,6 +642,7 @@
     <a href="{{ url_for('galerie') }}">Gallery</a>
     <a href="{{ url_for('harta') }}">Map</a>
     <a href="{{ url_for('contact') }}">Contact</a>
+
     {% if current_user.is_authenticated %}
       <a href="{{ url_for('dashboard') }}">Dashboard</a>
       <a href="{{ url_for('logout') }}">Logout</a>
@@ -202,19 +654,88 @@
 </header>
 
 <main>
-  <h1>📬 Contact Us</h1>
-  <p>Have questions? Suggestions? Want to collaborate with us? Write to us!</p>
 
-  <form method="post" action="{{ url_for('contact') }}">
-    <input type="text" name="nume" placeholder="Your Name" required />
-    <input type="email" name="email" placeholder="Your Email" required />
-    <textarea name="mesaj" rows="5" placeholder="Your Message..." required></textarea>
-    <button type="submit">Send Message</button>
-  </form>
+  <div class="contact-layout">
 
-  <div class="contact-info">
-    <p>📱 Instagram: <a href="https://instagram.com/lichenary.ro" target="_blank" style="color:#9ff;">@lichenary.ro</a></p>
+    <section class="contact-content">
+
+      <div class="eyebrow">
+        Get in touch
+      </div>
+
+      <h1>
+        Let's talk about nature.
+      </h1>
+
+      <p class="intro">
+        Have questions? Suggestions? Want to collaborate with us?
+        Write to us and become part of the conversation around
+        lichens, air quality and citizen science.
+      </p>
+
+      <form method="post" action="{{ url_for('contact') }}">
+
+        <div class="form-group">
+          <input
+            type="text"
+            name="nume"
+            placeholder="Your Name"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <input
+            type="email"
+            name="email"
+            placeholder="Your Email"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <textarea
+            name="mesaj"
+            rows="5"
+            placeholder="Your Message..."
+            required
+          ></textarea>
+        </div>
+
+        <button type="submit">
+          Send Message
+        </button>
+
+      </form>
+
+      <div class="contact-info">
+        <p>
+          Instagram:
+          <a
+            href="https://instagram.com/lichenary.ro"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            @lichenary.ro
+          </a>
+        </p>
+      </div>
+
+    </section>
+
+    <section class="contact-image-wrapper">
+
+      <img
+        class="contact-image"
+        src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1782058786/esch2ef80bgcmn5fodnl.jpg"
+        alt="Lichenary field observation"
+      />
+
+
+    </section>
+
   </div>
+
 </main>
 
 <footer>
@@ -230,23 +751,34 @@
     document.body.classList.toggle('menu-open', isOpen);
   });
 
-  // Închide meniul când se apasă un link (pe mobil)
   document.querySelectorAll('#nav-links a').forEach(link => {
     link.addEventListener('click', () => {
       navLinks.classList.remove('open');
       document.body.classList.remove('menu-open');
     });
   });
+
+  burger.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+
+      const isOpen = navLinks.classList.toggle('open');
+      document.body.classList.toggle('menu-open', isOpen);
+    }
+  });
 </script>
 
 <script>
   const canvas = document.getElementById('cloud-canvas');
   const ctx = canvas.getContext('2d');
-  let width, height;
+
+  let width;
+  let height;
 
   function resize() {
     width = window.innerWidth;
     height = window.innerHeight;
+
     canvas.width = width;
     canvas.height = height;
   }
@@ -262,39 +794,75 @@
       this.color = color;
       this.speed = speed;
     }
+
     draw(ctx) {
-      let gradient = ctx.createRadialGradient(this.x, this.y, this.size * 0.3, this.x, this.y, this.size);
+      const gradient = ctx.createRadialGradient(
+        this.x,
+        this.y,
+        this.size * 0.3,
+        this.x,
+        this.y,
+        this.size
+      );
+
       gradient.addColorStop(0, this.color);
       gradient.addColorStop(1, 'rgba(0,0,0,0)');
+
       ctx.fillStyle = gradient;
+
       ctx.beginPath();
-      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.arc(
+        this.x,
+        this.y,
+        this.size,
+        0,
+        Math.PI * 2
+      );
       ctx.fill();
     }
+
     update() {
       this.x += this.speed;
+
       if (this.x - this.size > width) {
         this.x = -this.size;
-        this.y = Math.random() * height * 0.8 + height * 0.1;
+        this.y =
+          Math.random() * height * 0.8 +
+          height * 0.1;
       }
     }
   }
 
   const clouds = [];
-  const colors = ['rgba(180,220,180,0.3)', 'rgba(150,190,150,0.25)', 'rgba(120,160,120,0.2)'];
+
+  const colors = [
+    'rgba(180,220,180,0.18)',
+    'rgba(150,190,150,0.14)',
+    'rgba(120,160,120,0.11)'
+  ];
 
   colors.forEach(color => {
     for (let i = 0; i < 8; i++) {
-      clouds.push(new Cloud(Math.random() * width, Math.random() * height, 60 + Math.random() * 50, color, 0.15 + Math.random() * 0.2));
+      clouds.push(
+        new Cloud(
+          Math.random() * width,
+          Math.random() * height,
+          60 + Math.random() * 50,
+          color,
+          0.15 + Math.random() * 0.2
+        )
+      );
     }
   });
 
   function animate() {
     ctx.clearRect(0, 0, width, height);
+
     clouds.forEach(cloud => {
       cloud.draw(ctx);
       cloud.update();
     });
+
     requestAnimationFrame(animate);
   }
 

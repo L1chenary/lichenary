@@ -4,157 +4,1175 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>About Air Pollution – Lichenary</title>
+
   <style>
-    html, body {
+    /* =========================================================
+       LICHENARY — ORGANIC / EDITORIAL / CITIZEN SCIENCE
+       About Air Pollution
+       ========================================================= */
+
+    :root {
+      --cream: #f5f3ea;
+      --cream-light: #fbfaf5;
+      --paper: #eeece1;
+
+      --forest: #173f35;
+      --forest-dark: #102f28;
+      --forest-soft: #315c4d;
+
+      --moss: #718d57;
+      --sage: #a8b89a;
+      --lichen: #d9e4bb;
+
+      --ink: #18231f;
+      --muted: #65716a;
+
+      --white: #ffffff;
+
+      --radius-xl: 42px;
+      --radius-lg: 28px;
+      --radius-md: 18px;
+
+      --shadow-soft: 0 20px 60px rgba(23, 63, 53, 0.10);
+      --shadow-deep: 0 30px 70px rgba(23, 63, 53, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
       margin: 0;
       padding: 0;
-      height: 100%;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #1f2f1f;
-      color: white;
+
+      min-height: 100vh;
+
+      font-family:
+        "Segoe UI",
+        Tahoma,
+        Geneva,
+        Verdana,
+        sans-serif;
+
+      background: var(--cream);
+      color: var(--ink);
+
       overflow-x: hidden;
+
       position: relative;
-      /* am adăugat position relative pentru body, ca la primul cod */
     }
+
+    a {
+      color: inherit;
+    }
+
+    /* =========================================================
+       BACKGROUND CANVAS
+       ========================================================= */
 
     #cloud-canvas {
       position: fixed;
+
       top: 0;
       left: 0;
+
       width: 100vw;
       height: 100vh;
+
       z-index: 0;
+
       pointer-events: none;
+
+      opacity: 0.32;
     }
 
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
     header {
-      background: rgba(17, 61, 60, 0.85);
-      padding: 15px 20px;
+      position: sticky;
+      top: 0;
+
+      z-index: 100;
+
+      width: 100%;
+
+      padding: 20px 5vw;
+
       display: flex;
       align-items: center;
       justify-content: space-between;
-      flex-wrap: wrap; /* adăugat ca la primul cod pentru wrap */
-      z-index: 20; /* creștere z-index la 20 ca la primul cod */
-      position: relative;
+
+      gap: 30px;
+
+      background: rgba(245, 243, 234, 0.88);
+
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+
+      border-bottom:
+        1px solid rgba(23, 63, 53, 0.08);
     }
 
     .logo {
-      font-size: 1.5em;
+      color: var(--forest);
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      font-size: 1.7rem;
+
       font-weight: bold;
+
+      letter-spacing: -0.04em;
+
       cursor: pointer;
-      color: white;
+
+      transition:
+        transform 0.25s ease,
+        color 0.25s ease;
     }
 
-    /* Înlocuim .menu-toggle cu .burger ca în primul cod */
+    .logo:hover {
+      color: var(--moss);
 
-    .burger {
-      display: none;
-      flex-direction: column;
-      cursor: pointer;
-      gap: 5px;
-      z-index: 30;
+      transform: translateY(-1px);
     }
 
-    .burger div {
-      width: 25px;
-      height: 3px;
-      background-color: white;
-      border-radius: 2px;
-    }
+    /* =========================================================
+       NAVIGATION
+       ========================================================= */
 
     nav.main-nav {
       display: flex;
-      gap: 10px;
+
+      align-items: center;
+      justify-content: flex-end;
+
+      gap: 5px;
+
+      flex-wrap: wrap;
+
       z-index: 20;
     }
 
     nav.main-nav a {
-      color: white;
+      position: relative;
+
+      color: var(--forest);
+
       text-decoration: none;
-      padding: 6px 10px;
-      border-radius: 4px;
+
+      padding: 9px 12px;
+
+      font-size: 0.92rem;
+
+      font-weight: 500;
+
+      border-radius: 999px;
+
+      white-space: nowrap;
+
+      transition:
+        color 0.25s ease,
+        background 0.25s ease,
+        transform 0.25s ease;
     }
 
     nav.main-nav a:hover {
-      background-color: #1d5957;
+      color: var(--forest);
+
+      background:
+        rgba(113, 141, 87, 0.14);
+
+      transform: translateY(-1px);
     }
 
-    @media (max-width: 768px) {
+    /* =========================================================
+       BURGER
+       ========================================================= */
+
+    .burger {
+      display: none;
+
+      flex-direction: column;
+      justify-content: center;
+
+      gap: 5px;
+
+      width: 42px;
+      height: 42px;
+
+      padding: 8px;
+
+      cursor: pointer;
+
+      border-radius: 50%;
+
+      background: var(--forest);
+
+      z-index: 30;
+    }
+
+    .burger div {
+      width: 100%;
+      height: 2px;
+
+      background: white;
+
+      border-radius: 10px;
+
+      transition:
+        transform 0.25s ease,
+        opacity 0.25s ease;
+    }
+
+    /* =========================================================
+       MAIN
+       ========================================================= */
+
+    main {
+      position: relative;
+
+      z-index: 10;
+
+      width: 100%;
+      max-width: 1320px;
+
+      margin: 0 auto;
+
+      padding:
+        75px 5vw 110px;
+    }
+
+    /* =========================================================
+       ORGANIC BACKGROUND ELEMENTS
+       ========================================================= */
+
+    main::before {
+      content: "";
+
+      position: absolute;
+
+      width: 380px;
+      height: 380px;
+
+      top: 80px;
+      left: -210px;
+
+      background: var(--lichen);
+
+      opacity: 0.45;
+
+      border-radius:
+        62% 38% 65% 35% /
+        40% 57% 43% 60%;
+
+      z-index: -1;
+    }
+
+    main::after {
+      content: "";
+
+      position: absolute;
+
+      width: 320px;
+      height: 320px;
+
+      right: -190px;
+      bottom: 120px;
+
+      background: var(--sage);
+
+      opacity: 0.18;
+
+      border-radius:
+        42% 58% 63% 37% /
+        54% 40% 60% 46%;
+
+      z-index: -1;
+    }
+
+    /* =========================================================
+       SECTIONS
+       ========================================================= */
+
+    .section {
+      position: relative;
+
+      margin: 0 0 55px;
+
+      padding: 70px 80px;
+
+      overflow: hidden;
+
+      border-radius:
+        42px 90px 42px 75px;
+
+      background: var(--cream-light);
+
+      border:
+        1px solid rgba(23, 63, 53, 0.08);
+
+      box-shadow: var(--shadow-soft);
+
+      opacity: 0;
+
+      transform: translateY(35px);
+
+      transition:
+        opacity 0.8s ease,
+        transform 0.8s ease;
+    }
+
+    .section.visible {
+      opacity: 1;
+
+      transform: translateY(0);
+    }
+
+    .section::before {
+      content: "";
+
+      position: absolute;
+
+      width: 230px;
+      height: 230px;
+
+      right: -100px;
+      top: -100px;
+
+      background: var(--sage);
+
+      opacity: 0.12;
+
+      border-radius: 50%;
+    }
+
+    .section::after {
+      content: "";
+
+      position: absolute;
+
+      width: 140px;
+      height: 140px;
+
+      left: -65px;
+      bottom: -65px;
+
+      background: var(--lichen);
+
+      opacity: 0.35;
+
+      border-radius:
+        55% 45% 35% 65% /
+        45% 58% 42% 55%;
+    }
+
+    /* =========================================================
+       SECTION HEADINGS
+       ========================================================= */
+
+    .section h2 {
+      position: relative;
+
+      z-index: 2;
+
+      margin: 0 0 28px;
+
+      max-width: 950px;
+
+      color: var(--forest);
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      font-size:
+        clamp(2.5rem, 4.5vw, 4.4rem);
+
+      line-height: 0.98;
+
+      font-weight: normal;
+
+      letter-spacing: -0.05em;
+    }
+
+    /* =========================================================
+       TEXT
+       ========================================================= */
+
+    .section p {
+      position: relative;
+
+      z-index: 2;
+
+      max-width: 1050px;
+
+      margin: 0 0 22px;
+
+      color: var(--ink);
+
+      font-size: 1.08rem;
+
+      line-height: 1.8;
+    }
+
+    .section p:last-child {
+      margin-bottom: 0;
+    }
+
+    .section strong {
+      color: var(--forest);
+
+      font-weight: 700;
+    }
+
+    /* =========================================================
+       LISTS
+       ========================================================= */
+
+    .section ul {
+      position: relative;
+
+      z-index: 2;
+
+      max-width: 1050px;
+
+      margin: 15px 0 25px;
+
+      padding: 0;
+
+      list-style: none;
+    }
+
+    .section ul li {
+      position: relative;
+
+      padding:
+        15px 0
+        15px 35px;
+
+      border-bottom:
+        1px solid
+        rgba(23, 63, 53, 0.11);
+
+      color: var(--forest);
+
+      font-size: 1rem;
+
+      line-height: 1.65;
+    }
+
+    .section ul li::before {
+      content: "✦";
+
+      position: absolute;
+
+      left: 4px;
+      top: 15px;
+
+      color: var(--moss);
+
+      font-size: 0.95rem;
+    }
+
+    /* =========================================================
+       DIFFERENT SECTION STYLES
+       ========================================================= */
+
+    .section:nth-child(1) {
+      background:
+        linear-gradient(
+          135deg,
+          var(--paper),
+          #e5e8d8
+        );
+
+      border-radius:
+        35px 110px 35px 90px;
+
+      padding:
+        85px 90px;
+    }
+
+    .section:nth-child(1)::before {
+      width: 360px;
+      height: 360px;
+
+      right: -130px;
+      top: -150px;
+
+      background: var(--sage);
+
+      opacity: 0.20;
+    }
+
+    .section:nth-child(2) {
+      max-width: 1120px;
+
+      margin-left: auto;
+      margin-right: 0;
+
+      padding:
+        75px 80px 75px 120px;
+
+      border-radius:
+        110px 30px 100px 35px;
+    }
+
+    .section:nth-child(2)::before {
+      width: 150px;
+      height: 150px;
+
+      right: -40px;
+      top: 45px;
+
+      background: var(--lichen);
+
+      opacity: 0.55;
+
+      border-radius: 50%;
+    }
+
+    .section:nth-child(2)::after {
+      width: 90px;
+      height: 90px;
+
+      left: 18px;
+      top: 80px;
+
+      bottom: auto;
+
+      border:
+        2px solid var(--sage);
+
+      background: transparent;
+
+      opacity: 0.55;
+
+      border-radius:
+        67% 33% 52% 48% /
+        44% 57% 43% 56%;
+
+      transform: rotate(-20deg);
+    }
+
+    .section:nth-child(3) {
+      background: var(--forest);
+
+      color: white;
+
+      border-radius:
+        35px 100px 35px 90px;
+
+      box-shadow:
+        0 25px 70px
+        rgba(23, 63, 53, 0.18);
+    }
+
+    .section:nth-child(3)::before {
+      width: 360px;
+      height: 360px;
+
+      right: -140px;
+      top: -150px;
+
+      background: var(--moss);
+
+      opacity: 0.20;
+    }
+
+    .section:nth-child(3)::after {
+      width: 230px;
+      height: 230px;
+
+      left: -100px;
+      bottom: -120px;
+
+      background: var(--sage);
+
+      opacity: 0.10;
+    }
+
+    .section:nth-child(3) h2,
+    .section:nth-child(3) p,
+    .section:nth-child(3) strong,
+    .section:nth-child(3) ul li {
+      color: white;
+    }
+
+    .section:nth-child(3) ul li {
+      border-bottom-color:
+        rgba(255, 255, 255, 0.14);
+    }
+
+    .section:nth-child(3) ul li::before {
+      color: var(--lichen);
+    }
+
+    .section:nth-child(4) {
+      padding:
+        85px 100px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #e8eadc,
+          var(--cream-light)
+        );
+
+      border-radius:
+        30px 105px 30px 120px;
+    }
+
+    .section:nth-child(4)::before {
+      width: 290px;
+      height: 290px;
+
+      right: -80px;
+      top: -100px;
+
+      background: var(--sage);
+
+      opacity: 0.18;
+
+      border-radius:
+        42% 58% 63% 37% /
+        54% 40% 60% 46%;
+    }
+
+    .section:nth-child(5) {
+      max-width: 1080px;
+
+      margin-left: 0;
+
+      padding:
+        70px 100px;
+
+      border-radius:
+        100px 35px 85px 30px;
+    }
+
+    .section:nth-child(6) {
+      background: var(--forest);
+
+      border-radius:
+        30px 110px 30px 110px;
+
+      text-align: center;
+
+      padding:
+        85px 12%;
+    }
+
+    .section:nth-child(6)::before {
+      width: 330px;
+      height: 330px;
+
+      right: -120px;
+      top: -130px;
+
+      background: var(--moss);
+
+      opacity: 0.18;
+    }
+
+    .section:nth-child(6)::after {
+      width: 230px;
+      height: 230px;
+
+      left: -90px;
+      bottom: -120px;
+
+      background: var(--lichen);
+
+      opacity: 0.12;
+    }
+
+    .section:nth-child(6) h2,
+    .section:nth-child(6) p,
+    .section:nth-child(6) strong {
+      color: white;
+    }
+
+    .section:nth-child(7) {
+      max-width: 1120px;
+
+      margin-left: auto;
+      margin-right: 0;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--paper),
+          #e3e7d9
+        );
+
+      border-radius:
+        120px 30px 100px 35px;
+
+      padding:
+        80px 100px;
+    }
+
+    .section:nth-child(8) {
+      background: var(--cream-light);
+
+      border-radius:
+        35px 100px 35px 100px;
+
+      text-align: center;
+
+      padding:
+        90px 12%;
+    }
+
+    .section:nth-child(8)::before {
+      width: 300px;
+      height: 300px;
+
+      right: -100px;
+      top: -120px;
+
+      background: var(--sage);
+
+      opacity: 0.18;
+    }
+
+    .section:nth-child(8)::after {
+      width: 220px;
+      height: 220px;
+
+      left: -90px;
+      bottom: -110px;
+
+      background: var(--lichen);
+
+      opacity: 0.55;
+    }
+
+    .section:nth-child(8) p {
+      position: relative;
+
+      z-index: 2;
+
+      max-width: 850px;
+
+      margin-left: auto;
+      margin-right: auto;
+
+      color: var(--forest);
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      font-size: 1.45rem;
+
+      line-height: 1.6;
+    }
+
+    /* =========================================================
+       ORGANIC DIVIDERS BETWEEN SECTIONS
+       ========================================================= */
+
+    .section + .section {
+      position: relative;
+    }
+
+    .section + .section::marker {
+      display: none;
+    }
+
+    /* =========================================================
+       FOOTER
+       ========================================================= */
+
+    footer {
+      position: relative;
+
+      z-index: 10;
+
+      width: 100%;
+
+      padding:
+        55px 20px 45px;
+
+      background: var(--forest);
+
+      color:
+        rgba(255, 255, 255, 0.72);
+
+      text-align: center;
+
+      font-size: 0.85rem;
+
+      letter-spacing: 0.03em;
+    }
+
+    footer::before {
+      content: "";
+
+      position: absolute;
+
+      top: -35px;
+      left: 0;
+
+      width: 100%;
+      height: 70px;
+
+      background: var(--forest);
+
+      clip-path:
+        ellipse(55% 45% at 50% 100%);
+    }
+
+    /* =========================================================
+       RESPONSIVE — TABLET
+       ========================================================= */
+
+    @media (max-width: 1100px) {
+
+      header {
+        padding:
+          18px 4vw;
+      }
+
+      main {
+        padding-left: 4vw;
+        padding-right: 4vw;
+      }
+
+      .section {
+        padding:
+          65px 60px;
+      }
+
+      .section:nth-child(1) {
+        padding:
+          70px 65px;
+      }
+
+      .section:nth-child(2),
+      .section:nth-child(5),
+      .section:nth-child(7) {
+        padding:
+          65px 65px 65px 90px;
+      }
+
+      .section:nth-child(4),
+      .section:nth-child(6),
+      .section:nth-child(8) {
+        padding:
+          70px 8%;
+      }
+    }
+
+    /* =========================================================
+       RESPONSIVE — MOBILE NAV
+       ========================================================= */
+
+    @media (max-width: 850px) {
+
+      header {
+        position: relative;
+
+        flex-wrap: wrap;
+      }
+
       .burger {
         display: flex;
       }
 
       nav.main-nav {
-        max-height: 0;
-        overflow: hidden;
-        flex-direction: column;
-        width: 100%;
-        background-color: rgba(17, 61, 60, 0.9);
         position: absolute;
-        top: 56px;
+
+        top: 100%;
         left: 0;
-        padding: 0 20px;
-        border-radius: 0 0 8px 8px;
-        box-sizing: border-box;
-        transition: max-height 0.4s ease, padding 0.4s ease;
+
+        width: 100%;
+
+        max-height: 0;
+
+        overflow: hidden;
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 4px;
+
+        padding:
+          0 5vw;
+
+        background:
+          rgba(245, 243, 234, 0.97);
+
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+
+        border-bottom:
+          1px solid
+          rgba(23, 63, 53, 0.08);
+
+        transition:
+          max-height 0.45s ease,
+          padding 0.45s ease;
       }
+
       nav.main-nav.open {
-        max-height: 500px;
-        padding: 10px 20px;
+        max-height: 600px;
+
+        padding-top: 15px;
+        padding-bottom: 18px;
+      }
+
+      nav.main-nav a {
+        width: 100%;
+
+        padding:
+          13px 15px;
+
+        border-radius: 14px;
       }
 
       body.menu-open main {
         margin-top: 250px;
-        transition: margin-top 0.3s ease;
+
+        transition:
+          margin-top 0.3s ease;
+      }
+
+      main {
+        padding:
+          65px 4vw 90px;
+      }
+
+      .section {
+        margin-bottom: 45px;
+
+        padding:
+          60px 50px;
+
+        border-radius:
+          35px 75px 35px 75px;
+      }
+
+      .section:nth-child(1) {
+        padding:
+          65px 50px;
+
+        border-radius:
+          30px 80px 30px 70px;
+      }
+
+      .section:nth-child(2),
+      .section:nth-child(5),
+      .section:nth-child(7) {
+        margin-left: 0;
+        margin-right: 0;
+
+        padding:
+          60px 50px;
+
+        border-radius:
+          80px 30px 75px 30px;
+      }
+
+      .section:nth-child(4) {
+        padding:
+          65px 50px;
+
+        border-radius:
+          30px 80px 30px 90px;
+      }
+
+      .section:nth-child(6),
+      .section:nth-child(8) {
+        padding:
+          65px 8%;
+
+        border-radius:
+          30px 80px 30px 90px;
+      }
+
+      .section h2 {
+        font-size:
+          clamp(2.5rem, 7vw, 4rem);
       }
     }
 
-    main {
-      position: relative;
-      z-index: 10;
-      padding: 20px;
-      max-width: 1000px;
-      margin: 60px auto;
-      /* păstrat exact cum era */
+    /* =========================================================
+       RESPONSIVE — SMALL MOBILE
+       ========================================================= */
+
+    @media (max-width: 600px) {
+
+      header {
+        padding:
+          15px 20px;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+      }
+
+      main {
+        padding:
+          55px 20px 80px;
+      }
+
+      .section {
+        padding:
+          50px 30px !important;
+
+        margin-bottom: 35px;
+
+        border-radius:
+          28px 60px 28px 60px;
+      }
+
+      .section h2 {
+        font-size:
+          2.55rem;
+
+        line-height: 0.98;
+
+        margin-bottom: 22px;
+      }
+
+      .section p {
+        font-size: 1rem;
+
+        line-height: 1.72;
+      }
+
+      .section ul {
+        margin-top: 10px;
+      }
+
+      .section ul li {
+        padding:
+          14px 0 14px 30px;
+
+        font-size: 0.98rem;
+      }
+
+      .section ul li::before {
+        left: 2px;
+        top: 14px;
+      }
+
+      .section:nth-child(1) {
+        border-radius:
+          28px 65px 28px 65px;
+      }
+
+      .section:nth-child(2) {
+        border-radius:
+          65px 24px 65px 24px;
+      }
+
+      .section:nth-child(2)::after {
+        width: 65px;
+        height: 65px;
+
+        left: -15px;
+        top: 55px;
+      }
+
+      .section:nth-child(3) {
+        border-radius:
+          28px 70px 28px 65px;
+      }
+
+      .section:nth-child(4) {
+        border-radius:
+          25px 70px 25px 80px;
+      }
+
+      .section:nth-child(5) {
+        border-radius:
+          70px 25px 65px 25px;
+      }
+
+      .section:nth-child(6) {
+        border-radius:
+          25px 70px 25px 80px;
+      }
+
+      .section:nth-child(7) {
+        border-radius:
+          70px 25px 65px 25px;
+      }
+
+      .section:nth-child(8) {
+        border-radius:
+          25px 70px 25px 80px;
+
+        padding:
+          60px 30px !important;
+      }
+
+      .section:nth-child(8) p {
+        font-size: 1.2rem;
+
+        line-height: 1.55;
+      }
+
+      .section::before {
+        width: 190px;
+        height: 190px;
+      }
+
+      .section::after {
+        width: 110px;
+        height: 110px;
+      }
+
+      footer {
+        padding:
+          45px 20px;
+      }
     }
 
-    .section {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 25px;
-      margin-bottom: 25px;
-      border-radius: 10px;
-      backdrop-filter: blur(6px);
-      box-shadow: 0 0 12px rgba(0,0,0,0.25);
-    }
+    /* =========================================================
+       REDUCED MOTION
+       ========================================================= */
 
-    .section h2 {
-      margin-top: 0;
-      font-size: 1.6em;
-    }
+    @media (prefers-reduced-motion: reduce) {
 
-    .section p, .section ul {
-      font-size: 1.05em;
-      line-height: 1.6;
-    }
+      html {
+        scroll-behavior: auto;
+      }
 
-    .section ul {
-      padding-left: 20px;
-    }
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
 
-    .section ul li {
-      margin-bottom: 8px;
-    }
+        transition-duration: 0.01ms !important;
+      }
 
-    footer {
-      position: relative;
-      z-index: 10;
-      text-align: center;
-      padding: 15px;
-      background: rgba(17, 61, 60, 0.85);
-      margin-top: 40px;
+      .section {
+        opacity: 1;
+
+        transform: none;
+      }
     }
   </style>
 </head>
+
 <body>
 
 <canvas id="cloud-canvas"></canvas>
@@ -184,15 +1202,17 @@
     {% endif %}
   </nav>
 </header>
+
 <main>
+
   <div class="section">
-    <h2>🌫️ What is air pollution?</h2>
+    <h2>What is air pollution?</h2>
     <p>Air pollution is the contamination of the atmosphere with substances harmful to human health, other living beings, and the natural environment. Although the air may seem clean, it often contains an invisible mix of particles, toxic gases, and chemical compounds that directly impact life on Earth.</p>
     <p>It’s not always visible or easy to detect. Sometimes it appears as thick smog, but most of the time it’s invisible—a silent yet persistent threat.</p>
   </div>
 
   <div class="section">
-    <h2>🛑 Where does pollution come from?</h2>
+    <h2>Where does pollution come from?</h2>
     <ul>
       <li>Road traffic – nitrogen dioxide, carbon monoxide, and fine particles.</li>
       <li>Industry and energy production – gases and dust with a major environmental impact.</li>
@@ -203,7 +1223,7 @@
   </div>
 
   <div class="section">
-    <h2>🔬 What does polluted air contain?</h2>
+    <h2>What does polluted air contain?</h2>
     <ul>
       <li>PM10 and PM2.5 – dangerous microscopic particles.</li>
       <li>Nitrogen dioxide (NO₂) – an irritating gas.</li>
@@ -215,7 +1235,7 @@
   </div>
 
   <div class="section">
-    <h2>🫁 How does it affect us?</h2>
+    <h2>How does it affect us?</h2>
     <p><strong>Health effects:</strong></p>
     <ul>
       <li>Worsening respiratory conditions</li>
@@ -238,17 +1258,17 @@
   </div>
 
   <div class="section">
-    <h2>📉 What do the data say?</h2>
+    <h2>What do the data say?</h2>
     <p>Millions of premature deaths are directly linked to air pollution. In many cities, pollutant levels exceed recommended limits — often without the public being aware.</p>
   </div>
 
   <div class="section">
-    <h2>🧭 Why must we act?</h2>
+    <h2>Why must we act?</h2>
     <p>Air is a shared resource essential to life. Awareness is the first step towards change. We need to understand it, measure it, and then take action.</p>
   </div>
 
   <div class="section">
-    <h2>🌱 What does the Lichenary project do?</h2>
+    <h2>What does the Lichenary project do?</h2>
     <p>Lichens – sensitive to pollution – tell a silent story about the air. Through mapping, Lichenary reveals affected areas and engages citizens, especially young people, in environmental science.</p>
   </div>
 
@@ -256,7 +1276,9 @@
     <p><strong>Air pollution is invisible, but its effects are very real.</strong><br>
     The future lies in the hands of those who choose to look up and pay closer attention to the sky.</p>
   </div>
+
 </main>
+
 <footer>
   © 2025 Lichenary • All rights reserved
 </footer>
@@ -282,40 +1304,135 @@
 <script>
   const c = document.getElementById('cloud-canvas'), ctx = c.getContext('2d');
   let w,h;
-  function rez(){ w=innerWidth; h=innerHeight; c.width=w; c.height=h;}
-  addEventListener('resize', rez); rez();
+
+  function rez(){
+    w=innerWidth;
+    h=innerHeight;
+    c.width=w;
+    c.height=h;
+  }
+
+  addEventListener('resize', rez);
+  rez();
 
   class Cloud {
     constructor(x,y,s,col,spd){
       Object.assign(this,{x,y,s,col,spd});
     }
+
     draw(ctx){
-      const g=ctx.createRadialGradient(this.x,this.y,this.s*0.3,this.x,this.y,this.s);
-      g.addColorStop(0,this.col); g.addColorStop(1,'rgba(0,0,0,0)');
+      const g=ctx.createRadialGradient(
+        this.x,
+        this.y,
+        this.s*0.3,
+        this.x,
+        this.y,
+        this.s
+      );
+
+      g.addColorStop(0,this.col);
+      g.addColorStop(1,'rgba(0,0,0,0)');
+
       ctx.fillStyle=g;
-      ctx.beginPath(); ctx.arc(this.x,this.y,this.s,0,2*Math.PI); ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(
+        this.x,
+        this.y,
+        this.s,
+        0,
+        2*Math.PI
+      );
+      ctx.fill();
     }
+
     update(){
       this.x+=this.spd;
+
       if(this.x-this.s>w){
         this.x=-this.s;
-        this.y=Math.random()*h*0.8+h*0.1;
+
+        this.y=
+          Math.random()*h*0.8+
+          h*0.1;
       }
     }
   }
 
   const clouds=[];
+
   ['rgba(180,220,180,0.3)','rgba(150,190,150,0.25)','rgba(120,160,120,0.2)'].forEach(col=>{
     for(let i=0;i<7;i++)
-      clouds.push(new Cloud(Math.random()*w,Math.random()*h*0.8+h*0.1,60+Math.random()*50,col,0.2+Math.random()*0.2));
+      clouds.push(
+        new Cloud(
+          Math.random()*w,
+          Math.random()*h*0.8+h*0.1,
+          60+Math.random()*50,
+          col,
+          0.2+Math.random()*0.2
+        )
+      );
   });
 
   function anim(){
     ctx.clearRect(0,0,w,h);
-    clouds.forEach(c=>{c.draw(ctx); c.update()});
+
+    clouds.forEach(c=>{
+      c.draw(ctx);
+      c.update();
+    });
+
     requestAnimationFrame(anim);
   }
+
   anim();
+</script>
+
+<script>
+  /* =========================================================
+     SCROLL REVEAL
+     ========================================================= */
+
+  const sections =
+    document.querySelectorAll('.section');
+
+  if ('IntersectionObserver' in window) {
+
+    const observer =
+      new IntersectionObserver(
+        (entries, observerInstance) => {
+
+          entries.forEach(entry => {
+
+            if (entry.isIntersecting) {
+
+              entry.target.classList.add('visible');
+
+              observerInstance.unobserve(
+                entry.target
+              );
+
+            }
+
+          });
+
+        },
+        {
+          threshold: 0.10
+        }
+      );
+
+    sections.forEach(section => {
+      observer.observe(section);
+    });
+
+  } else {
+
+    sections.forEach(section => {
+      section.classList.add('visible');
+    });
+
+  }
 </script>
 
 </body>

@@ -4,323 +4,1575 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Welcome – Lichenary</title>
+
   <style>
-    html, body {
+    /* =========================================================
+       LICHENARY — ORGANIC / EDITORIAL / CITIZEN SCIENCE
+       ========================================================= */
+
+    :root {
+      --cream: #f5f3ea;
+      --cream-light: #fbfaf5;
+      --paper: #eeece1;
+
+      --forest: #173f35;
+      --forest-dark: #102f28;
+      --forest-soft: #315c4d;
+
+      --moss: #718d57;
+      --sage: #a8b89a;
+      --lichen: #d9e4bb;
+
+      --ink: #18231f;
+      --muted: #65716a;
+
+      --white: #ffffff;
+
+      --radius-xl: 42px;
+      --radius-lg: 28px;
+      --radius-md: 18px;
+
+      --shadow-soft: 0 20px 60px rgba(23, 63, 53, 0.10);
+      --shadow-image: 0 30px 70px rgba(23, 63, 53, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
       margin: 0;
       padding: 0;
-      height: 100%;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #1f2f1f, #2e4a4a);
-      color: white;
+      min-height: 100vh;
+
+      font-family:
+        "Segoe UI",
+        Tahoma,
+        Geneva,
+        Verdana,
+        sans-serif;
+
+      background: var(--cream);
+      color: var(--ink);
+
       overflow-x: hidden;
-      display: flex;
-      flex-direction: column;
-      position: relative;
     }
-    #cloud-canvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 0;
-      pointer-events: none;
+
+    a {
+      color: inherit;
     }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
     header {
-      background-color: rgba(17, 61, 60, 0.85);
-      padding: 15px 20px;
-      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+
+      width: 100%;
+
+      padding: 20px 5vw;
+
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      position: relative;
-      z-index: 20;
+      justify-content: space-between;
+      gap: 30px;
+
+      background: rgba(245, 243, 234, 0.88);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+
+      border-bottom: 1px solid rgba(23, 63, 53, 0.08);
     }
+
     .logo {
-      font-size: 1.8em;
+      color: var(--forest);
+
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.7rem;
       font-weight: bold;
+      letter-spacing: -0.04em;
+
       cursor: pointer;
-      color: white;
+
+      transition:
+        transform 0.25s ease,
+        color 0.25s ease;
     }
-    /* Burger styles */
-    .burger {
-      display: none;
-      flex-direction: column;
-      cursor: pointer;
-      gap: 5px;
-      z-index: 30;
+
+    .logo:hover {
+      color: var(--moss);
+      transform: translateY(-1px);
     }
-    .burger div {
-      width: 25px;
-      height: 3px;
-      background-color: white;
-      border-radius: 2px;
-    }
+
     nav {
       display: flex;
-      gap: 15px;
-      z-index: 20;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 5px;
+
       flex-wrap: wrap;
     }
+
     nav a {
-      color: white;
+      position: relative;
+
+      color: var(--forest);
+
       text-decoration: none;
-      padding: 8px 12px;
-      border-radius: 4px;
+
+      padding: 9px 12px;
+
+      font-size: 0.92rem;
+      font-weight: 500;
+
+      border-radius: 999px;
+
       white-space: nowrap;
-      transition: background 0.2s;
+
+      transition:
+        color 0.25s ease,
+        background 0.25s ease,
+        transform 0.25s ease;
     }
+
     nav a:hover {
-      background-color: #14614d;
+      color: var(--forest);
+      background: rgba(113, 141, 87, 0.14);
+      transform: translateY(-1px);
     }
-    /* Responsive styles */
-    @media (max-width: 768px) {
-      nav {
-        max-height: 0;
-        overflow: hidden;
-        flex-direction: column;
-        width: 100%;
-        background-color: rgba(17, 61, 60, 0.9);
-        position: absolute;
-        top: 56px;
-        left: 0;
-        padding: 0 20px;
-        border-radius: 0 0 8px 8px;
-        box-sizing: border-box;
-        transition: max-height 0.4s ease, padding 0.4s ease;
+
+    /* =========================================================
+       BURGER
+       ========================================================= */
+
+    .burger {
+      display: none;
+
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+
+      width: 42px;
+      height: 42px;
+
+      padding: 8px;
+
+      cursor: pointer;
+
+      border-radius: 50%;
+      background: var(--forest);
+    }
+
+    .burger div {
+      width: 100%;
+      height: 2px;
+
+      background: white;
+      border-radius: 10px;
+
+      transition:
+        transform 0.25s ease,
+        opacity 0.25s ease;
+    }
+
+    /* =========================================================
+       MAIN
+       ========================================================= */
+
+    main {
+      width: 100%;
+      max-width: 1320px;
+
+      margin: 0 auto;
+
+      padding: 0 5vw 80px;
+    }
+
+    /* =========================================================
+       HERO
+       ========================================================= */
+
+    .hero {
+      min-height: calc(100vh - 83px);
+
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+
+      align-items: center;
+
+      gap: clamp(50px, 7vw, 110px);
+
+      padding: 80px 0 100px;
+
+      position: relative;
+    }
+
+    .hero::before {
+      content: "";
+
+      position: absolute;
+
+      width: 360px;
+      height: 360px;
+
+      top: 8%;
+      left: -180px;
+
+      background: var(--lichen);
+
+      border-radius:
+        62% 38% 65% 35% /
+        40% 57% 43% 60%;
+
+      opacity: 0.45;
+
+      z-index: -1;
+
+      filter: blur(1px);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .title {
+      margin: 0 0 25px;
+
+      max-width: 720px;
+
+      color: var(--forest);
+
+      font-family: Georgia, "Times New Roman", serif;
+
+      font-size: clamp(4rem, 8vw, 7.5rem);
+      line-height: 0.88;
+
+      font-weight: normal;
+
+      letter-spacing: -0.065em;
+    }
+
+    .subtitle {
+      max-width: 580px;
+
+      margin-bottom: 40px;
+
+      color: var(--forest-soft);
+
+      font-size: clamp(1.2rem, 2vw, 1.5rem);
+      line-height: 1.55;
+
+      letter-spacing: 0.01em;
+    }
+
+    /* =========================================================
+       BUTTONS
+       ========================================================= */
+
+    .btn-group {
+      display: flex;
+
+      align-items: center;
+
+      gap: 14px;
+
+      flex-wrap: wrap;
+
+      margin: 0;
+    }
+
+    .btn {
+      display: inline-flex;
+
+      align-items: center;
+      justify-content: center;
+
+      min-height: 52px;
+
+      padding: 14px 22px;
+
+      border-radius: 999px;
+
+      background: var(--forest);
+      color: white;
+
+      text-decoration: none;
+
+      font-size: 0.95rem;
+      font-weight: 600;
+
+      box-shadow: 0 10px 25px rgba(23, 63, 53, 0.18);
+
+      transition:
+        transform 0.3s ease,
+        background 0.3s ease,
+        box-shadow 0.3s ease;
+    }
+
+    .btn::after {
+      content: "→";
+
+      margin-left: 10px;
+
+      font-size: 1.15rem;
+
+      transition: transform 0.3s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+
+      background: var(--moss);
+
+      box-shadow: 0 15px 35px rgba(23, 63, 53, 0.22);
+    }
+
+    .btn:hover::after {
+      transform: translateX(4px);
+    }
+
+    /* =========================================================
+       HERO IMAGE
+       ========================================================= */
+
+    .hero-visual {
+      position: relative;
+
+      min-height: 610px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-image {
+      position: relative;
+
+      width: min(100%, 570px);
+      height: 650px;
+
+      overflow: hidden;
+
+      border-radius:
+        48% 52% 42% 58% /
+        38% 42% 58% 62%;
+
+      background-color: var(--sage);
+
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+
+      box-shadow: var(--shadow-image);
+
+      transform: rotate(2deg);
+
+      transition: transform 0.7s ease;
+    }
+
+    .hero-image:hover {
+      transform: rotate(0deg) scale(1.015);
+    }
+
+    .hero-image::after {
+      content: "";
+
+      position: absolute;
+      inset: 0;
+
+      background:
+        linear-gradient(
+          180deg,
+          rgba(16, 47, 40, 0.02) 30%,
+          rgba(16, 47, 40, 0.25) 100%
+        );
+    }
+
+    .hero-note {
+      position: absolute;
+
+      right: -20px;
+      bottom: 45px;
+
+      z-index: 3;
+
+      padding: 18px 22px;
+
+      background: var(--cream-light);
+
+      color: var(--forest);
+
+      border-radius: 22px 22px 22px 5px;
+
+      box-shadow: var(--shadow-soft);
+
+      font-size: 0.8rem;
+      font-weight: 700;
+
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+
+      transform: rotate(-4deg);
+    }
+
+    /* =========================================================
+       ORGANIC DIVIDER
+       ========================================================= */
+
+    .organic-divider {
+      width: 100%;
+
+      margin: 10px 0 100px;
+
+      display: flex;
+      justify-content: center;
+
+      overflow: hidden;
+    }
+
+    .organic-divider svg {
+      width: min(700px, 80%);
+
+      height: 75px;
+
+      overflow: visible;
+    }
+
+    .organic-divider path {
+      fill: none;
+
+      stroke: var(--sage);
+      stroke-width: 2;
+
+      stroke-linecap: round;
+
+      stroke-dasharray: 4 9;
+    }
+
+    /* =========================================================
+       GENERAL SECTION
+       ========================================================= */
+
+    .section {
+      position: relative;
+
+      margin: 0 0 120px;
+
+      padding: 80px;
+
+      text-align: left;
+
+      border-radius: var(--radius-xl);
+
+      overflow: hidden;
+    }
+
+    .section h3 {
+      margin: 0 0 28px;
+
+      color: var(--forest);
+
+      font-family: Georgia, "Times New Roman", serif;
+
+      font-size: clamp(2.3rem, 4vw, 4.2rem);
+
+      font-weight: normal;
+
+      line-height: 0.98;
+
+      letter-spacing: -0.05em;
+    }
+
+    .section p {
+      margin: 0 0 22px;
+
+      color: var(--ink);
+
+      font-size: 1.08rem;
+      line-height: 1.8;
+    }
+
+    .section strong {
+      color: var(--forest);
+
+      font-weight: 700;
+    }
+
+    .section ul {
+      margin: 25px 0 0;
+      padding: 0;
+
+      list-style: none;
+    }
+
+    .section li {
+      position: relative;
+
+      padding: 15px 0 15px 35px;
+
+      border-bottom: 1px solid rgba(23, 63, 53, 0.12);
+
+      color: var(--forest);
+
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .section li::before {
+      content: "✦";
+
+      position: absolute;
+      left: 4px;
+      top: 15px;
+
+      color: var(--moss);
+    }
+
+    /* =========================================================
+       WHAT IS LICHENARY
+       ========================================================= */
+
+    .section:nth-of-type(1) {
+      min-height: 580px;
+
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+
+      align-items: center;
+
+      gap: 80px;
+
+      background: var(--forest);
+
+      color: white;
+
+      border-radius:
+        35px 110px 35px 90px;
+    }
+
+    .section:nth-of-type(1)::before {
+      content: "";
+
+      position: absolute;
+
+      width: 380px;
+      height: 380px;
+
+      right: -150px;
+      top: -150px;
+
+      border-radius: 50%;
+
+      background: var(--moss);
+
+      opacity: 0.22;
+    }
+
+    .section:nth-of-type(1)::after {
+      content: "";
+
+      position: absolute;
+
+      width: 240px;
+      height: 240px;
+
+      left: -100px;
+      bottom: -120px;
+
+      border-radius: 50%;
+
+      background: var(--sage);
+
+      opacity: 0.10;
+    }
+
+    .section:nth-of-type(1) h3,
+    .section:nth-of-type(1) p,
+    .section:nth-of-type(1) strong {
+      color: white;
+    }
+
+    .section:nth-of-type(1) h3 {
+      position: relative;
+      z-index: 2;
+    }
+
+    .section:nth-of-type(1) p {
+      position: relative;
+      z-index: 2;
+
+      color: rgba(255, 255, 255, 0.86);
+    }
+
+    /* =========================================================
+       WHY DO WE DO THIS
+       ========================================================= */
+
+    .section:nth-of-type(2) {
+      max-width: 1120px;
+
+      margin-left: auto;
+      margin-right: 0;
+
+      padding: 90px 90px 85px 150px;
+
+      background: var(--cream-light);
+
+      border:
+        1px solid rgba(23, 63, 53, 0.09);
+
+      border-radius:
+        120px 30px 110px 35px;
+
+      box-shadow: var(--shadow-soft);
+    }
+
+    .section:nth-of-type(2)::before {
+      content: "";
+
+      position: absolute;
+
+      width: 150px;
+      height: 150px;
+
+      left: -55px;
+      top: 65px;
+
+      border: 2px solid var(--sage);
+
+      border-radius:
+        67% 33% 52% 48% /
+        44% 57% 43% 56%;
+
+      transform: rotate(-20deg);
+
+      opacity: 0.6;
+    }
+
+    .section:nth-of-type(2)::after {
+      content: "";
+
+      position: absolute;
+
+      width: 90px;
+      height: 90px;
+
+      left: 8px;
+      top: 150px;
+
+      background: var(--lichen);
+
+      border-radius: 50%;
+
+      opacity: 0.7;
+
+      z-index: 0;
+    }
+
+    .section:nth-of-type(2) h3,
+    .section:nth-of-type(2) p,
+    .section:nth-of-type(2) ul {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* =========================================================
+       VISION
+       ========================================================= */
+
+    .section:nth-of-type(3) {
+      min-height: 550px;
+
+      display: flex;
+
+      flex-direction: column;
+
+      justify-content: center;
+
+      padding: 100px 10%;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--paper),
+          #e5e8d8
+        );
+
+      border-radius:
+        30px 100px 30px 120px;
+
+      text-align: center;
+    }
+
+    .section:nth-of-type(3)::before {
+      content: "";
+
+      position: absolute;
+
+      width: 300px;
+      height: 300px;
+
+      right: -90px;
+      top: -100px;
+
+      background: var(--sage);
+
+      opacity: 0.18;
+
+      border-radius:
+        42% 58% 63% 37% /
+        54% 40% 60% 46%;
+    }
+
+    .section:nth-of-type(3)::after {
+      content: "";
+
+      position: absolute;
+
+      width: 230px;
+      height: 230px;
+
+      left: -90px;
+      bottom: -100px;
+
+      background: var(--lichen);
+
+      opacity: 0.45;
+
+      border-radius:
+        55% 45% 35% 65% /
+        45% 58% 42% 55%;
+    }
+
+    .section:nth-of-type(3) h3,
+    .section:nth-of-type(3) p {
+      position: relative;
+      z-index: 2;
+    }
+
+    .section:nth-of-type(3) h3 {
+      max-width: 800px;
+
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .section:nth-of-type(3) p {
+      max-width: 780px;
+
+      margin-left: auto;
+      margin-right: auto;
+
+      color: var(--forest-soft);
+    }
+
+    /* =========================================================
+       FINAL MESSAGE
+       ========================================================= */
+
+    .section:nth-of-type(3) p:last-child {
+      margin-top: 30px;
+
+      font-family: Georgia, "Times New Roman", serif;
+
+      font-size: 1.4rem;
+
+      color: var(--forest);
+    }
+
+    /* =========================================================
+       FOOTER
+       ========================================================= */
+
+    footer {
+      position: relative;
+
+      width: 100%;
+
+      padding: 50px 20px;
+
+      background: var(--forest);
+
+      color: rgba(255, 255, 255, 0.72);
+
+      text-align: center;
+
+      font-size: 0.85rem;
+
+      letter-spacing: 0.03em;
+    }
+
+    footer::before {
+      content: "";
+
+      position: absolute;
+
+      top: -35px;
+      left: 0;
+
+      width: 100%;
+      height: 70px;
+
+      background: var(--forest);
+
+      clip-path:
+        ellipse(55% 45% at 50% 100%);
+    }
+
+    /* =========================================================
+       SCROLL ANIMATION
+       ========================================================= */
+
+    .section,
+    .hero-content,
+    .hero-visual {
+      opacity: 0;
+
+      transform: translateY(35px);
+
+      transition:
+        opacity 0.8s ease,
+        transform 0.8s ease;
+    }
+
+    .visible {
+      opacity: 1;
+
+      transform: translateY(0);
+    }
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @media (max-width: 1100px) {
+
+      header {
+        padding: 18px 4vw;
       }
-      nav.open {
-        max-height: 500px;
-        padding: 10px 20px;
+
+      main {
+        padding-left: 4vw;
+        padding-right: 4vw;
       }
-      body.menu-open main {
-        margin-top: 250px;
-        transition: margin-top 0.3s ease;
+
+      .hero {
+        gap: 50px;
       }
+
+      .hero-image {
+        height: 560px;
+      }
+
+      .section:nth-of-type(1) {
+        gap: 50px;
+
+        padding: 65px;
+      }
+
+      .section:nth-of-type(2) {
+        padding: 70px 70px 70px 110px;
+      }
+    }
+
+    @media (max-width: 850px) {
+
+      header {
+        position: relative;
+
+        flex-wrap: wrap;
+      }
+
       .burger {
         display: flex;
       }
+
+      nav {
+        position: absolute;
+
+        top: 100%;
+
+        left: 0;
+
+        width: 100%;
+
+        max-height: 0;
+
+        overflow: hidden;
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 4px;
+
+        padding: 0 5vw;
+
+        background: rgba(245, 243, 234, 0.97);
+
+        backdrop-filter: blur(18px);
+
+        border-bottom:
+          1px solid rgba(23, 63, 53, 0.08);
+
+        transition:
+          max-height 0.45s ease,
+          padding 0.45s ease;
+      }
+
+      nav.open {
+        max-height: 600px;
+
+        padding-top: 15px;
+        padding-bottom: 18px;
+      }
+
+      nav a {
+        width: 100%;
+
+        padding: 13px 15px;
+
+        border-radius: 14px;
+      }
+
+      .hero {
+        min-height: auto;
+
+        grid-template-columns: 1fr;
+
+        padding-top: 70px;
+        padding-bottom: 70px;
+      }
+
+      .hero-content {
+        text-align: center;
+      }
+
+      .title {
+        max-width: none;
+      }
+
+      .subtitle {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .btn-group {
+        justify-content: center;
+      }
+
+      .hero-visual {
+        min-height: auto;
+
+        margin-top: 20px;
+      }
+
+      .hero-image {
+        width: 85%;
+
+        height: 520px;
+      }
+
+      .hero-note {
+        right: 3%;
+      }
+
+      .section {
+        margin-bottom: 80px;
+      }
+
+      .section:nth-of-type(1) {
+        grid-template-columns: 1fr;
+
+        gap: 20px;
+
+        min-height: auto;
+
+        border-radius:
+          35px 70px 35px 70px;
+      }
+
+      .section:nth-of-type(2) {
+        margin-left: 0;
+
+        padding-left: 80px;
+
+        border-radius:
+          80px 25px 80px 25px;
+      }
+
+      .section:nth-of-type(3) {
+        min-height: auto;
+      }
+
+      .organic-divider {
+        margin-bottom: 70px;
+      }
     }
-    main {
-      flex: 1;
-      position: relative;
-      z-index: 10;
-      padding: 40px 20px;
-      max-width: 1000px;
-      margin: 0 auto;
-      text-align: center;
-      /* margin-top will be adjusted dynamically by the menu */
+
+    @media (max-width: 600px) {
+
+      header {
+        padding: 15px 20px;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+      }
+
+      main {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .hero {
+        padding-top: 55px;
+      }
+
+      .title {
+        font-size: clamp(3.5rem, 18vw, 5.2rem);
+
+        line-height: 0.9;
+      }
+
+      .subtitle {
+        font-size: 1.15rem;
+
+        margin-bottom: 30px;
+      }
+
+      .btn-group {
+        flex-direction: column;
+
+        width: 100%;
+      }
+
+      .btn {
+        width: 100%;
+
+        max-width: 320px;
+      }
+
+      .hero-image {
+        width: 92%;
+
+        height: 430px;
+
+        border-radius:
+          45% 55% 40% 60% /
+          35% 45% 55% 65%;
+      }
+
+      .hero-note {
+        right: 0;
+        bottom: 20px;
+
+        padding: 14px 16px;
+
+        font-size: 0.68rem;
+      }
+
+      .section {
+        padding: 50px 30px !important;
+
+        margin-bottom: 65px;
+      }
+
+      .section h3 {
+        font-size: 2.6rem;
+
+        margin-bottom: 22px;
+      }
+
+      .section p {
+        font-size: 1rem;
+
+        line-height: 1.7;
+      }
+
+      .section:nth-of-type(1) {
+        border-radius:
+          28px 55px 28px 55px;
+      }
+
+      .section:nth-of-type(2) {
+        border-radius:
+          55px 22px 55px 22px;
+      }
+
+      .section:nth-of-type(2)::before {
+        width: 100px;
+        height: 100px;
+
+        left: -45px;
+        top: 35px;
+      }
+
+      .section:nth-of-type(2)::after {
+        width: 60px;
+        height: 60px;
+
+        left: -5px;
+        top: 95px;
+      }
+
+      .section:nth-of-type(3) {
+        border-radius:
+          25px 70px 25px 80px;
+      }
+
+      .section:nth-of-type(3) p:last-child {
+        font-size: 1.2rem;
+      }
+
+      .organic-divider {
+        margin: 0 0 60px;
+      }
+
+      .organic-divider svg {
+        width: 100%;
+
+        height: 50px;
+      }
+
+      footer {
+        padding: 45px 20px;
+      }
     }
-    .title {
-      font-size: 2.8em;
-      margin-bottom: 10px;
-    }
-    .subtitle {
-      font-size: 1.4em;
-      margin-bottom: 30px;
-      opacity: 0.9;
-    }
-    .btn-group {
-      margin: 30px 0;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-    .btn {
-      padding: 15px 25px;
-      background: #29a19c;
-      color: white;
-      text-decoration: none;
-      font-size: 1.1em;
-      border-radius: 8px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-      transition: transform 0.2s, background 0.2s;
-    }
-    .btn:hover {
-      transform: translateY(-3px);
-      background: #1e7d79;
-    }
-    .section {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 30px;
-      margin: 40px 0;
-      border-radius: 12px;
-      backdrop-filter: blur(6px);
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-      text-align: left;
-    }
-    .section h3 {
-      font-size: 1.6em;
-      margin-bottom: 10px;
-    }
-    .section p {
-      font-size: 1.1em;
-      line-height: 1.6;
-    }
-    footer {
-      background: rgba(17, 61, 60, 0.85);
-      text-align: center;
-      padding: 15px;
-      position: relative;
-      z-index: 10;
+
+    /* =========================================================
+       REDUCED MOTION
+       ========================================================= */
+
+    @media (prefers-reduced-motion: reduce) {
+
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+      }
+
+      .section,
+      .hero-content,
+      .hero-visual {
+        opacity: 1;
+
+        transform: none;
+      }
     }
   </style>
 </head>
+
 <body>
 
-<canvas id="cloud-canvas"></canvas>
-
 <header>
-  <div class="logo" onclick="location='{{ url_for('home') }}'">Lichenary</div>
-  <div id="burger" class="burger" aria-label="Menu" tabindex="0">
+
+  <div
+    class="logo"
+    onclick="location='{{ url_for('home') }}'"
+  >
+    Lichenary
+  </div>
+
+  <div
+    id="burger"
+    class="burger"
+    aria-label="Menu"
+    aria-expanded="false"
+    tabindex="0"
+  >
     <div></div>
     <div></div>
     <div></div>
   </div>
+
   <nav id="nav-links">
-    <a href="{{ url_for('home') }}">Home</a>
-    <a href="{{ url_for('despre') }}">About</a>
-    <a href="{{ url_for('participa') }}">How to Participate</a>
-    <a href="{{ url_for('galerie') }}">Gallery</a>
-    <a href="{{ url_for('harta') }}">Map</a>
-    <a href="{{ url_for('contact') }}">Contact</a>
+
+    <a href="{{ url_for('home') }}">
+      Home
+    </a>
+
+    <a href="{{ url_for('despre') }}">
+      About
+    </a>
+
+    <a href="{{ url_for('participa') }}">
+      How to Participate
+    </a>
+
+    <a href="{{ url_for('galerie') }}">
+      Gallery
+    </a>
+
+    <a href="{{ url_for('harta') }}">
+      Map
+    </a>
+
+    <a href="{{ url_for('contact') }}">
+      Contact
+    </a>
+
     {% if current_user.is_authenticated %}
-      <a href="{{ url_for('dashboard') }}">Dashboard</a>
-      <a href="{{ url_for('logout') }}">Logout</a>
+
+      <a href="{{ url_for('dashboard') }}">
+        Dashboard
+      </a>
+
+      <a href="{{ url_for('logout') }}">
+        Logout
+      </a>
+
     {% else %}
-      <a href="{{ url_for('login') }}">Login</a>
-      <a href="{{ url_for('register') }}">Register</a>
+
+      <a href="{{ url_for('login') }}">
+        Login
+      </a>
+
+      <a href="{{ url_for('register') }}">
+        Register
+      </a>
+
     {% endif %}
+
   </nav>
+
 </header>
 
+
 <main>
-  <div class="title">🌿 Welcome to Lichenary</div>
-  <div class="subtitle">
-    Nature speaks. You listen. We understand.
+
+  <!-- =======================================================
+       HERO
+       ======================================================= -->
+
+  <section class="hero">
+
+    <div class="hero-content">
+
+      <div class="title">
+        Welcome<br>
+        to Lichenary
+      </div>
+
+      <div class="subtitle">
+        Nature speaks. You listen. We understand.
+      </div>
+
+      <div class="btn-group">
+
+        <a
+          href="{{ url_for('despre') }}"
+          class="btn"
+        >
+          About the Project
+        </a>
+
+        <a
+          href="{{ url_for('participa') }}"
+          class="btn"
+        >
+          How to Participate
+        </a>
+
+        <a
+          href="{{ url_for('harta') }}"
+          class="btn"
+        >
+          Map
+        </a>
+
+      </div>
+
+    </div>
+
+
+    <div class="hero-visual">
+
+      <div
+        class="hero-image"
+        id="hero-image"
+      ></div>
+
+      <div class="hero-note">
+        Citizen science · Nature · Air
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =======================================================
+       ORGANIC DIVIDER
+       ======================================================= -->
+
+  <div class="organic-divider">
+
+    <svg
+      viewBox="0 0 700 75"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+
+      <path
+        d="
+          M 5 38
+          C 70 10, 105 68, 170 38
+          S 270 8, 330 40
+          S 440 70, 500 35
+          S 620 10, 695 42
+        "
+      />
+
+    </svg>
+
   </div>
 
-  <div class="btn-group">
-    <a href="{{ url_for('despre') }}" class="btn">About the Project</a>
-    <a href="{{ url_for('participa') }}" class="btn">How to Participate</a>
-    <a href="{{ url_for('harta') }}" class="btn">Map</a>
-  </div>
+
+  <!-- =======================================================
+       WHAT IS LICHENARY?
+       ======================================================= -->
 
   <div class="section">
-    <h3>🌍 What is Lichenary?</h3>
-    <p>
-      <strong>Lichenary</strong> is a citizen science project and a community of young people, students, and nature enthusiasts who monitor air quality — no labs needed, just a magnifying glass, curiosity, and attention.
-    </p>
-    <p>
-      By observing lichen species, we collect data that form a living map of air health. It’s ecology, education, and activism — all combined in one simple act: <strong>observation</strong>.
-    </p>
+
+    <div>
+
+      <h3>
+        What is Lichenary?
+      </h3>
+
+    </div>
+
+    <div>
+
+      <p>
+        <strong>Lichenary</strong> is a citizen science project and a community of young people, students, and nature enthusiasts who monitor air quality — no labs needed, just a magnifying glass, curiosity, and attention.
+      </p>
+
+      <p>
+        By observing lichen species, we collect data that form a living map of air health. It’s ecology, education, and activism — all combined in one simple act: <strong>observation</strong>.
+      </p>
+
+    </div>
+
   </div>
 
-  <div class="section">
-    <h3>👣 Why do we do this?</h3>
-    <p>Because the air we breathe shapes our community’s health and our future.</p>
-    <p>Lichens offer us a bridge to the unseen: they sense changes in the air before we do and speak to us through their disappearance.</p>
-    <p><strong>Through Lichenary, we:</strong></p>
-    <ul>
-      <li>Open young people's eyes to the science around them</li>
-      <li>Build a global network of volunteers mapping the air</li>
-      <li>Unite communities around environmental protection</li>
-    </ul>
-  </div>
+
+  <!-- =======================================================
+       WHY DO WE DO THIS?
+       ======================================================= -->
 
   <div class="section">
-    <h3>💫 Our Vision</h3>
+
+    <h3>
+      Why do we do this?
+    </h3>
+
+    <div>
+
+      <p>
+        Because the air we breathe shapes our community’s health and our future.
+      </p>
+
+      <p>
+        Lichens offer us a bridge to the unseen: they sense changes in the air before we do and speak to us through their disappearance.
+      </p>
+
+      <p>
+        <strong>Through Lichenary, we:</strong>
+      </p>
+
+      <ul>
+
+        <li>
+          Open young people's eyes to the science around them
+        </li>
+
+        <li>
+          Build a global network of volunteers mapping the air
+        </li>
+
+        <li>
+          Unite communities around environmental protection
+        </li>
+
+      </ul>
+
+    </div>
+
+  </div>
+
+
+  <!-- =======================================================
+       OUR VISION
+       ======================================================= -->
+
+  <div class="section">
+
+    <h3>
+      Our Vision
+    </h3>
+
     <p>
       A world where anyone can become a researcher, where nature is a dialogue partner,
       and where air is no longer a mystery.
     </p>
-    <p>Change starts with a photo. With a simple observation. With you.</p>
+
+    <p>
+      Change starts with a photo. With a simple observation. With you.
+    </p>
+
   </div>
+
 </main>
 
-<footer>© 2025 Lichenary • All rights reserved</footer>
+
+<footer>
+  © 2025 Lichenary • All rights reserved
+</footer>
+
 
 <script>
+  /* =========================================================
+     CLOUDINARY HERO IMAGE
+     ========================================================= */
+
+  const CLOUDINARY_HERO_IMAGE =
+    "https://res.cloudinary.com/dkaff7r7k/image/upload/v1762068590/WhatsApp_Image_2025-11-02_at_09.26.59_cmpete.jpg";
+
+  document.getElementById("hero-image").style.backgroundImage =
+    `url("${CLOUDINARY_HERO_IMAGE}")`;
+
+
+  /* =========================================================
+     MOBILE MENU
+     ========================================================= */
+
   const burger = document.getElementById('burger');
   const navLinks = document.getElementById('nav-links');
 
-  burger.addEventListener('click', () => {
-    const isOpen = navLinks.classList.toggle('open');
-    document.body.classList.toggle('menu-open', isOpen);
-  });
+  function toggleMenu() {
 
-  // Închide meniul când se apasă un link (pe mobil)
-  document.querySelectorAll('#nav-links a').forEach(link => {
-    link.addEventListener('click', () => {
-      navLinks.classList.remove('open');
-      document.body.classList.remove('menu-open');
-    });
-  });
-</script>
+    const isOpen =
+      navLinks.classList.toggle('open');
 
-<script>
-  const canvas = document.getElementById('cloud-canvas');
-  const ctx = canvas.getContext('2d');
-  let width, height;
-
-  function resize() {
-    width = window.innerWidth;
-    height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
+    burger.setAttribute(
+      'aria-expanded',
+      isOpen ? 'true' : 'false'
+    );
   }
-  window.addEventListener('resize', resize);
-  resize();
 
-  class Cloud {
-    constructor(x, y, size, color, speed) {
-      this.x = x;
-      this.y = y;
-      this.size = size;
-      this.color = color;
-      this.speed = speed;
-    }
-    draw(ctx) {
-      let gradient = ctx.createRadialGradient(this.x, this.y, this.size*0.3, this.x, this.y, this.size);
-      gradient.addColorStop(0, this.color);
-      gradient.addColorStop(1, 'rgba(0,0,0,0)');
-      ctx.fillStyle = gradient;
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    update() {
-      this.x += this.speed;
-      if(this.x - this.size > width) {
-        this.x = -this.size;
-        this.y = Math.random() * height * 0.8 + height * 0.1;
+  burger.addEventListener(
+    'click',
+    toggleMenu
+  );
+
+  burger.addEventListener(
+    'keydown',
+    (event) => {
+
+      if (
+        event.key === 'Enter' ||
+        event.key === ' '
+      ) {
+
+        event.preventDefault();
+
+        toggleMenu();
       }
+
     }
-  }
+  );
 
-  const clouds = [];
-  const cloudColors = ['rgba(180,220,180,0.3)', 'rgba(150,190,150,0.25)', 'rgba(120,160,120,0.2)'];
+  document
+    .querySelectorAll('#nav-links a')
+    .forEach(link => {
 
-  for(let i=0; i<20; i++) {
-    clouds.push(new Cloud(
-      Math.random() * width,
-      Math.random() * height * 0.8 + height * 0.1,
-      60 + Math.random() * 50,
-      cloudColors[Math.floor(Math.random()*cloudColors.length)],
-      0.2 + Math.random() * 0.2
-    ));
-  }
+      link.addEventListener(
+        'click',
+        () => {
 
-  function animate() {
-    ctx.clearRect(0, 0, width, height);
-    clouds.forEach(cloud => {
-      cloud.draw(ctx);
-      cloud.update();
+          navLinks.classList.remove('open');
+
+          burger.setAttribute(
+            'aria-expanded',
+            'false'
+          );
+
+        }
+      );
+
     });
-    requestAnimationFrame(animate);
+
+
+  /* =========================================================
+     SCROLL REVEAL
+     ========================================================= */
+
+  const animatedElements =
+    document.querySelectorAll(
+      '.section, .hero-content, .hero-visual'
+    );
+
+
+  if ('IntersectionObserver' in window) {
+
+    const observer =
+      new IntersectionObserver(
+        (entries, observerInstance) => {
+
+          entries.forEach(entry => {
+
+            if (entry.isIntersecting) {
+
+              entry.target.classList.add(
+                'visible'
+              );
+
+              observerInstance.unobserve(
+                entry.target
+              );
+
+            }
+
+          });
+
+        },
+        {
+          threshold: 0.12
+        }
+      );
+
+
+    animatedElements.forEach(element => {
+
+      observer.observe(element);
+
+    });
+
+  } else {
+
+    animatedElements.forEach(element => {
+
+      element.classList.add('visible');
+
+    });
+
   }
-  animate();
 </script>
 
 </body>

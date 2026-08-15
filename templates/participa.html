@@ -4,179 +4,835 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>How to Participate – Lichenary</title>
+
   <style>
-    html, body {
+    /* =========================================================
+       LICHENARY — ORGANIC / EDITORIAL / CITIZEN SCIENCE
+       HOW TO PARTICIPATE
+       ========================================================= */
+
+    :root {
+      --cream: #f5f3ea;
+      --cream-light: #fbfaf5;
+      --paper: #eeece1;
+
+      --forest: #173f35;
+      --forest-dark: #102f28;
+      --forest-soft: #315c4d;
+
+      --moss: #718d57;
+      --sage: #a8b89a;
+      --lichen: #d9e4bb;
+
+      --ink: #18231f;
+      --muted: #65716a;
+
+      --white: #ffffff;
+
+      --shadow-soft: 0 20px 60px rgba(23, 63, 53, 0.10);
+      --shadow-medium: 0 25px 65px rgba(23, 63, 53, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
       margin: 0;
       padding: 0;
-      height: 100%;
-      font-family: Arial, sans-serif;
-      background: #1f2f1f;
-      color: white;
+      min-height: 100vh;
+
+      font-family:
+        "Segoe UI",
+        Tahoma,
+        Geneva,
+        Verdana,
+        sans-serif;
+
+      background: var(--cream);
+      color: var(--ink);
+
       overflow-x: hidden;
+
+      position: relative;
+
       display: flex;
       flex-direction: column;
     }
 
-    #cloud-canvas {
+    body::before {
+      content: "";
+
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 0;
+
+      width: 430px;
+      height: 430px;
+
+      top: 150px;
+      left: -230px;
+
+      background: var(--lichen);
+
+      border-radius:
+        62% 38% 65% 35% /
+        40% 57% 43% 60%;
+
+      opacity: 0.42;
+
       pointer-events: none;
+
+      z-index: 0;
     }
 
+    body::after {
+      content: "";
+
+      position: fixed;
+
+      width: 350px;
+      height: 350px;
+
+      right: -170px;
+      bottom: 100px;
+
+      background: var(--sage);
+
+      border-radius:
+        45% 55% 62% 38% /
+        60% 42% 58% 40%;
+
+      opacity: 0.22;
+
+      pointer-events: none;
+
+      z-index: 0;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
     header {
-      background-color: rgba(17, 61, 60, 0.85);
-      padding: 15px 20px;
-      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+
+      width: 100%;
+
+      padding: 20px 5vw;
+
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      position: relative;
-      z-index: 20;
+      justify-content: space-between;
+
+      gap: 30px;
+
+      background: rgba(245, 243, 234, 0.88);
+
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+
+      border-bottom: 1px solid rgba(23, 63, 53, 0.08);
     }
 
     .logo {
-      font-size: 1.5em;
+      color: var(--forest);
+
+      font-family: Georgia, "Times New Roman", serif;
+
+      font-size: 1.7rem;
       font-weight: bold;
+
+      letter-spacing: -0.04em;
+
       cursor: pointer;
-      color: white;
+
+      transition:
+        transform 0.25s ease,
+        color 0.25s ease;
     }
+
+    .logo:hover {
+      color: var(--moss);
+
+      transform: translateY(-1px);
+    }
+
+    /* =========================================================
+       NAVIGATION
+       ========================================================= */
 
     nav {
       display: flex;
-      gap: 10px;
+
+      align-items: center;
+      justify-content: flex-end;
+
+      gap: 5px;
+
       z-index: 20;
+
+      flex-wrap: wrap;
+
+      transition:
+        max-height 0.4s ease,
+        padding 0.4s ease;
     }
 
     nav a {
-      color: white;
+      position: relative;
+
+      color: var(--forest);
+
       text-decoration: none;
-      padding: 6px 10px;
-      border-radius: 4px;
+
+      padding: 9px 12px;
+
+      font-size: 0.92rem;
+      font-weight: 500;
+
+      border-radius: 999px;
+
+      white-space: nowrap;
+
+      transition:
+        color 0.25s ease,
+        background 0.25s ease,
+        transform 0.25s ease;
     }
 
     nav a:hover {
-      background-color: #1d5957;
+      color: var(--forest);
+
+      background: rgba(113, 141, 87, 0.14);
+
+      transform: translateY(-1px);
     }
+
+    /* =========================================================
+       BURGER
+       ========================================================= */
 
     .burger {
       display: none;
+
       flex-direction: column;
-      cursor: pointer;
+      justify-content: center;
+
       gap: 5px;
+
+      width: 42px;
+      height: 42px;
+
+      padding: 8px;
+
+      cursor: pointer;
+
+      border-radius: 50%;
+
+      background: var(--forest);
+
       z-index: 30;
     }
 
     .burger div {
-      width: 25px;
-      height: 3px;
-      background-color: white;
-      border-radius: 2px;
+      width: 100%;
+      height: 2px;
+
+      background: white;
+
+      border-radius: 10px;
+
+      transition:
+        transform 0.25s ease,
+        opacity 0.25s ease;
     }
 
-    @media (max-width: 768px) {
-      nav {
-        max-height: 0;
-        overflow: hidden;
-        flex-direction: column;
-        width: 100%;
-        background-color: rgba(17, 61, 60, 0.9);
-        position: absolute;
-        top: 56px;
-        left: 0;
-        padding: 0 20px;
-        border-radius: 0 0 8px 8px;
-        box-sizing: border-box;
-        transition: max-height 0.4s ease, padding 0.4s ease;
+    /* =========================================================
+       MAIN
+       ========================================================= */
+
+    main {
+      flex: 1;
+
+      position: relative;
+      z-index: 10;
+
+      width: 100%;
+      max-width: 1250px;
+
+      margin: 0 auto;
+
+      padding: 80px 5vw 110px;
+    }
+
+    main::before {
+      content: "";
+
+      position: absolute;
+
+      width: 300px;
+      height: 300px;
+
+      top: 25px;
+      left: -150px;
+
+      background: var(--lichen);
+
+      border-radius:
+        55% 45% 35% 65% /
+        45% 58% 42% 55%;
+
+      opacity: 0.30;
+
+      z-index: -1;
+    }
+
+    main::after {
+      content: "";
+
+      position: absolute;
+
+      width: 230px;
+      height: 230px;
+
+      right: -110px;
+      bottom: 70px;
+
+      border: 2px solid var(--sage);
+
+      border-radius:
+        67% 33% 52% 48% /
+        44% 57% 43% 56%;
+
+      transform: rotate(18deg);
+
+      opacity: 0.45;
+
+      z-index: -1;
+    }
+
+    /* =========================================================
+       ORGANIC DIVIDER
+       ========================================================= */
+
+    .organic-divider {
+      width: 100%;
+
+      height: 75px;
+
+      margin: 0 0 55px;
+
+      display: flex;
+
+      justify-content: center;
+
+      overflow: hidden;
+    }
+
+    .organic-divider svg {
+      width: min(700px, 80%);
+
+      height: 75px;
+
+      overflow: visible;
+    }
+
+    .organic-divider path {
+      fill: none;
+
+      stroke: var(--sage);
+
+      stroke-width: 2;
+
+      stroke-linecap: round;
+
+      stroke-dasharray: 4 9;
+    }
+
+    /* =========================================================
+       CARDS GRID
+       ========================================================= */
+
+    .cards {
+      position: relative;
+
+      display: grid;
+
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+
+      gap: 45px;
+
+      align-items: stretch;
+    }
+
+    /* =========================================================
+       CARD
+       ========================================================= */
+
+    .card {
+      position: relative;
+
+      background: var(--cream-light);
+
+      border-radius:
+        38px 95px 38px 75px;
+
+      border: 1px solid rgba(23, 63, 53, 0.08);
+
+      box-shadow: var(--shadow-soft);
+
+      transition:
+        transform 0.35s ease,
+        box-shadow 0.35s ease;
+
+      cursor: pointer;
+
+      overflow: hidden;
+
+      padding: 0;
+
+      display: flex;
+      flex-direction: column;
+
+      height: 100%;
+    }
+
+    .card:nth-child(2) {
+      border-radius:
+        100px 32px 85px 35px;
+
+      /* Removed margin-top so both cards start at the same level */
+    }
+
+    .card::before {
+      content: "";
+
+      position: absolute;
+
+      width: 190px;
+      height: 190px;
+
+      right: -90px;
+      top: -90px;
+
+      background: var(--lichen);
+
+      border-radius: 50%;
+
+      opacity: 0.48;
+
+      z-index: 0;
+
+      pointer-events: none;
+    }
+
+    .card::after {
+      content: "";
+
+      position: absolute;
+
+      width: 100px;
+      height: 100px;
+
+      left: -45px;
+      bottom: -45px;
+
+      border: 2px solid var(--sage);
+
+      border-radius:
+        67% 33% 52% 48% /
+        44% 57% 43% 56%;
+
+      transform: rotate(18deg);
+
+      opacity: 0.5;
+
+      pointer-events: none;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+
+      box-shadow: var(--shadow-medium);
+    }
+
+    /* =========================================================
+       CARD LINK
+       ========================================================= */
+
+    .card a {
+      position: relative;
+
+      z-index: 2;
+
+      color: var(--ink);
+
+      text-decoration: none;
+
+      display: flex;
+
+      flex-direction: column;
+
+      height: 100%;
+    }
+
+    /* =========================================================
+       CARD IMAGE
+       ========================================================= */
+
+    .card img {
+      width: 100%;
+
+      display: block;
+
+      object-fit: cover;
+
+      aspect-ratio: 16 / 9;
+
+      border-radius: 0;
+
+      transition:
+        transform 0.5s ease,
+        filter 0.5s ease;
+    }
+
+    .card:hover img {
+      transform: scale(1.035);
+
+      filter: saturate(1.04);
+    }
+
+    /* =========================================================
+       CARD CONTENT
+       ========================================================= */
+
+    .card-content {
+      position: relative;
+
+      padding: 38px 42px 45px;
+
+      flex-grow: 1;
+
+      background: var(--cream-light);
+    }
+
+    .card-content::before {
+      content: "";
+
+      position: absolute;
+
+      width: 65px;
+      height: 3px;
+
+      top: 0;
+      left: 42px;
+
+      background: var(--moss);
+
+      border-radius: 999px;
+    }
+
+    .card-content h3 {
+      position: relative;
+
+      margin: 0 0 18px;
+
+      color: var(--forest);
+
+      font-family: Georgia, "Times New Roman", serif;
+
+      font-size: clamp(1.9rem, 3vw, 2.55rem);
+
+      font-weight: normal;
+
+      line-height: 1.03;
+
+      letter-spacing: -0.045em;
+    }
+
+    .card-content p {
+      position: relative;
+
+      margin: 0;
+
+      color: var(--muted);
+
+      font-size: 1rem;
+
+      line-height: 1.75;
+    }
+
+    /* =========================================================
+       FOOTER
+       ========================================================= */
+
+    footer {
+      position: relative;
+
+      width: 100%;
+
+      padding: 50px 20px;
+
+      background: var(--forest);
+
+      color: rgba(255, 255, 255, 0.72);
+
+      text-align: center;
+
+      font-size: 0.85rem;
+
+      letter-spacing: 0.03em;
+
+      z-index: 10;
+    }
+
+    footer::before {
+      content: "";
+
+      position: absolute;
+
+      top: -35px;
+      left: 0;
+
+      width: 100%;
+      height: 70px;
+
+      background: var(--forest);
+
+      clip-path:
+        ellipse(55% 45% at 50% 100%);
+    }
+
+    /* =========================================================
+       RESPONSIVE — 1100px
+       ========================================================= */
+
+    @media (max-width: 1100px) {
+
+      header {
+        padding: 18px 4vw;
       }
 
-      nav.open {
-        max-height: 500px;
-        padding: 10px 20px;
+      main {
+        padding-left: 4vw;
+        padding-right: 4vw;
       }
 
-      body.menu-open main {
-        margin-top: 250px;
-        transition: margin-top 0.3s ease;
+      .cards {
+        gap: 35px;
+      }
+
+      .card-content {
+        padding: 35px 35px 40px;
+      }
+
+      .card-content::before {
+        left: 35px;
+      }
+    }
+
+    /* =========================================================
+       RESPONSIVE — 850px
+       ========================================================= */
+
+    @media (max-width: 850px) {
+
+      header {
+        position: sticky;
+
+        flex-wrap: wrap;
       }
 
       .burger {
         display: flex;
       }
+
+      nav:not(.bottom-nav) {
+        position: absolute;
+
+        top: 100%;
+        left: 0;
+
+        width: 100%;
+
+        max-height: 0;
+
+        overflow: hidden;
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 4px;
+
+        padding: 0 5vw;
+
+        background:
+          rgba(245, 243, 234, 0.97);
+
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+
+        border-bottom:
+          1px solid rgba(23, 63, 53, 0.08);
+
+        transition:
+          max-height 0.45s ease,
+          padding 0.45s ease;
+      }
+
+      nav:not(.bottom-nav).open {
+        max-height: 600px;
+
+        padding-top: 15px;
+        padding-bottom: 18px;
+      }
+
+      nav:not(.bottom-nav) a {
+        width: 100%;
+
+        padding: 13px 15px;
+
+        border-radius: 14px;
+      }
+
+      body.menu-open main {
+        margin-top: 0;
+      }
+
+      main {
+        padding-top: 55px;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+
+        gap: 35px;
+      }
+
+      .card:nth-child(2) {
+        margin-top: 0;
+
+        border-radius:
+          100px 32px 85px 35px;
+      }
+
+      .card:first-child {
+        border-radius:
+          35px 95px 35px 75px;
+      }
     }
 
-    main {
-      flex: 1;
-      position: relative;
-      z-index: 10;
-      padding: 20px;
-      max-width: 1000px;
-      margin: 60px auto;
-      width: 100%;
+    /* =========================================================
+       RESPONSIVE — 600px
+       ========================================================= */
+
+    @media (max-width: 600px) {
+
+      header {
+        padding: 15px 20px;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+      }
+
+      main {
+        padding-left: 20px;
+        padding-right: 20px;
+
+        padding-top: 45px;
+        padding-bottom: 70px;
+      }
+
+      .organic-divider {
+        height: 50px;
+
+        margin: 0 0 45px;
+      }
+
+      .organic-divider svg {
+        width: 100%;
+
+        height: 50px;
+      }
+
+      .cards {
+        gap: 30px;
+      }
+
+      .card {
+        border-radius:
+          28px 65px 28px 60px;
+      }
+
+      .card:first-child {
+        border-radius:
+          28px 65px 28px 60px;
+      }
+
+      .card:nth-child(2) {
+        border-radius:
+          65px 25px 60px 25px;
+      }
+
+      .card-content {
+        padding: 32px 28px 38px;
+      }
+
+      .card-content::before {
+        left: 28px;
+      }
+
+      .card-content h3 {
+        font-size: 2rem;
+
+        line-height: 1.02;
+
+        margin-bottom: 16px;
+      }
+
+      .card-content p {
+        font-size: 1rem;
+
+        line-height: 1.7;
+      }
+
+      footer {
+        padding: 45px 20px;
+      }
     }
 
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-    }
+    /* =========================================================
+       REDUCED MOTION
+       ========================================================= */
 
-    .card {
-      background: rgba(255, 255, 255, 0.15);
-      border-radius: 8px;
-      backdrop-filter: blur(6px);
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-      transition: transform 0.2s;
-      cursor: pointer;
-      overflow: hidden;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-    }
+    @media (prefers-reduced-motion: reduce) {
 
-    .card:hover {
-      transform: translateY(-5px);
-    }
+      html {
+        scroll-behavior: auto;
+      }
 
-    .card a {
-      color: white;
-      text-decoration: none;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-    }
-
-    .card img {
-      width: 100%;
-      display: block;
-      object-fit: cover;
-      aspect-ratio: 16 / 9;
-      border-top-left-radius: 8px;
-      border-top-right-radius: 8px;
-    }
-
-    .card-content {
-      padding: 20px;
-      flex-grow: 1;
-    }
-
-    footer {
-      position: relative;
-      z-index: 10;
-      text-align: center;
-      padding: 15px;
-      background: rgba(17, 61, 60, 0.85);
+      *,
+      *::before,
+      *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+      }
     }
   </style>
 </head>
-<body>
 
-<canvas id="cloud-canvas"></canvas>
+<body>
 
 <header>
   <div class="logo" onclick="window.location='/'">Lichenary</div>
@@ -205,7 +861,27 @@
 </header>
 
 <main>
+
+  <div class="organic-divider">
+    <svg
+      viewBox="0 0 700 75"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <path
+        d="
+          M 5 38
+          C 70 10, 105 68, 170 38
+          S 270 8, 330 40
+          S 440 70, 500 35
+          S 620 10, 695 42
+        "
+      />
+    </svg>
+  </div>
+
   <div class="cards">
+
     <div class="card">
       <a href="{{ url_for('participa_voluntariez') }}">
         <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1756030842/WhatsApp_Image_2025-08-24_at_13.19.29_hqzjbd.jpg" alt="Volunteer" />
@@ -215,6 +891,7 @@
         </div>
       </a>
     </div>
+
     <div class="card">
       <a href="{{ url_for('participa_ambasador') }}">
         <img src="https://res.cloudinary.com/dkaff7r7k/image/upload/v1756030860/WhatsApp_Image_2025-08-24_at_13.19.29_1_cps20r.jpg" alt="Ambassador" />
@@ -224,7 +901,9 @@
         </div>
       </a>
     </div>
+
   </div>
+
 </main>
 
 <footer>
@@ -246,45 +925,6 @@
       document.body.classList.remove('menu-open');
     });
   });
-</script>
-
-<script>
-  const c = document.getElementById('cloud-canvas'), ctx = c.getContext('2d');
-  let w,h;
-  function rez(){ w=innerWidth; h=innerHeight; c.width=w; c.height=h;}
-  addEventListener('resize', rez); rez();
-
-  class Cloud {
-    constructor(x,y,s,col,spd){
-      Object.assign(this,{x,y,s,col,spd});
-    }
-    draw(ctx){
-      const g=ctx.createRadialGradient(this.x,this.y,this.s*0.3,this.x,this.y,this.s);
-      g.addColorStop(0,this.col); g.addColorStop(1,'rgba(0,0,0,0)');
-      ctx.fillStyle=g;
-      ctx.beginPath(); ctx.arc(this.x,this.y,this.s,0,2*Math.PI); ctx.fill();
-    }
-    update(){
-      this.x+=this.spd;
-      if(this.x-this.s>w){
-        this.x=-this.s;
-        this.y=Math.random()*h*0.8+h*0.1;
-      }
-    }
-  }
-
-  const clouds=[];
-  ['rgba(180,220,180,0.3)','rgba(150,190,150,0.25)','rgba(120,160,120,0.2)'].forEach(col=>{
-    for(let i=0;i<7;i++)
-      clouds.push(new Cloud(Math.random()*w,Math.random()*h*0.8+h*0.1,60+Math.random()*50,col,0.2+Math.random()*0.2));
-  });
-
-  function anim(){
-    ctx.clearRect(0,0,w,h);
-    clouds.forEach(c=>{c.draw(ctx); c.update()});
-    requestAnimationFrame(anim);
-  }
-  anim();
 </script>
 
 </body>

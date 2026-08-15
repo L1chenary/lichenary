@@ -3,248 +3,1049 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dashboard</title>
+  <title>Dashboard – Lichenary</title>
+
   <style>
-    html, body {
-      margin: 0; padding: 0;
-      height: 100%;
-      font-family: Arial, sans-serif;
-      background-color: #1f2f1f;
-      color: white;
-      overflow-x: hidden;
-      position: relative;
+    :root {
+      --forest-dark: #102f29;
+      --forest: #173f36;
+      --forest-light: #2b6657;
+      --sage: #91a998;
+      --cream: #f3f0e7;
+      --cream-light: #faf9f4;
+      --white: #ffffff;
+      --text: #17342d;
+      --muted: #63756d;
+      --accent: #c8d9c8;
+      --border: rgba(23, 63, 54, 0.12);
+      --shadow: 0 25px 70px rgba(19, 53, 45, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
     }
 
     body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+      background:
+        radial-gradient(
+          circle at 10% 10%,
+          rgba(200, 217, 200, 0.5),
+          transparent 30%
+        ),
+        radial-gradient(
+          circle at 90% 80%,
+          rgba(211, 224, 211, 0.55),
+          transparent 32%
+        ),
+        var(--cream);
+
+      color: var(--text);
+      overflow-x: hidden;
+      position: relative;
+
       display: flex;
       flex-direction: column;
       min-height: 100vh;
-      transition: margin-top 0.3s ease;
     }
 
-    #cloud-canvas {
+    /* Organic background shapes */
+
+    body::before {
+      content: "";
+
       position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
+
+      width: 420px;
+      height: 420px;
+
+      top: -160px;
+      left: -140px;
+
+      border-radius:
+        48% 52% 63% 37% /
+        42% 36% 64% 58%;
+
+      background: rgba(145, 169, 152, 0.12);
+
+      z-index: 0;
+      pointer-events: none;
+
+      filter: blur(1px);
+    }
+
+    body::after {
+      content: "";
+
+      position: fixed;
+
+      width: 500px;
+      height: 500px;
+
+      right: -200px;
+      bottom: -180px;
+
+      border-radius:
+        63% 37% 44% 56% /
+        58% 48% 52% 42%;
+
+      background: rgba(190, 210, 193, 0.15);
+
       z-index: 0;
       pointer-events: none;
     }
 
+    #cloud-canvas {
+      position: fixed;
+
+      top: 0;
+      left: 0;
+
+      width: 100vw;
+      height: 100vh;
+
+      z-index: 0;
+      pointer-events: none;
+
+      opacity: 0.35;
+    }
+
+    /* =========================
+       HEADER
+    ========================= */
+
     header {
-      background-color: rgba(17, 61, 60, 0.85);
-      padding: 15px 20px;
-      color: white;
+      position: relative;
+      z-index: 20;
+
+      width: 100%;
+
+      padding: 20px 5%;
+
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      position: relative;
-      z-index: 20; /* mai sus ca main */
+
+      gap: 30px;
+
+      background: rgba(250, 249, 244, 0.82);
+
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+
+      border-bottom:
+        1px solid rgba(23, 63, 54, 0.08);
     }
 
     .logo {
-      font-size: 1.5em;
-      font-weight: bold;
+      font-size: 1.65rem;
+      font-weight: 700;
+
+      letter-spacing: -0.04em;
+
+      color: var(--forest);
+
       cursor: pointer;
-      color: white;
+
+      white-space: nowrap;
+
+      transition:
+        opacity 0.25s ease,
+        transform 0.25s ease;
     }
 
-    /* Buton hamburger */
-    .burger {
-      display: none;
-      flex-direction: column;
-      cursor: pointer;
-      gap: 5px;
-      z-index: 30;
+    .logo:hover {
+      opacity: 0.7;
+      transform: translateY(-1px);
     }
 
-    .burger div {
-      width: 25px;
-      height: 3px;
-      background-color: white;
-      border-radius: 2px;
-    }
+    /* =========================
+       NAVIGATION
+    ========================= */
 
-    /* Nav links */
     nav {
       display: flex;
-      gap: 10px;
+
+      align-items: center;
+      justify-content: flex-end;
+
+      gap: 5px;
+
       z-index: 20;
+
+      flex-wrap: wrap;
     }
 
     nav a {
-      color: white;
+      color: var(--forest);
+
       text-decoration: none;
-      padding: 6px 10px;
-      border-radius: 4px;
+
+      padding: 9px 13px;
+
+      border-radius: 999px;
+
+      white-space: nowrap;
+
+      font-size: 0.92rem;
+      font-weight: 500;
+
+      transition:
+        background 0.25s ease,
+        color 0.25s ease,
+        transform 0.25s ease;
     }
 
     nav a:hover {
-      background-color: #1d5957;
+      background: rgba(43, 102, 87, 0.1);
+
+      color: var(--forest-light);
+
+      transform: translateY(-1px);
     }
 
-    /* Media queries - mobil */
-    @media (max-width: 768px) {
+    /* =========================
+       BURGER
+    ========================= */
+
+    .burger {
+      display: none;
+
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      cursor: pointer;
+
+      gap: 5px;
+
+      width: 44px;
+      height: 44px;
+
+      border-radius: 50%;
+
+      background: rgba(23, 63, 54, 0.08);
+
+      z-index: 30;
+
+      transition:
+        background 0.25s ease;
+    }
+
+    .burger:hover {
+      background: rgba(23, 63, 54, 0.13);
+    }
+
+    .burger div {
+      width: 20px;
+      height: 2px;
+
+      background-color: var(--forest);
+
+      border-radius: 2px;
+
+      transition:
+        transform 0.25s ease;
+    }
+
+    /* =========================
+       MAIN
+    ========================= */
+
+    main {
+      position: relative;
+      z-index: 10;
+
+      width: min(920px, 90%);
+
+      margin: 0 auto;
+
+      padding: 75px 0 90px;
+
+      flex: 1;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* =========================
+       DASHBOARD CARD
+    ========================= */
+
+    .dashboard-box {
+      position: relative;
+
+      width: 100%;
+
+      padding: 55px 55px 50px;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(255, 255, 255, 0.82),
+          rgba(255, 255, 255, 0.60)
+        );
+
+      border:
+        1px solid rgba(23, 63, 54, 0.09);
+
+      border-radius: 34px;
+
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+
+      box-shadow:
+        0 30px 80px rgba(19, 53, 45, 0.13),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+
+      text-align: center;
+
+      overflow: hidden;
+
+      animation:
+        cardAppear 0.8s ease both;
+    }
+
+    .dashboard-box::before {
+      content: "";
+
+      position: absolute;
+
+      width: 350px;
+      height: 350px;
+
+      top: -210px;
+      right: -120px;
+
+      background:
+        rgba(145, 169, 152, 0.18);
+
+      border-radius:
+        48% 52% 62% 38% /
+        42% 35% 65% 58%;
+
+      filter: blur(8px);
+
+      pointer-events: none;
+    }
+
+    .dashboard-box::after {
+      content: "";
+
+      position: absolute;
+
+      width: 300px;
+      height: 300px;
+
+      bottom: -190px;
+      left: -130px;
+
+      background:
+        rgba(190, 210, 193, 0.22);
+
+      border-radius:
+        63% 37% 44% 56% /
+        58% 48% 52% 42%;
+
+      filter: blur(12px);
+
+      pointer-events: none;
+    }
+
+    @keyframes cardAppear {
+      from {
+        opacity: 0;
+        transform: translateY(25px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* =========================
+       DASHBOARD HEADER
+    ========================= */
+
+    .dashboard-intro {
+      position: relative;
+      z-index: 2;
+
+      margin-bottom: 38px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+
+      align-items: center;
+
+      gap: 9px;
+
+      margin-bottom: 20px;
+
+      color: var(--forest-light);
+
+      font-size: 0.76rem;
+
+      font-weight: 700;
+
+      text-transform: uppercase;
+
+      letter-spacing: 0.16em;
+    }
+
+    .eyebrow::before {
+      content: "";
+
+      width: 28px;
+      height: 1px;
+
+      background: var(--forest-light);
+    }
+
+    h2 {
+      position: relative;
+      z-index: 2;
+
+      margin: 0 0 15px;
+
+      color: var(--forest-dark);
+
+      font-size: clamp(2.6rem, 6vw, 4.4rem);
+
+      font-weight: 700;
+
+      letter-spacing: -0.065em;
+
+      line-height: 1;
+    }
+
+    .dashboard-box > p {
+      position: relative;
+      z-index: 2;
+
+      margin: 0;
+
+      color: var(--muted);
+
+      font-size: 1.08rem;
+
+      line-height: 1.7;
+    }
+
+    /* =========================
+       DASHBOARD LINKS
+    ========================= */
+
+    ul {
+      position: relative;
+      z-index: 2;
+
+      list-style: none;
+
+      padding: 0;
+      margin: 0 auto 32px;
+
+      max-width: 620px;
+
+      display: flex;
+      flex-direction: column;
+
+      gap: 12px;
+    }
+
+    ul li {
+      margin: 0;
+    }
+
+    ul li a {
+      position: relative;
+
+      display: flex;
+
+      align-items: center;
+
+      min-height: 65px;
+
+      padding: 17px 23px;
+
+      text-decoration: none;
+
+      color: var(--forest-dark);
+
+      background:
+        rgba(250, 249, 244, 0.72);
+
+      border:
+        1px solid rgba(23, 63, 54, 0.10);
+
+      border-radius: 18px;
+
+      font-size: 1rem;
+
+      font-weight: 600;
+
+      text-align: left;
+
+      box-shadow:
+        0 8px 25px rgba(23, 63, 54, 0.05);
+
+      transition:
+        background 0.3s ease,
+        border-color 0.3s ease,
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        color 0.3s ease;
+    }
+
+    ul li a::after {
+      content: "→";
+
+      position: absolute;
+
+      right: 23px;
+
+      color: var(--forest-light);
+
+      font-size: 1.15rem;
+
+      opacity: 0.7;
+
+      transition:
+        transform 0.3s ease,
+        opacity 0.3s ease;
+    }
+
+    ul li a:hover {
+      background:
+        rgba(255, 255, 255, 0.95);
+
+      border-color:
+        rgba(43, 102, 87, 0.22);
+
+      color: var(--forest-light);
+
+      transform: translateX(5px);
+
+      box-shadow:
+        0 14px 32px rgba(23, 63, 54, 0.10);
+    }
+
+    ul li a:hover::after {
+      transform: translateX(4px);
+      opacity: 1;
+    }
+
+    /* =========================
+       ADMIN BUTTONS
+    ========================= */
+
+    .admin-section {
+      position: relative;
+      z-index: 2;
+
+      padding-top: 25px;
+
+      border-top:
+        1px solid rgba(23, 63, 54, 0.10);
+    }
+
+    .admin-label {
+      margin: 0 0 15px;
+
+      color: var(--muted);
+
+      font-size: 0.78rem;
+
+      font-weight: 700;
+
+      text-transform: uppercase;
+
+      letter-spacing: 0.13em;
+    }
+
+    .admin-button {
+      position: relative;
+      z-index: 2;
+
+      display: inline-block;
+
+      margin: 5px;
+
+      padding: 12px 20px;
+
+      background:
+        rgba(43, 102, 87, 0.09);
+
+      border:
+        1px solid rgba(43, 102, 87, 0.16);
+
+      color: var(--forest);
+
+      font-weight: 600;
+
+      border-radius: 999px;
+
+      text-decoration: none;
+
+      transition:
+        background 0.3s ease,
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        border-color 0.3s ease,
+        color 0.3s ease;
+    }
+
+    .admin-button:hover {
+      background:
+        rgba(43, 102, 87, 0.16);
+
+      border-color:
+        rgba(43, 102, 87, 0.28);
+
+      color: var(--forest-dark);
+
+      transform: translateY(-2px);
+
+      box-shadow:
+        0 10px 25px rgba(23, 63, 54, 0.10);
+    }
+
+    /* =========================
+       FOOTER
+    ========================= */
+
+    footer {
+      position: relative;
+      z-index: 10;
+
+      padding: 24px 20px;
+
+      background: var(--forest);
+
+      color:
+        rgba(255, 255, 255, 0.72);
+
+      text-align: center;
+
+      font-size: 0.85rem;
+
+      letter-spacing: 0.01em;
+    }
+
+    /* =========================
+       TABLET
+    ========================= */
+
+    @media (max-width: 1050px) {
+
+      header {
+        padding-left: 4%;
+        padding-right: 4%;
+      }
+
       nav {
-        max-height: 0;
-        overflow: hidden;
-        flex-direction: column;
-        width: 100%;
-        background-color: rgba(17, 61, 60, 0.9);
-        position: absolute;
-        top: 56px; /* inaltimea header */
-        left: 0;
-        padding: 0 20px;
-        border-radius: 0 0 8px 8px;
-        box-sizing: border-box;
-        transition: max-height 0.4s ease, padding 0.4s ease;
+        gap: 2px;
       }
 
-      nav.open {
-        max-height: 500px; /* suficient pt meniul deschis */
-        padding: 10px 20px;
+      nav a {
+        padding: 8px 9px;
+        font-size: 0.86rem;
       }
 
-      body.menu-open main {
-        margin-top: 250px; /* împinge conținutul când meniul e deschis */
-        transition: margin-top 0.3s ease;
+      main {
+        width: min(900px, 92%);
+      }
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 768px) {
+
+      header {
+        padding: 15px 20px;
+      }
+
+      .logo {
+        font-size: 1.45rem;
       }
 
       .burger {
         display: flex;
       }
+
+      nav {
+        position: absolute;
+
+        top: 100%;
+        left: 0;
+
+        width: 100%;
+
+        max-height: 0;
+
+        overflow: hidden;
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 4px;
+
+        padding: 0 20px;
+
+        background:
+          rgba(250, 249, 244, 0.96);
+
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+
+        border-bottom:
+          1px solid rgba(23, 63, 54, 0.08);
+
+        border-radius:
+          0 0 20px 20px;
+
+        box-shadow:
+          0 15px 30px rgba(23, 63, 54, 0.10);
+
+        transition:
+          max-height 0.45s ease,
+          padding 0.45s ease;
+      }
+
+      nav.open {
+        max-height: 600px;
+
+        padding:
+          12px 20px 18px;
+      }
+
+      nav a {
+        width: 100%;
+
+        padding: 12px 14px;
+
+        border-radius: 12px;
+      }
+
+      nav a:hover {
+        transform: none;
+      }
+
+      body.menu-open main {
+        margin-top: 300px;
+      }
+
+      main {
+        width: min(92%, 620px);
+
+        margin:
+          45px auto 55px;
+
+        padding:
+          0 0 15px;
+      }
+
+      .dashboard-box {
+        padding:
+          42px 22px 35px;
+
+        border-radius: 27px;
+      }
+
+      .dashboard-intro {
+        margin-bottom: 30px;
+      }
+
+      .eyebrow {
+        font-size: 0.7rem;
+      }
+
+      h2 {
+        font-size: clamp(2.4rem, 11vw, 3.5rem);
+      }
+
+      .dashboard-box > p {
+        font-size: 1rem;
+      }
+
+      ul {
+        gap: 10px;
+
+        margin-bottom: 25px;
+      }
+
+      ul li a {
+        min-height: 60px;
+
+        padding:
+          15px 18px;
+
+        padding-right: 48px;
+
+        font-size: 0.98rem;
+
+        border-radius: 15px;
+      }
+
+      ul li a::after {
+        right: 18px;
+      }
+
+      .admin-section {
+        padding-top: 22px;
+      }
+
+      .admin-button {
+        margin:
+          4px 2px;
+
+        padding:
+          11px 16px;
+
+        font-size: 0.9rem;
+      }
     }
 
-    main {
-      flex-grow: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 40px 20px;
-      position: relative;
-      z-index: 10;
-      max-width: 700px;
-      margin: 2rem auto;
-      background: rgba(255,255,255,0.08);
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.3);
-      backdrop-filter: blur(8px);
-      text-align: center;
-      color: white;
-      box-sizing: border-box;
-      transition: margin-top 0.3s ease;
+    /* =========================
+       SMALL MOBILE
+    ========================= */
+
+    @media (max-width: 430px) {
+
+      main {
+        width: calc(100% - 20px);
+      }
+
+      .dashboard-box {
+        padding:
+          36px 17px 30px;
+
+        border-radius: 23px;
+      }
+
+      h2 {
+        font-size: 2.25rem;
+      }
+
+      .dashboard-box > p {
+        font-size: 0.95rem;
+      }
+
+      ul li a {
+        padding:
+          15px;
+
+        padding-right: 42px;
+      }
+
+      .admin-button {
+        width: 100%;
+
+        margin:
+          4px 0;
+
+        text-align: center;
+      }
+
+      footer {
+        padding:
+          18px 12px;
+      }
     }
 
-    h2 {
-      margin-bottom: 20px;
-      color: white;
-    }
+    /* =========================
+       REDUCED MOTION
+    ========================= */
 
-    p {
-      font-size: 18px;
-    }
+    @media (prefers-reduced-motion: reduce) {
 
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 20px 0;
-    }
+      html {
+        scroll-behavior: auto;
+      }
 
-    ul li {
-      margin: 15px 0;
-    }
-
-    ul li a {
-      text-decoration: none;
-      color: #78cfc6;
-      font-weight: bold;
-      font-size: 18px;
-    }
-
-    ul li a:hover {
-      text-decoration: underline;
-    }
-
-    .admin-button {
-      display: inline-block;
-      margin: 10px;
-      padding: 10px 18px;
-      background-color: #1d5957;
-      color: white;
-      font-weight: bold;
-      border-radius: 6px;
-      text-decoration: none;
-      transition: background 0.3s;
-    }
-
-    .admin-button:hover {
-      background-color: #14614d;
-    }
-
-    footer {
-      text-align: center;
-      color: white;
-      padding: 20px;
-      background-color: rgba(17, 61, 60, 0.85);
-      position: relative;
-      z-index: 10;
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
     }
   </style>
 </head>
+
 <body>
 
 <canvas id="cloud-canvas"></canvas>
 
 <header>
-  <div class="logo" onclick="window.location='/'">Lichenary</div>
 
-  <div id="burger" class="burger" aria-label="Menu" tabindex="0">
+  <div class="logo" onclick="window.location='/'">
+    Lichenary
+  </div>
+
+  <div
+    id="burger"
+    class="burger"
+    aria-label="Menu"
+    tabindex="0"
+  >
     <div></div>
     <div></div>
     <div></div>
   </div>
 
   <nav id="nav-links">
-    <a href="{{ url_for('home') }}">Home</a>
-    <a href="{{ url_for('despre') }}">About</a>
-    <a href="{{ url_for('participa') }}">How to Participate</a>
-    <a href="{{ url_for('galerie') }}">Gallery</a>
-    <a href="{{ url_for('harta') }}">Map</a>
-    <a href="{{ url_for('contact') }}">Contact</a>
+
+    <a href="{{ url_for('home') }}">
+      Home
+    </a>
+
+    <a href="{{ url_for('despre') }}">
+      About
+    </a>
+
+    <a href="{{ url_for('participa') }}">
+      How to Participate
+    </a>
+
+    <a href="{{ url_for('galerie') }}">
+      Gallery
+    </a>
+
+    <a href="{{ url_for('harta') }}">
+      Map
+    </a>
+
+    <a href="{{ url_for('contact') }}">
+      Contact
+    </a>
+
     {% if current_user.is_authenticated %}
-      <a href="{{ url_for('dashboard') }}">Dashboard</a>
-      <a href="{{ url_for('logout') }}">Logout</a>
+
+      <a href="{{ url_for('dashboard') }}">
+        Dashboard
+      </a>
+
+      <a href="{{ url_for('logout') }}">
+        Logout
+      </a>
+
     {% else %}
-      <a href="{{ url_for('login') }}">Login</a>
+
+      <a href="{{ url_for('login') }}">
+        Login
+      </a>
+
     {% endif %}
+
   </nav>
+
 </header>
 
+
 <main>
+
   <div class="dashboard-box">
-    <h2>Welcome, {{ current_user.username }}!</h2>
-    <p>You have the following options:</p>
+
+    <div class="dashboard-intro">
+
+      <div class="eyebrow">
+        Lichenary dashboard
+      </div>
+
+      <h2>
+        Welcome, {{ current_user.username }}!
+      </h2>
+
+      <p>
+        You have the following options:
+      </p>
+
+    </div>
+
+
     <ul>
-      <li><a href="{{ url_for('upload_observation') }}">Upload a Lichen Observation</a></li>
-      <li><a href="{{ url_for('view_observations') }}">View Your Observations</a></li>
-      <li><a href="{{ url_for('logout') }}">Logout</a></li>
+
+      <li>
+        <a href="{{ url_for('upload_observation') }}">
+          Upload a Lichen Observation
+        </a>
+      </li>
+
+      <li>
+        <a href="{{ url_for('view_observations') }}">
+          View Your Observations
+        </a>
+      </li>
+
+      <li>
+        <a href="{{ url_for('logout') }}">
+          Logout
+        </a>
+      </li>
+
     </ul>
 
-    <!-- between the two existing -->
+
     {% if current_user.username == 'admin' %}
-  
-      <a href="{{ url_for('admin_users') }}" class="admin-button">Unapproved Users</a>
-      <a href="{{ url_for('admin_observations') }}" class="admin-button">Unapproved Observations</a>
-      <a href="{{ url_for('admin_approved_observations') }}" class="admin-button">Approved Observations</a>
+
+      <div class="admin-section">
+
+        <p class="admin-label">
+          Administration
+        </p>
+
+        <a
+          href="{{ url_for('admin_users') }}"
+          class="admin-button"
+        >
+          Unapproved Users
+        </a>
+
+        <a
+          href="{{ url_for('admin_observations') }}"
+          class="admin-button"
+        >
+          Unapproved Observations
+        </a>
+
+        <a
+          href="{{ url_for('admin_approved_observations') }}"
+          class="admin-button"
+        >
+          Approved Observations
+        </a>
+
+      </div>
 
     {% endif %}
 
   </div>
+
 </main>
+
 
 <footer>
   &copy; 2025 Lichenary • All rights reserved
 </footer>
+
 
 <script>
   const burger = document.getElementById('burger');
@@ -252,85 +1053,228 @@
 
   burger.addEventListener('click', () => {
     const isOpen = navLinks.classList.toggle('open');
-    document.body.classList.toggle('menu-open', isOpen);
+
+    document.body.classList.toggle(
+      'menu-open',
+      isOpen
+    );
   });
 
-  // Închide meniul când se apasă un link (pe mobil)
   document.querySelectorAll('#nav-links a').forEach(link => {
     link.addEventListener('click', () => {
+
       navLinks.classList.remove('open');
-      document.body.classList.remove('menu-open');
+
+      document.body.classList.remove(
+        'menu-open'
+      );
+
     });
   });
 </script>
 
+
 <script>
-  const canvas = document.getElementById('cloud-canvas');
-  const ctx = canvas.getContext('2d');
-  let width, height;
+  const canvas =
+    document.getElementById('cloud-canvas');
+
+  const ctx =
+    canvas.getContext('2d');
+
+  let width;
+  let height;
+
 
   function resize() {
+
     width = window.innerWidth;
     height = window.innerHeight;
+
     canvas.width = width;
     canvas.height = height;
+
   }
 
-  window.addEventListener('resize', resize);
+
+  window.addEventListener(
+    'resize',
+    resize
+  );
+
   resize();
 
+
   class Cloud {
-    constructor(x, y, size, color, speed) {
+
+    constructor(
+      x,
+      y,
+      size,
+      color,
+      speed
+    ) {
+
       this.x = x;
       this.y = y;
       this.size = size;
       this.color = color;
       this.speed = speed;
+
     }
+
 
     draw(ctx) {
-      let gradient = ctx.createRadialGradient(this.x, this.y, this.size * 0.3, this.x, this.y, this.size);
-      gradient.addColorStop(0, this.color);
-      gradient.addColorStop(1, 'rgba(0,0,0,0)');
-      ctx.fillStyle = gradient;
+
+      const gradient =
+        ctx.createRadialGradient(
+          this.x,
+          this.y,
+          this.size * 0.3,
+          this.x,
+          this.y,
+          this.size
+        );
+
+
+      gradient.addColorStop(
+        0,
+        this.color
+      );
+
+      gradient.addColorStop(
+        1,
+        'rgba(0,0,0,0)'
+      );
+
+
+      ctx.fillStyle =
+        gradient;
+
+
       ctx.beginPath();
-      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+
+
+      ctx.arc(
+        this.x,
+        this.y,
+        this.size,
+        0,
+        Math.PI * 2
+      );
+
+
       ctx.fill();
+
     }
+
 
     update() {
+
       this.x += this.speed;
-      if (this.x - this.size > width) {
-        this.x = -this.size;
-        this.y = Math.random() * height * 0.8 + height * 0.1;
+
+
+      if (
+        this.x - this.size > width
+      ) {
+
+        this.x =
+          -this.size;
+
+        this.y =
+          Math.random() * height * 0.8 +
+          height * 0.1;
+
       }
+
     }
+
   }
+
 
   const clouds = [];
-  const cloudColors = ['rgba(180,220,180,0.3)', 'rgba(150,190,150,0.25)', 'rgba(120,160,120,0.2)'];
 
-  for (let i = 0; i < 20; i++) {
-    clouds.push(new Cloud(
-      Math.random() * width,
-      Math.random() * height * 0.8 + height * 0.1,
-      60 + Math.random() * 50,
-      cloudColors[Math.floor(Math.random() * cloudColors.length)],
-      0.2 + Math.random() * 0.2
-    ));
+
+  const cloudColors = [
+
+    'rgba(180,220,180,0.18)',
+
+    'rgba(150,190,150,0.14)',
+
+    'rgba(120,160,120,0.11)'
+
+  ];
+
+
+  for (
+    let i = 0;
+    i < 20;
+    i++
+  ) {
+
+    clouds.push(
+
+      new Cloud(
+
+        Math.random() * width,
+
+        Math.random() *
+          height *
+          0.8 +
+          height *
+          0.1,
+
+        60 +
+          Math.random() *
+          50,
+
+        cloudColors[
+          Math.floor(
+            Math.random() *
+            cloudColors.length
+          )
+        ],
+
+        0.15 +
+          Math.random() *
+          0.2
+
+      )
+
+    );
+
   }
+
 
   function animate() {
-    ctx.clearRect(0, 0, width, height);
-    clouds.forEach(cloud => {
-      cloud.draw(ctx);
-      cloud.update();
-    });
-    requestAnimationFrame(animate);
+
+    ctx.clearRect(
+      0,
+      0,
+      width,
+      height
+    );
+
+
+    clouds.forEach(
+      cloud => {
+
+        cloud.draw(ctx);
+        cloud.update();
+
+      }
+    );
+
+
+    requestAnimationFrame(
+      animate
+    );
+
   }
+
 
   animate();
 </script>
+
 
 </body>
 </html>

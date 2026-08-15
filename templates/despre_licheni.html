@@ -1,189 +1,1342 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>About Lichens – Lichenary</title>
-  <style>
-    html, body {
-      margin: 0; padding: 0;
-      height: 100%;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #1f2f1f;
-      color: white;
-      overflow-x: hidden;
-      position: relative;
-    }
-
-    #cloud-canvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    header {
-      background-color: rgba(17, 61, 60, 0.85);
-      padding: 15px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 20;
-      position: relative;
-      flex-wrap: wrap;
-    }
-
-    .logo {
-      font-size: 1.5em;
-      font-weight: bold;
-      color: white;
-      cursor: pointer;
-    }
-
-    /* Burger menu styles from original */
-    .burger {
-      display: none;
-      flex-direction: column;
-      cursor: pointer;
-      gap: 5px;
-      z-index: 30;
-    }
-
-    .burger div {
-      width: 25px;
-      height: 3px;
-      background-color: white;
-      border-radius: 2px;
-    }
-
-    nav.main-nav {
-      display: flex;
-      gap: 10px;
-      z-index: 20;
-      transition: max-height 0.4s ease, padding 0.4s ease;
-      overflow: hidden;
-    }
-
-    nav.main-nav a {
-      color: white;
-      text-decoration: none;
-      padding: 6px 10px;
-      border-radius: 4px;
-    }
-
-    nav.main-nav a:hover {
-      background-color: #1d5957;
-    }
-
-    @media (max-width: 768px) {
-      .burger {
-        display: flex;
-      }
-      nav.main-nav {
-        max-height: 0;
-        flex-direction: column;
-        width: 100%;
-        background-color: rgba(17, 61, 60, 0.9);
-        position: absolute;
-        top: 56px;
-        left: 0;
-        padding: 0 20px;
-        border-radius: 0 0 8px 8px;
-        box-sizing: border-box;
-      }
-      nav.main-nav.open {
-        max-height: 500px;
-        padding: 10px 20px;
-      }
-
-      body.menu-open main {
-        margin-top: 250px;
-        transition: margin-top 0.3s ease;
-      }
-    }
-
-    main {
-      position: relative;
-      z-index: 10;
-      max-width: 900px;
-      margin: 60px auto 30px;
-      padding: 20px;
-      transition: margin-top 0.3s ease;
-    }
-
-    .section {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 25px;
-      margin-bottom: 25px;
-      border-radius: 10px;
-      backdrop-filter: blur(6px);
-      box-shadow: 0 0 12px rgba(0,0,0,0.25);
-    }
-
-    .section h2, .section h3 {
-      margin-top: 0;
-      font-size: 1.5em;
-      margin-bottom: 10px;
-    }
-
-    .section p, .section ul {
-      font-size: 1.05em;
-      line-height: 1.6;
-      margin-bottom: 15px;
-    }
-
-    .section ul {
-      padding-left: 20px;
-    }
-
-    .section ul li {
-      margin-bottom: 8px;
-    }
-
-    footer {
-      background-color: rgba(17, 61, 60, 0.85);
-      color: white;
-      text-align: center;
-      padding: 15px;
-      position: relative;
-      z-index: 10;
-    }
-  </style>
-</head>
-<body>
-
-<canvas id="cloud-canvas"></canvas>
-
-<header>
-  <div class="logo" onclick="window.location='/'">Lichenary</div>
-
-  <div id="burger" class="burger" aria-label="Menu">
-    <div></div>
-    <div></div>
-    <div></div>
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+  <meta charset="UTF-8" /> 
+  <meta name="viewport" content="width=device-width, initial-scale=1" /> 
+  <title>About Lichens – Lichenary</title> 
+ 
+  <style> 
+    /* ========================================================= 
+       LICHENARY — ORGANIC / EDITORIAL / CITIZEN SCIENCE 
+       ABOUT LICHENS 
+       ========================================================= */ 
+ 
+    :root { 
+      --cream: #f5f3ea; 
+      --cream-light: #fbfaf5; 
+      --paper: #eeece1; 
+ 
+      --forest: #173f35; 
+      --forest-dark: #102f28; 
+      --forest-soft: #315c4d; 
+ 
+      --moss: #718d57; 
+      --sage: #a8b89a; 
+      --lichen: #d9e4bb; 
+ 
+      --ink: #18231f; 
+      --muted: #65716a; 
+ 
+      --white: #ffffff; 
+ 
+      --radius-xl: 42px; 
+      --radius-lg: 28px; 
+      --radius-md: 18px; 
+ 
+      --shadow-soft: 0 20px 60px rgba(23, 63, 53, 0.10); 
+      --shadow-medium: 0 25px 65px rgba(23, 63, 53, 0.14); 
+    } 
+ 
+    * { 
+      box-sizing: border-box; 
+    } 
+ 
+    html { 
+      scroll-behavior: smooth; 
+    } 
+ 
+    body { 
+      margin: 0; 
+      padding: 0; 
+      min-height: 100vh; 
+ 
+      font-family: 
+        "Segoe UI", 
+        Tahoma, 
+        Geneva, 
+        Verdana, 
+        sans-serif; 
+ 
+      background: var(--cream); 
+      color: var(--ink); 
+ 
+      overflow-x: hidden; 
+ 
+      position: relative; 
+    } 
+ 
+    a { 
+      color: inherit; 
+    } 
+ 
+    /* ========================================================= 
+       ORIGINAL CANVAS KEPT — NOW SUBTLE / ORGANIC 
+       ========================================================= */ 
+ 
+    #cloud-canvas { 
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+ 
+      width: 100vw; 
+      height: 100vh; 
+ 
+      z-index: 0; 
+      pointer-events: none; 
+ 
+      opacity: 0.45; 
+    } 
+ 
+    /* ========================================================= 
+       HEADER 
+       ========================================================= */ 
+ 
+    header { 
+      position: sticky; 
+      top: 0; 
+      z-index: 100; 
+ 
+      width: 100%; 
+ 
+      padding: 20px 5vw; 
+ 
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between; 
+ 
+      gap: 30px; 
+ 
+      background: rgba(245, 243, 234, 0.88); 
+ 
+      backdrop-filter: blur(18px); 
+      -webkit-backdrop-filter: blur(18px); 
+ 
+      border-bottom: 1px solid rgba(23, 63, 53, 0.08); 
+    } 
+ 
+    .logo { 
+      color: var(--forest); 
+ 
+      font-family: Georgia, "Times New Roman", serif; 
+ 
+      font-size: 1.7rem; 
+      font-weight: bold; 
+ 
+      letter-spacing: -0.04em; 
+ 
+      cursor: pointer; 
+ 
+      transition: 
+        transform 0.25s ease, 
+        color 0.25s ease; 
+    } 
+ 
+    .logo:hover { 
+      color: var(--moss); 
+      transform: translateY(-1px); 
+    } 
+ 
+    /* ========================================================= 
+       BURGER 
+       ========================================================= */ 
+ 
+    .burger { 
+      display: none; 
+ 
+      flex-direction: column; 
+      justify-content: center; 
+ 
+      gap: 5px; 
+ 
+      width: 42px; 
+      height: 42px; 
+ 
+      padding: 8px; 
+ 
+      cursor: pointer; 
+ 
+      border-radius: 50%; 
+ 
+      background: var(--forest); 
+ 
+      z-index: 30; 
+    } 
+ 
+    .burger div { 
+      width: 100%; 
+      height: 2px; 
+ 
+      background: white; 
+ 
+      border-radius: 10px; 
+ 
+      transition: 
+        transform 0.25s ease, 
+        opacity 0.25s ease; 
+    } 
+ 
+    /* ========================================================= 
+       NAVIGATION 
+       ========================================================= */ 
+ 
+    nav.main-nav { 
+      display: flex; 
+ 
+      align-items: center; 
+      justify-content: flex-end; 
+ 
+      gap: 5px; 
+ 
+      z-index: 20; 
+ 
+      flex-wrap: wrap; 
+ 
+      transition: 
+        max-height 0.4s ease, 
+        padding 0.4s ease; 
+    } 
+ 
+    nav.main-nav a { 
+      position: relative; 
+ 
+      color: var(--forest); 
+ 
+      text-decoration: none; 
+ 
+      padding: 9px 12px; 
+ 
+      font-size: 0.92rem; 
+      font-weight: 500; 
+ 
+      border-radius: 999px; 
+ 
+      white-space: nowrap; 
+ 
+      transition: 
+        color 0.25s ease, 
+        background 0.25s ease, 
+        transform 0.25s ease; 
+    } 
+ 
+    nav.main-nav a:hover { 
+      color: var(--forest); 
+ 
+      background: rgba(113, 141, 87, 0.14); 
+ 
+      transform: translateY(-1px); 
+    } 
+ 
+    /* ========================================================= 
+       MAIN 
+       ========================================================= */ 
+ 
+    main { 
+      position: relative; 
+      z-index: 10; 
+ 
+      width: 100%; 
+      max-width: 1320px; 
+ 
+      margin: 0 auto; 
+ 
+      padding: 70px 5vw 100px; 
+    } 
+ 
+    /* ========================================================= 
+       PAGE INTRO 
+       ========================================================= */ 
+ 
+    main::before { 
+      content: ""; 
+ 
+      position: absolute; 
+ 
+      width: 330px; 
+      height: 330px; 
+ 
+      top: 10px; 
+      left: -170px; 
+ 
+      background: var(--lichen); 
+ 
+      border-radius: 
+        62% 38% 65% 35% / 
+        40% 57% 43% 60%; 
+ 
+      opacity: 0.48; 
+ 
+      z-index: -1; 
+    } 
+ 
+    main::after { 
+      content: ""; 
+ 
+      position: absolute; 
+ 
+      width: 250px; 
+      height: 250px; 
+ 
+      right: -130px; 
+      top: 520px; 
+ 
+      background: var(--sage); 
+ 
+      border-radius: 
+        45% 55% 62% 38% / 
+        60% 42% 58% 40%; 
+ 
+      opacity: 0.22; 
+ 
+      z-index: -1; 
+    } 
+ 
+    /* ========================================================= 
+       SECTIONS 
+       ========================================================= */ 
+ 
+    .section { 
+      position: relative; 
+ 
+      padding: 65px 75px; 
+ 
+      margin-bottom: 55px; 
+ 
+      background: var(--cream-light); 
+ 
+      color: var(--ink); 
+ 
+      border-radius: 
+        38px 95px 38px 75px; 
+ 
+      border: 1px solid rgba(23, 63, 53, 0.08); 
+ 
+      box-shadow: var(--shadow-soft); 
+ 
+      overflow: hidden; 
+ 
+      opacity: 0; 
+ 
+      transform: translateY(35px); 
+ 
+      transition: 
+        opacity 0.8s ease, 
+        transform 0.8s ease; 
+    } 
+ 
+    .section.visible { 
+      opacity: 1; 
+ 
+      transform: translateY(0); 
+    } 
+ 
+    .section:nth-child(even) { 
+      border-radius: 
+        100px 32px 85px 35px; 
+    } 
+ 
+    .section::before { 
+      content: ""; 
+ 
+      position: absolute; 
+ 
+      width: 180px; 
+      height: 180px; 
+ 
+      right: -80px; 
+      top: -85px; 
+ 
+      background: var(--lichen); 
+ 
+      border-radius: 50%; 
+ 
+      opacity: 0.5; 
+    } 
+ 
+    .section::after { 
+      content: ""; 
+ 
+      position: absolute; 
+ 
+      width: 95px; 
+      height: 95px; 
+ 
+      left: -45px; 
+      bottom: -40px; 
+ 
+      border: 2px solid var(--sage); 
+ 
+      border-radius: 
+        67% 33% 52% 48% / 
+        44% 57% 43% 56%; 
+ 
+      transform: rotate(18deg); 
+ 
+      opacity: 0.55; 
+    } 
+ 
+    /* ========================================================= 
+       HEADINGS 
+       ========================================================= */ 
+ 
+    .section h2 { 
+      position: relative; 
+ 
+      z-index: 2; 
+ 
+      margin: 0 0 28px; 
+ 
+      color: var(--forest); 
+ 
+      font-family: Georgia, "Times New Roman", serif; 
+ 
+      font-size: clamp(2.4rem, 4vw, 4rem); 
+ 
+      font-weight: normal; 
+ 
+      line-height: 0.98; 
+ 
+      letter-spacing: -0.05em; 
+    } 
+ 
+    /* ========================================================= 
+       TEXT 
+       ========================================================= */ 
+ 
+    .section p, 
+    .section ul, 
+    .section ol { 
+      position: relative; 
+ 
+      z-index: 2; 
+ 
+      font-size: 1.05rem; 
+ 
+      line-height: 1.8; 
+ 
+      color: var(--ink); 
+ 
+      margin-top: 0; 
+      margin-bottom: 22px; 
+    } 
+ 
+    .section p:last-child { 
+      margin-bottom: 0; 
+    } 
+ 
+    .section strong { 
+      color: var(--forest); 
+ 
+      font-weight: 700; 
+    } 
+ 
+    /* ========================================================= 
+       LISTS 
+       ========================================================= */ 
+ 
+    .section ul { 
+      padding: 0; 
+ 
+      margin: 20px 0 25px; 
+ 
+      list-style: none; 
+    } 
+ 
+    .section ul li { 
+      position: relative; 
+ 
+      padding: 14px 0 14px 38px; 
+ 
+      border-bottom: 
+        1px solid rgba(23, 63, 53, 0.11); 
+ 
+      color: var(--forest); 
+ 
+      line-height: 1.65; 
+    } 
+ 
+    .section ul li::before { 
+      content: "✦"; 
+ 
+      position: absolute; 
+ 
+      left: 5px; 
+      top: 14px; 
+ 
+      color: var(--moss); 
+ 
+      font-size: 1rem; 
+    } 
+ 
+    .section ul li:last-child { 
+      border-bottom: none; 
+    } 
+ 
+    /* ========================================================= 
+       ORDERED LIST 
+       ========================================================= */ 
+ 
+    .section ol { 
+      counter-reset: lichen-counter; 
+ 
+      list-style: none; 
+ 
+      padding: 0; 
+ 
+      margin: 30px 0 10px; 
+    } 
+ 
+    .section ol > li { 
+      position: relative; 
+ 
+      counter-increment: lichen-counter; 
+ 
+      padding: 22px 25px 22px 75px; 
+ 
+      margin-bottom: 15px; 
+ 
+      background: rgba(217, 228, 187, 0.26); 
+ 
+      border-radius: 
+        25px 10px 25px 10px; 
+ 
+      color: var(--forest); 
+ 
+      font-weight: 500; 
+ 
+      border: 1px solid rgba(23, 63, 53, 0.06); 
+    } 
+ 
+    .section ol > li::before { 
+      content: counter(lichen-counter); 
+ 
+      position: absolute; 
+ 
+      left: 20px; 
+      top: 19px; 
+ 
+      width: 36px; 
+      height: 36px; 
+ 
+      display: flex; 
+ 
+      align-items: center; 
+      justify-content: center; 
+ 
+      border-radius: 50%; 
+ 
+      background: var(--forest); 
+ 
+      color: white; 
+ 
+      font-family: Georgia, "Times New Roman", serif; 
+ 
+      font-size: 1.1rem; 
+    } 
+ 
+    .section ol > li > ul { 
+      margin-top: 15px; 
+      margin-bottom: 0; 
+    } 
+ 
+    .section ol > li > ul li { 
+      padding-top: 8px; 
+      padding-bottom: 8px; 
+ 
+      border-bottom: none; 
+ 
+      font-size: 0.98rem; 
+ 
+      color: var(--ink); 
+    } 
+ 
+    /* ========================================================= 
+       SPECIAL FIRST SECTION 
+       ========================================================= */ 
+ 
+    .section:first-child { 
+      min-height: 470px; 
+ 
+      display: grid; 
+ 
+      grid-template-columns: 0.7fr 1.3fr; 
+ 
+      align-items: center; 
+ 
+      gap: 75px; 
+ 
+      background: var(--forest); 
+ 
+      color: white; 
+ 
+      border-radius: 
+        35px 110px 35px 90px; 
+    } 
+ 
+    .section:first-child::before { 
+      width: 390px; 
+      height: 390px; 
+ 
+      right: -170px; 
+      top: -190px; 
+ 
+      background: var(--moss); 
+ 
+      opacity: 0.20; 
+    } 
+ 
+    .section:first-child::after { 
+      width: 220px; 
+      height: 220px; 
+ 
+      left: -100px; 
+      bottom: -120px; 
+ 
+      background: var(--sage); 
+ 
+      border: none; 
+ 
+      opacity: 0.10; 
+    } 
+ 
+    .section:first-child h2, 
+    .section:first-child p, 
+    .section:first-child li { 
+      color: white; 
+    } 
+ 
+    .section:first-child h2 { 
+      position: relative; 
+      z-index: 3; 
+    } 
+ 
+    .section:first-child p { 
+      color: rgba(255, 255, 255, 0.86); 
+    } 
+ 
+    .section:first-child strong { 
+      color: var(--lichen); 
+    } 
+ 
+    .section:first-child ul li { 
+      border-bottom-color: rgba(255, 255, 255, 0.14); 
+    } 
+ 
+    .section:first-child ul li::before { 
+      color: var(--lichen); 
+    } 
+ 
+    /* ========================================================= 
+       SECOND SECTION — AIR QUALITY 
+       ========================================================= */ 
+ 
+    .section:nth-child(2) { 
+      max-width: 1120px; 
+ 
+      margin-left: auto; 
+      margin-right: 0; 
+ 
+      padding: 75px 90px 75px 120px; 
+ 
+      border-radius: 
+        120px 30px 110px 35px; 
+    } 
+ 
+    .section:nth-child(2)::before { 
+      width: 150px; 
+      height: 150px; 
+ 
+      right: auto; 
+      left: -55px; 
+      top: 65px; 
+ 
+      border: 2px solid var(--sage); 
+ 
+      background: transparent; 
+ 
+      border-radius: 
+        67% 33% 52% 48% / 
+        44% 57% 43% 56%; 
+ 
+      transform: rotate(-20deg); 
+ 
+      opacity: 0.6; 
+    } 
+ 
+    .section:nth-child(2)::after { 
+      width: 90px; 
+      height: 90px; 
+ 
+      left: 8px; 
+      top: 150px; 
+ 
+      background: var(--lichen); 
+ 
+      border: none; 
+ 
+      border-radius: 50%; 
+ 
+      opacity: 0.7; 
+    } 
+ 
+    /* ========================================================= 
+       THIRD SECTION — LICHENARY 
+       ========================================================= */ 
+ 
+    .section:nth-child(3) { 
+      background: 
+        linear-gradient( 
+          135deg, 
+          var(--paper), 
+          #e5e8d8 
+        ); 
+ 
+      border-radius: 
+        30px 100px 30px 120px; 
+ 
+      padding: 85px 90px; 
+    } 
+ 
+    .section:nth-child(3)::before { 
+      width: 300px; 
+      height: 300px; 
+ 
+      right: -100px; 
+      top: -120px; 
+ 
+      background: var(--sage); 
+ 
+      opacity: 0.18; 
+ 
+      border: none; 
+ 
+      border-radius: 
+        42% 58% 63% 37% / 
+        54% 40% 60% 46%; 
+    } 
+ 
+    .section:nth-child(3)::after { 
+      width: 230px; 
+      height: 230px; 
+ 
+      left: -100px; 
+      bottom: -110px; 
+ 
+      background: var(--lichen); 
+ 
+      opacity: 0.45; 
+ 
+      border: none; 
+ 
+      border-radius: 
+        55% 45% 35% 65% / 
+        45% 58% 42% 55%; 
+    } 
+ 
+    /* ========================================================= 
+       FOURTH SECTION — TYPES 
+       ========================================================= */ 
+ 
+    .section:nth-child(4) { 
+      background: var(--cream-light); 
+ 
+      padding: 75px 80px; 
+ 
+      border-radius: 
+        40px 40px 110px 40px; 
+    } 
+ 
+    .section:nth-child(4) h2 { 
+      max-width: 750px; 
+    } 
+ 
+    /* ========================================================= 
+       FIFTH SECTION — IDENTIFICATION 
+       ========================================================= */ 
+ 
+    .section:nth-child(5) { 
+      max-width: 1120px; 
+ 
+      margin-left: 0; 
+      margin-right: auto; 
+ 
+      padding: 80px 100px 80px 80px; 
+ 
+      background: var(--forest); 
+ 
+      border-radius: 
+        110px 35px 90px 35px; 
+    } 
+ 
+    .section:nth-child(5)::before { 
+      width: 280px; 
+      height: 280px; 
+ 
+      right: -100px; 
+      top: -110px; 
+ 
+      background: var(--moss); 
+ 
+      opacity: 0.17; 
+ 
+      border: none; 
+    } 
+ 
+    .section:nth-child(5)::after { 
+      width: 150px; 
+      height: 150px; 
+ 
+      left: -65px; 
+      bottom: -75px; 
+ 
+      background: var(--sage); 
+ 
+      border: none; 
+ 
+      opacity: 0.10; 
+    } 
+ 
+    .section:nth-child(5) h2, 
+    .section:nth-child(5) p, 
+    .section:nth-child(5) li { 
+      color: white; 
+    } 
+ 
+    .section:nth-child(5) p { 
+      color: rgba(255, 255, 255, 0.86); 
+    } 
+ 
+    .section:nth-child(5) strong { 
+      color: var(--lichen); 
+    } 
+ 
+    .section:nth-child(5) ul li { 
+      border-bottom-color: rgba(255, 255, 255, 0.14); 
+    } 
+ 
+    .section:nth-child(5) ul li::before { 
+      color: var(--lichen); 
+    } 
+ 
+    /* ========================================================= 
+       FINAL SECTION — JOIN MISSION 
+       ========================================================= */ 
+ 
+    .section:last-child { 
+      max-width: 1000px; 
+ 
+      margin-left: auto; 
+      margin-right: auto; 
+ 
+      padding: 90px 100px; 
+ 
+      text-align: center; 
+ 
+      background: 
+        linear-gradient( 
+          135deg, 
+          #e6ead9, 
+          var(--paper) 
+        ); 
+ 
+      border-radius: 
+        35px 115px 35px 115px; 
+ 
+      box-shadow: var(--shadow-medium); 
+    } 
+ 
+    .section:last-child::before { 
+      width: 230px; 
+      height: 230px; 
+ 
+      right: -90px; 
+      top: -100px; 
+ 
+      background: var(--sage); 
+ 
+      opacity: 0.20; 
+ 
+      border: none; 
+    } 
+ 
+    .section:last-child::after { 
+      width: 180px; 
+      height: 180px; 
+ 
+      left: -70px; 
+      bottom: -80px; 
+ 
+      background: var(--lichen); 
+ 
+      border: none; 
+ 
+      opacity: 0.50; 
+    } 
+ 
+    .section:last-child h2 { 
+      max-width: 700px; 
+ 
+      margin-left: auto; 
+      margin-right: auto; 
+    } 
+ 
+    .section:last-child p { 
+      max-width: 720px; 
+ 
+      margin-left: auto; 
+      margin-right: auto; 
+ 
+      color: var(--forest-soft); 
+    } 
+ 
+    .section:last-child p:last-child { 
+      margin-top: 30px; 
+ 
+      font-family: Georgia, "Times New Roman", serif; 
+ 
+      font-size: 1.45rem; 
+ 
+      color: var(--forest); 
+    } 
+ 
+    /* ========================================================= 
+       ORGANIC DIVIDER 
+       ========================================================= */ 
+ 
+    .organic-divider { 
+      width: 100%; 
+ 
+      height: 75px; 
+ 
+      margin: 5px 0 70px; 
+ 
+      display: flex; 
+ 
+      justify-content: center; 
+ 
+      overflow: hidden; 
+    } 
+ 
+    .organic-divider svg { 
+      width: min(700px, 80%); 
+ 
+      height: 75px; 
+ 
+      overflow: visible; 
+    } 
+ 
+    .organic-divider path { 
+      fill: none; 
+ 
+      stroke: var(--sage); 
+ 
+      stroke-width: 2; 
+ 
+      stroke-linecap: round; 
+ 
+      stroke-dasharray: 4 9; 
+    } 
+ 
+    /* ========================================================= 
+       FOOTER 
+       ========================================================= */ 
+ 
+    footer { 
+      position: relative; 
+ 
+      width: 100%; 
+ 
+      padding: 50px 20px; 
+ 
+      background: var(--forest); 
+ 
+      color: rgba(255, 255, 255, 0.72); 
+ 
+      text-align: center; 
+ 
+      font-size: 0.85rem; 
+ 
+      letter-spacing: 0.03em; 
+ 
+      z-index: 10; 
+    } 
+ 
+    footer::before { 
+      content: ""; 
+ 
+      position: absolute; 
+ 
+      top: -35px; 
+      left: 0; 
+ 
+      width: 100%; 
+      height: 70px; 
+ 
+      background: var(--forest); 
+ 
+      clip-path: 
+        ellipse(55% 45% at 50% 100%); 
+    } 
+ 
+    /* ========================================================= 
+       RESPONSIVE — 1100px 
+       ========================================================= */ 
+ 
+    @media (max-width: 1100px) { 
+ 
+      header { 
+        padding: 18px 4vw; 
+      } 
+ 
+      main { 
+        padding-left: 4vw; 
+        padding-right: 4vw; 
+      } 
+ 
+      .section { 
+        padding: 60px; 
+      } 
+ 
+      .section:first-child { 
+        gap: 45px; 
+ 
+        padding: 60px; 
+      } 
+ 
+      .section:nth-child(2) { 
+        padding: 65px 70px 65px 100px; 
+      } 
+ 
+      .section:nth-child(3), 
+      .section:nth-child(4) { 
+        padding: 65px; 
+      } 
+ 
+      .section:nth-child(5) { 
+        padding: 70px; 
+      } 
+ 
+      .section:last-child { 
+        padding: 75px; 
+      } 
+    } 
+ 
+    /* ========================================================= 
+       RESPONSIVE — 850px 
+       ========================================================= */ 
+ 
+    @media (max-width: 850px) { 
+ 
+      header { 
+        position: sticky; 
+ 
+        flex-wrap: wrap; 
+      } 
+ 
+      .burger { 
+        display: flex; 
+      } 
+ 
+      nav.main-nav { 
+        position: absolute; 
+ 
+        top: 100%; 
+        left: 0; 
+ 
+        width: 100%; 
+ 
+        max-height: 0; 
+ 
+        overflow: hidden; 
+ 
+        flex-direction: column; 
+ 
+        align-items: stretch; 
+ 
+        gap: 4px; 
+ 
+        padding: 0 5vw; 
+ 
+        background: 
+          rgba(245, 243, 234, 0.97); 
+ 
+        backdrop-filter: blur(18px); 
+        -webkit-backdrop-filter: blur(18px); 
+ 
+        border-bottom: 
+          1px solid rgba(23, 63, 53, 0.08); 
+ 
+        transition: 
+          max-height 0.45s ease, 
+          padding 0.45s ease; 
+      } 
+ 
+      nav.main-nav.open { 
+        max-height: 600px; 
+ 
+        padding-top: 15px; 
+        padding-bottom: 18px; 
+      } 
+ 
+      nav.main-nav a { 
+        width: 100%; 
+ 
+        padding: 13px 15px; 
+ 
+        border-radius: 14px; 
+      } 
+ 
+      body.menu-open main { 
+        margin-top: 0; 
+      } 
+ 
+      main { 
+        padding-top: 55px; 
+      } 
+ 
+      .section:first-child { 
+        grid-template-columns: 1fr; 
+ 
+        gap: 10px; 
+ 
+        min-height: auto; 
+ 
+        border-radius: 
+          35px 70px 35px 70px; 
+      } 
+ 
+      .section:nth-child(2) { 
+        margin-left: 0; 
+ 
+        padding-left: 80px; 
+ 
+        border-radius: 
+          80px 25px 80px 25px; 
+      } 
+ 
+      .section:nth-child(3) { 
+        border-radius: 
+          30px 80px 30px 90px; 
+      } 
+ 
+      .section:nth-child(5) { 
+        margin-right: 0; 
+ 
+        border-radius: 
+          85px 28px 75px 28px; 
+      } 
+ 
+      .section:last-child { 
+        border-radius: 
+          28px 85px 28px 85px; 
+      } 
+ 
+      .organic-divider { 
+        margin-bottom: 55px; 
+      } 
+    } 
+ 
+    /* ========================================================= 
+       RESPONSIVE — 600px 
+       ========================================================= */ 
+ 
+    @media (max-width: 600px) { 
+ 
+      header { 
+        padding: 15px 20px; 
+      } 
+ 
+      .logo { 
+        font-size: 1.5rem; 
+      } 
+ 
+      main { 
+        padding-left: 20px; 
+        padding-right: 20px; 
+ 
+        padding-top: 45px; 
+        padding-bottom: 70px; 
+      } 
+ 
+      .section { 
+        padding: 50px 30px !important; 
+ 
+        margin-bottom: 35px; 
+ 
+        border-radius: 
+          28px 55px 28px 55px; 
+      } 
+ 
+      .section h2 { 
+        font-size: 2.6rem; 
+ 
+        line-height: 0.98; 
+ 
+        margin-bottom: 22px; 
+      } 
+ 
+      .section p, 
+      .section ul, 
+      .section ol { 
+        font-size: 1rem; 
+ 
+        line-height: 1.7; 
+      } 
+ 
+      .section:first-child { 
+        border-radius: 
+          28px 55px 28px 55px; 
+      } 
+ 
+      .section:nth-child(2) { 
+        border-radius: 
+          55px 22px 55px 22px; 
+      } 
+ 
+      .section:nth-child(2)::before { 
+        width: 100px; 
+        height: 100px; 
+ 
+        left: -45px; 
+        top: 35px; 
+      } 
+ 
+      .section:nth-child(2)::after { 
+        width: 60px; 
+        height: 60px; 
+ 
+        left: -5px; 
+        top: 95px; 
+      } 
+ 
+      .section:nth-child(3) { 
+        border-radius: 
+          25px 70px 25px 80px; 
+      } 
+ 
+      .section:nth-child(4) { 
+        border-radius: 
+          30px 30px 75px 30px; 
+      } 
+ 
+      .section:nth-child(5) { 
+        border-radius: 
+          70px 22px 65px 22px; 
+      } 
+ 
+      .section:last-child { 
+        border-radius: 
+          25px 70px 25px 80px; 
+      } 
+ 
+      .section:last-child p:last-child { 
+        font-size: 1.2rem; 
+      } 
+ 
+      .section ol > li { 
+        padding-left: 65px; 
+ 
+        border-radius: 
+          20px 8px 20px 8px; 
+      } 
+ 
+      .section ol > li::before { 
+        left: 15px; 
+      } 
+ 
+      .organic-divider { 
+        height: 50px; 
+ 
+        margin: 0 0 45px; 
+      } 
+ 
+      .organic-divider svg { 
+        width: 100%; 
+        height: 50px; 
+      } 
+ 
+      footer { 
+        padding: 45px 20px; 
+      } 
+    } 
+ 
+    /* ========================================================= 
+       REDUCED MOTION 
+       ========================================================= */ 
+ 
+    @media (prefers-reduced-motion: reduce) { 
+ 
+      html { 
+        scroll-behavior: auto; 
+      } 
+ 
+      *, 
+      *::before, 
+      *::after { 
+        transition-duration: 0.01ms !important; 
+        animation-duration: 0.01ms !important; 
+      } 
+ 
+      .section { 
+        opacity: 1; 
+ 
+        transform: none; 
+      } 
+    } 
+  </style> 
+</head> 
+ 
+<body> 
+ 
+<canvas id="cloud-canvas"></canvas> 
+ 
+<header> 
+  <div class="logo" onclick="window.location='/'">Lichenary</div> 
+ 
+  <div id="burger" class="burger" aria-label="Menu"> 
+    <div></div> 
+    <div></div> 
+    <div></div> 
+  </div> 
+ 
+  <nav id="nav-links" class="main-nav"> 
+    <a href="{{ url_for('home') }}">Home</a> 
+    <a href="{{ url_for('despre') }}">About</a> 
+    <a href="{{ url_for('participa') }}">How to Participate</a> 
+    <a href="{{ url_for('galerie') }}">Gallery</a> 
+    <a href="{{ url_for('harta') }}">Map</a> 
+    <a href="{{ url_for('contact') }}">Contact</a> 
+    {% if current_user.is_authenticated %} 
+      <a href="{{ url_for('dashboard') }}">Dashboard</a> 
+      <a href="{{ url_for('logout') }}">Logout</a> 
+    {% else %} 
+      <a href="{{ url_for('login') }}">Login</a> 
+      <a href="{{ url_for('register') }}">Register</a> 
+    {% endif %} 
+  </nav> 
+</header> 
+ 
+<main> 
+ 
+  <div class="organic-divider"> 
+    <svg 
+      viewBox="0 0 700 75" 
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <path
+        d="
+          M 5 38
+          C 70 10, 105 68, 170 38
+          S 270 8, 330 40
+          S 440 70, 500 35
+          S 620 10, 695 42
+        "
+      />
+    </svg>
   </div>
 
-  <nav id="nav-links" class="main-nav">
-    <a href="{{ url_for('home') }}">Home</a>
-    <a href="{{ url_for('despre') }}">About</a>
-    <a href="{{ url_for('participa') }}">How to Participate</a>
-    <a href="{{ url_for('galerie') }}">Gallery</a>
-    <a href="{{ url_for('harta') }}">Map</a>
-    <a href="{{ url_for('contact') }}">Contact</a>
-    {% if current_user.is_authenticated %}
-      <a href="{{ url_for('dashboard') }}">Dashboard</a>
-      <a href="{{ url_for('logout') }}">Logout</a>
-    {% else %}
-      <a href="{{ url_for('login') }}">Login</a>
-      <a href="{{ url_for('register') }}">Register</a>
-    {% endif %}
-  </nav>
-</header>
-
-<main>
   <div class="section">
-    <h2>🌿 What Are Lichens?</h2>
+    <h2>What Are Lichens?</h2>
     <p>Lichens are a remarkable example of cooperation in nature — two completely different organisms living together, supporting each other to survive some of the harshest conditions on Earth. They form through a symbiotic relationship between:</p>
     <ul>
       <li>a fungus (which provides structure, protection, and habitat),</li>
@@ -194,7 +1347,7 @@
   </div>
 
   <div class="section">
-    <h2>🌬️ Why Are Lichens Important for Air Quality?</h2>
+    <h2>Why Are Lichens Important for Air Quality?</h2>
     <p>Lichens have no roots. They don’t feed from soil. They don’t absorb water through stems or leaves. Everything they need for life — water, light, minerals — comes directly from the atmosphere.</p>
     <p>This makes them uniquely sensitive: they are in constant, direct contact with the air. If the air is clean, they thrive, grow, and reproduce. If the air is polluted with toxic gases, heavy metals, or industrial dust, they start to suffer — changing color, drying out, or disappearing altogether.</p>
     <p>Moreover, different lichen species react differently to various pollutants. Some are sensitive to sulfur dioxide, others to nitrogen oxides or heavy metals. So by simply observing which species live in an area, we can understand the air quality there.</p>
@@ -202,7 +1355,7 @@
   </div>
 
   <div class="section">
-    <h2>📍 Why Do We Use Lichens in Lichenary?</h2>
+    <h2>Why Do We Use Lichens in Lichenary?</h2>
     <p>The Lichenary project has a clear mission: to turn young people into explorers of the air. We want every participant to learn how to observe the nature around them, identify the invisible signs of pollution, and actively contribute to environmental understanding.</p>
     <p>We use lichens because they:</p>
     <ul>
@@ -215,7 +1368,7 @@
   </div>
 
   <div class="section">
-    <h2>🔍 What Types of Lichens Do We Analyze?</h2>
+    <h2>What Types of Lichens Do We Analyze?</h2>
     <p>In Lichenary, we focus on three main groups of lichens, based on their form and pollution sensitivity:</p>
     <ol>
       <li><strong>Crustose</strong>
@@ -244,7 +1397,7 @@
   </div>
 
   <div class="section">
-    <h2>🧭 How Do We Identify Them?</h2>
+    <h2>How Do We Identify Them?</h2>
     <p>You can find lichens:</p>
     <ul>
       <li>on tree bark (preferably in parks or urban forests),</li>
@@ -257,10 +1410,11 @@
   </div>
 
   <div class="section">
-    <h2>🤝 Join the Lichenary Mission!</h2>
+    <h2>Join the Lichenary Mission!</h2>
     <p>We encourage you to become a citizen scientist and help map the air quality in your community through lichens. By observing, reporting, and sharing your findings, you contribute to a healthier environment for everyone.</p>
     <p>Let’s explore, learn, and protect the air together!</p>
   </div>
+
 </main>
 
 <footer>
@@ -340,6 +1494,49 @@
     requestAnimationFrame(animate);
   }
   animate();
+</script>
+
+<script>
+  /* =========================================================
+     ORGANIC SCROLL REVEAL
+     ========================================================= */
+
+  const sections = document.querySelectorAll('.section');
+
+  if ('IntersectionObserver' in window) {
+
+    const observer = new IntersectionObserver(
+      (entries, observerInstance) => {
+
+        entries.forEach(entry => {
+
+          if (entry.isIntersecting) {
+
+            entry.target.classList.add('visible');
+
+            observerInstance.unobserve(entry.target);
+
+          }
+
+        });
+
+      },
+      {
+        threshold: 0.12
+      }
+    );
+
+    sections.forEach(section => {
+      observer.observe(section);
+    });
+
+  } else {
+
+    sections.forEach(section => {
+      section.classList.add('visible');
+    });
+
+  }
 </script>
 
 </body>

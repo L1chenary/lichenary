@@ -9,155 +9,877 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <style>
-    html, body {
-      margin: 0; padding: 0; height: 100%;
+    /* =========================================================
+       LICHENARY — ORGANIC / EDITORIAL / CITIZEN SCIENCE
+       MAP PAGE
+       ========================================================= */
+
+    :root {
+      --cream: #f5f3ea;
+      --cream-light: #fbfaf5;
+      --paper: #eeece1;
+
+      --forest: #173f35;
+      --forest-dark: #102f28;
+      --forest-soft: #315c4d;
+
+      --moss: #718d57;
+      --sage: #a8b89a;
+      --lichen: #d9e4bb;
+
+      --ink: #18231f;
+      --muted: #65716a;
+
+      --white: #ffffff;
+
+      --radius-xl: 42px;
+      --radius-lg: 28px;
+      --radius-md: 18px;
+
+      --shadow-soft: 0 20px 60px rgba(23, 63, 53, 0.10);
+      --shadow-medium: 0 25px 65px rgba(23, 63, 53, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+
+      font-family:
+        "Segoe UI",
+        Tahoma,
+        Geneva,
+        Verdana,
+        sans-serif;
+
+      background: var(--cream);
+      color: var(--ink);
+
       overflow-x: hidden;
-      font-family: Arial, sans-serif;
-      background-color: #1f2f1f;
+
       position: relative;
     }
 
-    #cloud-canvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 0;
-      pointer-events: none;
+    a {
+      color: inherit;
     }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
 
     header {
-      background-color: rgba(17, 61, 60, 0.85);
-      padding: 15px 20px;
-      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+
+      width: 100%;
+
+      padding: 20px 5vw;
+
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      position: relative;
-      z-index: 20;
+      justify-content: space-between;
+
+      gap: 30px;
+
+      background: rgba(245, 243, 234, 0.88);
+
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+
+      border-bottom: 1px solid rgba(23, 63, 53, 0.08);
     }
 
     .logo {
-      font-size: 1.5em;
+      color: var(--forest);
+
+      font-family: Georgia, "Times New Roman", serif;
+
+      font-size: 1.7rem;
       font-weight: bold;
+
+      letter-spacing: -0.04em;
+
       cursor: pointer;
-      color: white;
+
+      transition:
+        transform 0.25s ease,
+        color 0.25s ease;
     }
 
-    nav {
-      display: flex;
-      gap: 10px;
-      z-index: 20;
+    .logo:hover {
+      color: var(--moss);
+      transform: translateY(-1px);
     }
 
-    nav a {
-      color: white;
-      text-decoration: none;
-      padding: 6px 10px;
-      border-radius: 4px;
-    }
-
-    nav a:hover {
-      background-color: #1d5957;
-    }
+    /* =========================================================
+       BURGER
+       ========================================================= */
 
     .burger {
       display: none;
+
       flex-direction: column;
-      cursor: pointer;
+      justify-content: center;
+
       gap: 5px;
+
+      width: 42px;
+      height: 42px;
+
+      padding: 8px;
+
+      cursor: pointer;
+
+      border-radius: 50%;
+
+      background: var(--forest);
+
       z-index: 30;
     }
 
     .burger div {
-      width: 25px;
-      height: 3px;
-      background-color: white;
-      border-radius: 2px;
+      width: 100%;
+      height: 2px;
+
+      background: white;
+
+      border-radius: 10px;
+
+      transition:
+        transform 0.25s ease,
+        opacity 0.25s ease;
     }
 
-    @media (max-width: 768px) {
-      nav {
-        max-height: 0;
-        overflow: hidden;
-        flex-direction: column;
-        width: 100%;
-        background-color: rgba(17, 61, 60, 0.9);
-        position: absolute;
-        top: 56px;
-        left: 0;
-        padding: 0 20px;
-        border-radius: 0 0 8px 8px;
-        box-sizing: border-box;
-        transition: max-height 0.4s ease, padding 0.4s ease;
-      }
-      nav.open {
-        max-height: 500px;
-        padding: 10px 20px;
-      }
+    /* =========================================================
+       NAVIGATION
+       ========================================================= */
 
-      body.menu-open main {
-        margin-top: 250px;
-        transition: margin-top 0.3s ease;
-      }
+    nav {
+      display: flex;
 
-      .burger {
-        display: flex;
-      }
+      align-items: center;
+      justify-content: flex-end;
+
+      gap: 5px;
+
+      z-index: 20;
+
+      flex-wrap: wrap;
+
+      transition:
+        max-height 0.4s ease,
+        padding 0.4s ease;
     }
+
+    nav a {
+      position: relative;
+
+      color: var(--forest);
+
+      text-decoration: none;
+
+      padding: 9px 12px;
+
+      font-size: 0.92rem;
+      font-weight: 500;
+
+      border-radius: 999px;
+
+      white-space: nowrap;
+
+      transition:
+        color 0.25s ease,
+        background 0.25s ease,
+        transform 0.25s ease;
+    }
+
+    nav a:hover {
+      color: var(--forest);
+
+      background: rgba(113, 141, 87, 0.14);
+
+      transform: translateY(-1px);
+    }
+
+    /* =========================================================
+       MAIN
+       ========================================================= */
 
     main {
-      padding: 20px;
-      max-width: 1000px;
-      margin: auto;
       position: relative;
       z-index: 10;
+
+      width: 100%;
+      max-width: 1320px;
+
+      margin: 0 auto;
+
+      padding: 65px 5vw 100px;
+
+      overflow: visible;
     }
 
-    main h2 {
-      color: white;
+    /* =========================================================
+       ORGANIC BACKGROUND SHAPES
+       ========================================================= */
+
+    main::before {
+      content: "";
+
+      position: absolute;
+
+      width: 330px;
+      height: 330px;
+
+      top: 20px;
+      left: -170px;
+
+      background: var(--lichen);
+
+      border-radius:
+        62% 38% 65% 35% /
+        40% 57% 43% 60%;
+
+      opacity: 0.48;
+
+      z-index: -1;
     }
+
+    main::after {
+      content: "";
+
+      position: absolute;
+
+      width: 280px;
+      height: 280px;
+
+      right: -150px;
+      bottom: 80px;
+
+      background: var(--sage);
+
+      border-radius:
+        45% 55% 62% 38% /
+        60% 42% 58% 40%;
+
+      opacity: 0.22;
+
+      z-index: -1;
+    }
+
+    /* =========================================================
+       ORGANIC DIVIDER
+       ========================================================= */
+
+    .organic-divider {
+      width: 100%;
+
+      height: 75px;
+
+      margin: 0 0 35px;
+
+      display: flex;
+
+      justify-content: center;
+
+      overflow: hidden;
+    }
+
+    .organic-divider svg {
+      width: min(700px, 80%);
+
+      height: 75px;
+
+      overflow: visible;
+    }
+
+    .organic-divider path {
+      fill: none;
+
+      stroke: var(--sage);
+
+      stroke-width: 2;
+
+      stroke-linecap: round;
+
+      stroke-dasharray: 4 9;
+    }
+
+    /* =========================================================
+       MAP SECTION
+       ========================================================= */
+
+    .map-section {
+      position: relative;
+
+      padding: 65px 75px;
+
+      margin: 0 auto;
+
+      background: var(--cream-light);
+
+      color: var(--ink);
+
+      border-radius:
+        38px 95px 38px 75px;
+
+      border: 1px solid rgba(23, 63, 53, 0.08);
+
+      box-shadow: var(--shadow-soft);
+
+      overflow: hidden;
+    }
+
+    .map-section::before {
+      content: "";
+
+      position: absolute;
+
+      width: 220px;
+      height: 220px;
+
+      right: -100px;
+      top: -105px;
+
+      background: var(--lichen);
+
+      border-radius:
+        55% 45% 35% 65% /
+        45% 58% 42% 55%;
+
+      opacity: 0.58;
+
+      z-index: 0;
+    }
+
+    .map-section::after {
+      content: "";
+
+      position: absolute;
+
+      width: 110px;
+      height: 110px;
+
+      left: -55px;
+      bottom: -45px;
+
+      border: 2px solid var(--sage);
+
+      border-radius:
+        67% 33% 52% 48% /
+        44% 57% 43% 56%;
+
+      transform: rotate(18deg);
+
+      opacity: 0.55;
+
+      z-index: 0;
+    }
+
+    /* =========================================================
+       MAP TITLE
+       ========================================================= */
+
+    .map-section h2 {
+      position: relative;
+
+      z-index: 2;
+
+      margin: 0 0 35px;
+
+      color: var(--forest);
+
+      font-family: Georgia, "Times New Roman", serif;
+
+      font-size: clamp(2.5rem, 4.5vw, 4.2rem);
+
+      font-weight: normal;
+
+      line-height: 0.98;
+
+      letter-spacing: -0.05em;
+    }
+
+    .map-section h2::after {
+      content: "";
+
+      display: block;
+
+      width: 90px;
+      height: 3px;
+
+      margin-top: 22px;
+
+      background: var(--moss);
+
+      border-radius: 999px;
+
+      opacity: 0.7;
+    }
+
+    /* =========================================================
+       MAP CONTAINER
+       ========================================================= */
 
     #map {
+      position: relative;
+
+      z-index: 2;
+
+      width: 100%;
+
       height: 600px;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.15);
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-      backdrop-filter: blur(6px);
+
+      border-radius:
+        28px 12px 28px 12px;
+
+      background: var(--paper);
+
+      border: 1px solid rgba(23, 63, 53, 0.10);
+
+      box-shadow:
+        0 20px 50px rgba(23, 63, 53, 0.12),
+        inset 0 1px 0 rgba(255,255,255,0.6);
+
+      overflow: hidden;
     }
 
-    footer {
-      text-align: center;
-      padding: 20px;
-      background-color: rgba(17, 61, 60, 0.85);
-      color: white;
-      margin-top: 20px;
-      position: relative;
-      z-index: 10;
+    /* =========================================================
+       LEAFLET VISUAL REFINEMENT
+       FUNCTIONALITY UNCHANGED
+       ========================================================= */
+
+    .leaflet-container {
+      font-family:
+        "Segoe UI",
+        Tahoma,
+        Geneva,
+        Verdana,
+        sans-serif;
     }
+
+    .leaflet-control-zoom {
+      border: none !important;
+
+      box-shadow:
+        0 8px 25px rgba(23, 63, 53, 0.16) !important;
+
+      overflow: hidden;
+
+      border-radius: 14px !important;
+    }
+
+    .leaflet-control-zoom a {
+      color: var(--forest) !important;
+
+      background: rgba(251, 250, 245, 0.95) !important;
+
+      border: none !important;
+
+      width: 38px !important;
+      height: 38px !important;
+
+      line-height: 38px !important;
+
+      font-weight: 600;
+
+      transition:
+        background 0.2s ease,
+        color 0.2s ease;
+    }
+
+    .leaflet-control-zoom a:hover {
+      background: var(--lichen) !important;
+
+      color: var(--forest-dark) !important;
+    }
+
+    .leaflet-control-attribution {
+      background: rgba(251, 250, 245, 0.90) !important;
+
+      color: var(--muted) !important;
+
+      border-radius: 8px 0 0 0;
+
+      font-size: 10px;
+    }
+
+    .leaflet-control-attribution a {
+      color: var(--forest-soft) !important;
+    }
+
+    /* =========================================================
+       LEGEND
+       ========================================================= */
 
     .legend {
-      background: white;
-      padding: 10px;
-      line-height: 1.4em;
-      font-size: 13px;
-      border-radius: 5px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.3);
+      background: rgba(251, 250, 245, 0.96) !important;
+
+      padding: 14px 16px !important;
+
+      line-height: 1.65em !important;
+
+      font-size: 13px !important;
+
+      color: var(--ink);
+
+      border-radius:
+        16px 7px 16px 7px !important;
+
+      border: 1px solid rgba(23, 63, 53, 0.10);
+
+      box-shadow:
+        0 12px 30px rgba(23, 63, 53, 0.16) !important;
+
+      min-width: 145px;
+    }
+
+    .legend strong {
+      display: block;
+
+      margin-bottom: 5px;
+
+      color: var(--forest);
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      font-size: 1rem;
     }
 
     .legend i {
       width: 14px;
       height: 14px;
+
       float: left;
+
       margin-right: 8px;
-      opacity: 0.7;
+      margin-top: 3px;
+
+      opacity: 0.85;
+
+      border-radius: 50%;
+
+      box-shadow:
+        0 0 0 2px rgba(255,255,255,0.65);
+    }
+
+    /* =========================================================
+       LEAFLET POPUP
+       ========================================================= */
+
+    .leaflet-popup-content-wrapper {
+      background: var(--cream-light);
+
+      color: var(--ink);
+
+      border-radius:
+        18px 7px 18px 7px;
+
+      box-shadow:
+        0 15px 40px rgba(23, 63, 53, 0.18);
+    }
+
+    .leaflet-popup-tip {
+      background: var(--cream-light);
+    }
+
+    .leaflet-popup-content {
+      margin: 15px 17px;
+
+      font-size: 0.92rem;
+
+      line-height: 1.55;
+    }
+
+    /* =========================================================
+       FOOTER
+       ========================================================= */
+
+    footer {
+      position: relative;
+
+      width: 100%;
+
+      padding: 50px 20px;
+
+      background: var(--forest);
+
+      color: rgba(255, 255, 255, 0.72);
+
+      text-align: center;
+
+      font-size: 0.85rem;
+
+      letter-spacing: 0.03em;
+
+      z-index: 10;
+    }
+
+    footer::before {
+      content: "";
+
+      position: absolute;
+
+      top: -35px;
+      left: 0;
+
+      width: 100%;
+      height: 70px;
+
+      background: var(--forest);
+
+      clip-path:
+        ellipse(55% 45% at 50% 100%);
+    }
+
+    /* =========================================================
+       RESPONSIVE — 1100px
+       ========================================================= */
+
+    @media (max-width: 1100px) {
+
+      header {
+        padding: 18px 4vw;
+      }
+
+      main {
+        padding-left: 4vw;
+        padding-right: 4vw;
+      }
+
+      .map-section {
+        padding: 60px;
+      }
+    }
+
+    /* =========================================================
+       RESPONSIVE — 850px
+       ========================================================= */
+
+    @media (max-width: 850px) {
+
+      header {
+        position: sticky;
+
+        flex-wrap: wrap;
+      }
+
+      .burger {
+        display: flex;
+      }
+
+      nav {
+        position: absolute;
+
+        top: 100%;
+        left: 0;
+
+        width: 100%;
+
+        max-height: 0;
+
+        overflow: hidden;
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 4px;
+
+        padding: 0 5vw;
+
+        background:
+          rgba(245, 243, 234, 0.97);
+
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+
+        border-bottom:
+          1px solid rgba(23, 63, 53, 0.08);
+
+        transition:
+          max-height 0.45s ease,
+          padding 0.45s ease;
+      }
+
+      nav.open {
+        max-height: 600px;
+
+        padding-top: 15px;
+        padding-bottom: 18px;
+      }
+
+      nav a {
+        width: 100%;
+
+        padding: 13px 15px;
+
+        border-radius: 14px;
+      }
+
+      body.menu-open main {
+        margin-top: 0;
+      }
+
+      main {
+        padding-top: 55px;
+      }
+
+      .map-section {
+        padding: 55px 50px;
+
+        border-radius:
+          35px 75px 35px 75px;
+      }
+
+      #map {
+        height: 560px;
+      }
+    }
+
+    /* =========================================================
+       RESPONSIVE — 600px
+       ========================================================= */
+
+    @media (max-width: 600px) {
+
+      header {
+        padding: 15px 20px;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+      }
+
+      main {
+        padding-left: 20px;
+        padding-right: 20px;
+
+        padding-top: 45px;
+        padding-bottom: 70px;
+      }
+
+      .organic-divider {
+        height: 50px;
+
+        margin: 0 0 35px;
+      }
+
+      .organic-divider svg {
+        width: 100%;
+        height: 50px;
+      }
+
+      .map-section {
+        padding: 50px 25px;
+
+        margin-bottom: 0;
+
+        border-radius:
+          28px 55px 28px 55px;
+      }
+
+      .map-section h2 {
+        font-size: 2.6rem;
+
+        line-height: 0.98;
+
+        margin-bottom: 28px;
+      }
+
+      .map-section h2::after {
+        margin-top: 18px;
+      }
+
+      #map {
+        height: 520px;
+
+        border-radius:
+          22px 9px 22px 9px;
+      }
+
+      .legend {
+        padding: 11px 13px !important;
+
+        font-size: 12px !important;
+
+        min-width: 130px;
+      }
+
+      .legend strong {
+        font-size: 0.95rem;
+      }
+
+      footer {
+        padding: 45px 20px;
+      }
+    }
+
+    /* =========================================================
+       RESPONSIVE — 480px
+       ========================================================= */
+
+    @media (max-width: 480px) {
+
+      main {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      .map-section {
+        padding: 45px 18px;
+
+        border-radius:
+          25px 50px 25px 50px;
+      }
+
+      .map-section h2 {
+        font-size: 2.35rem;
+      }
+
+      #map {
+        height: 500px;
+      }
+
+      .legend {
+        max-width: 125px;
+      }
+    }
+
+    /* =========================================================
+       REDUCED MOTION
+       ========================================================= */
+
+    @media (prefers-reduced-motion: reduce) {
+
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+      }
     }
   </style>
 </head>
-<body>
 
-<canvas id="cloud-canvas"></canvas>
+<body>
 
 <header>
   <div class="logo" onclick="window.location='/'">Lichenary</div>
@@ -187,8 +909,31 @@
 </header>
 
 <main>
-  <h2>Observations on the Map</h2>
-  <div id="map"></div>
+
+  <div class="organic-divider">
+    <svg
+      viewBox="0 0 700 75"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <path
+        d="
+          M 5 38
+          C 70 10, 105 68, 170 38
+          S 270 8, 330 40
+          S 440 70, 500 35
+          S 620 10, 695 42
+        "
+      />
+    </svg>
+  </div>
+
+  <section class="map-section">
+    <h2>Observations on the Map</h2>
+
+    <div id="map"></div>
+  </section>
+
 </main>
 
 <footer>
@@ -237,6 +982,7 @@
             fillColor: color,
             fillOpacity: 0.8
           }).addTo(map);
+
           marker.bindPopup(`
   <div style="text-align: center;">
     <img src="${obs.image_filename}" alt="Lichen" style="max-width: 150px; border-radius: 4px;"><br>
@@ -291,70 +1037,6 @@
       document.body.classList.remove('menu-open');
     });
   });
-</script>
-
-<script>
-  const canvas = document.getElementById('cloud-canvas');
-  const ctx = canvas.getContext('2d');
-  let width, height;
-
-  function resize() {
-    width = window.innerWidth;
-    height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
-  }
-  window.addEventListener('resize', resize);
-  resize();
-
-  class Cloud {
-    constructor(x, y, size, color, speed) {
-      this.x = x;
-      this.y = y;
-      this.size = size;
-      this.color = color;
-      this.speed = speed;
-    }
-    draw(ctx) {
-      let gradient = ctx.createRadialGradient(this.x, this.y, this.size*0.3, this.x, this.y, this.size);
-      gradient.addColorStop(0, this.color);
-      gradient.addColorStop(1, 'rgba(0,0,0,0)');
-      ctx.fillStyle = gradient;
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    update() {
-      this.x += this.speed;
-      if(this.x - this.size > width) {
-        this.x = -this.size;
-        this.y = Math.random() * height * 0.8 + height * 0.1;
-      }
-    }
-  }
-
-  const clouds = [];
-  const cloudColors = ['rgba(180,220,180,0.3)', 'rgba(150,190,150,0.25)', 'rgba(120,160,120,0.2)'];
-
-  for(let i=0; i<20; i++) {
-    clouds.push(new Cloud(
-      Math.random() * width,
-      Math.random() * height * 0.8 + height * 0.1,
-      60 + Math.random() * 50,
-      cloudColors[Math.floor(Math.random()*cloudColors.length)],
-      0.2 + Math.random() * 0.2
-    ));
-  }
-
-  function animate() {
-    ctx.clearRect(0, 0, width, height);
-    clouds.forEach(cloud => {
-      cloud.draw(ctx);
-      cloud.update();
-    });
-    requestAnimationFrame(animate);
-  }
-  animate();
 </script>
 
 </body>
