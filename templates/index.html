@@ -89,6 +89,60 @@ a {
 
 }
 
+.legend {
+  background: rgba(251, 250, 245, 0.96) !important;
+
+  padding: 14px 16px !important;
+
+  line-height: 1.65em !important;
+
+  font-size: 13px !important;
+
+  color: var(--ink);
+
+  border-radius:
+    16px 7px 16px 7px !important;
+
+  border: 1px solid rgba(23, 63, 53, 0.10);
+
+  box-shadow:
+    0 12px 30px rgba(23, 63, 53, 0.16) !important;
+
+  min-width: 145px;
+}
+
+.legend strong {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: var(--forest);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 1rem;
+}
+
+.legend i {
+  width: 14px;
+  height: 14px;
+
+  float: left;
+
+  margin-right: 8px;
+  margin-top: 3px;
+
+  opacity: 0.85;
+
+  border-radius: 50%;
+
+  box-shadow:
+    0 0 0 2px rgba(255,255,255,0.65);
+}
+
 /* =========================================================
    HEADER
    ========================================================= */
@@ -4115,32 +4169,31 @@ document
   });
 
 
+<script>
+
 /* =========================================================
    HOME MAP PREVIEW
    ========================================================= */
 
-const homeMap =
-L.map('home-map', {
-
-  scrollWheelZoom: false
-
-}).setView([0, 0], 2);
+const homeMap = L.map('home-map')
+  .setView([0, 0], 2);
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   {
-
     maxZoom: 18,
-
     attribution: '&copy; OpenStreetMap contributors'
-
   }
 ).addTo(homeMap);
+
+
+/* =========================================================
+   POLLUTION COLORS
+   ========================================================= */
 
 function getColor(pollutionLevel) {
 
   const colorMap = {
-
     1: '#10A200',
     2: '#3EB401',
     3: '#6DC602',
@@ -4151,43 +4204,118 @@ function getColor(pollutionLevel) {
     8: '#FC7E03',
     9: '#FD3F01',
     10: '#FF0000'
-
   };
 
-  const level =
-    Math.round(pollutionLevel);
+  const level = Math.round(pollutionLevel);
 
   return colorMap[
     Math.max(1, Math.min(10, level))
   ] || '#888';
-
 }
+
+
+/* =========================================================
+   LOAD OBSERVATIONS
+   ========================================================= */
 
 fetch('/api/observations')
 
-  .then(res => res.json())
+  .then(res => {
+
+    if (!res.ok) {
+      throw new Error(
+        `HTTP error: ${res.status}`
+      );
+    }
+
+    return res.json();
+
+  })
 
   .then(data => {
-
-    const markers = [];
 
     data.forEach(obs => {
 
       if (
-        obs.latitude &&
-        obs.longitude &&
-        obs.pollution_level
+        obs.latitude !== null &&
+        obs.latitude !== undefined &&
+        obs.longitude !== null &&
+        obs.longitude !== undefined &&
+        obs.pollution_level !== null &&
+        obs.pollution_level !== undefined
       ) {
 
         const color =
           getColor(obs.pollution_level);
 
+/* =========================================================
+   LEGEND
+   ========================================================= */
+
+const homeLegend = L.control({
+  position: "bottomright"
+});
+
+homeLegend.onAdd = function () {
+
+  const div = L.DomUtil.create(
+    "div",
+    "legend"
+  );
+
+  const levels = [
+    {
+      value: 1,
+      label: "Very clean air"
+    },
+    {
+      value: 3,
+      label: "Clean air"
+    },
+    {
+      value: 5,
+      label: "Moderate air"
+    },
+    {
+      value: 7,
+      label: "Polluted air"
+    },
+    {
+      value: 10,
+      label: "Very polluted air"
+    }
+  ];
+
+  let html =
+    "<strong>Air Quality</strong><br>";
+
+  levels.forEach(level => {
+
+    const color =
+      getColor(level.value);
+
+    html +=
+      `<i style="background:${color}"></i> ${level.label}<br>`;
+
+  });
+
+  div.innerHTML = html;
+
+  return div;
+};
+
+homeLegend.addTo(homeMap);
+
+
+        /* ===============================================
+           MARKER
+           =============================================== */
+
         const marker =
           L.circleMarker(
             [obs.latitude, obs.longitude],
             {
-
-              radius: 7,
+              radius: 8,
 
               color: color,
 
@@ -4196,9 +4324,13 @@ fetch('/api/observations')
               fillOpacity: 0.8,
 
               weight: 2
-
             }
           ).addTo(homeMap);
+
+
+        /* ===============================================
+           POPUP
+           =============================================== */
 
         marker.bindPopup(`
 
@@ -4206,22 +4338,35 @@ fetch('/api/observations')
 
             ${
               obs.image_filename
-                ? `<img
+                ? `
+                  <img
                     src="${obs.image_filename}"
                     alt="Lichen"
-                    style="max-width: 130px; border-radius: 6px;"
-                  ><br>`
+                    style="
+                      max-width: 150px;
+                      border-radius: 6px;
+                      margin-bottom: 8px;
+                    "
+                  >
+                  <br>
+                `
                 : ''
             }
 
             <strong>Date:</strong>
-            ${obs.date_time}<br>
+            ${obs.date_time}
+
+            <br>
 
             <strong>Location:</strong>
-            ${obs.location}<br>
+            ${obs.location}
+
+            <br>
 
             <strong>Species:</strong>
-            ${obs.species ?? 'Not provided'}<br>
+            ${obs.species ?? 'Not provided'}
+
+            <br>
 
             <strong>Pollution Level:</strong>
             ${obs.pollution_level}
@@ -4230,22 +4375,9 @@ fetch('/api/observations')
 
         `);
 
-        markers.push(marker);
-
       }
 
     });
-
-    if (markers.length > 0) {
-
-      const group =
-        L.featureGroup(markers);
-
-      homeMap.fitBounds(
-        group.getBounds().pad(0.15)
-      );
-
-    }
 
   })
 
@@ -4257,6 +4389,19 @@ fetch('/api/observations')
     );
 
   });
+
+
+/* =========================================================
+   FIX LEAFLET SIZE
+   ========================================================= */
+
+setTimeout(() => {
+
+  homeMap.invalidateSize();
+
+}, 300);
+
+</script>
 
 
 /* =========================================================
