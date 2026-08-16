@@ -423,6 +423,32 @@ IMPORTANT:
 
     return species
 
+# =========================================================
+# GPS VALIDATION
+# =========================================================
+
+def validate_coordinates(latitude, longitude):
+    """
+    Validates GPS coordinates received from the browser.
+
+    Latitude must be between -90 and 90.
+    Longitude must be between -180 and 180.
+    """
+
+    try:
+        latitude = float(latitude)
+        longitude = float(longitude)
+    except (TypeError, ValueError):
+        raise ValueError("Invalid GPS coordinates.")
+
+    if not (-90 <= latitude <= 90):
+        raise ValueError("Latitude must be between -90 and 90.")
+
+    if not (-180 <= longitude <= 180):
+        raise ValueError("Longitude must be between -180 and 180.")
+
+    return latitude, longitude
+
 
 # =========================================================
 # Model User
@@ -890,6 +916,31 @@ def analyze_observation_ai():
     try:
 
         # -------------------------------------------------
+        # Validate GPS data
+        # -------------------------------------------------
+
+        latitude_str = request.form.get('latitude')
+        longitude_str = request.form.get('longitude')
+
+        if not latitude_str or not longitude_str:
+            return jsonify({
+                'success': False,
+                'message': 'GPS location is required.'
+            }), 400
+
+        try:
+            latitude, longitude = validate_coordinates(
+                latitude_str,
+                longitude_str
+            )
+
+        except ValueError as e:
+            return jsonify({
+                'success': False,
+                'message': str(e)
+            }), 400
+
+        # -------------------------------------------------
         # Check image
         # -------------------------------------------------
 
@@ -1235,6 +1286,9 @@ def upload_observation_ai():
         db.session.add(obs)
         db.session.commit()
 
+        # AI result has now been consumed.
+        session.pop('ai_species', None)
+        session.pop('ai_pollution_level', None)
 
         flash(
             'AI observation uploaded successfully. Thank you!'

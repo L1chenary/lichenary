@@ -913,6 +913,62 @@
     }
 
 
+/* =========================================================
+   GPS BUTTON
+   ========================================================= */
+
+.gps-button {
+  width: auto;
+
+  margin-top: 14px;
+
+  padding: 0.72rem 1rem;
+
+  background: var(--forest);
+
+  color: white;
+
+  border: none;
+
+  border-radius: 999px;
+
+  font-size: 0.88rem;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 20px rgba(23, 63, 53, 0.12);
+
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.gps-button:hover:not(:disabled) {
+  background: var(--forest-dark);
+
+  transform:
+    translateY(-1px);
+
+  box-shadow:
+    0 10px 25px rgba(23, 63, 53, 0.18);
+}
+
+.gps-button:disabled {
+  opacity: 0.55;
+
+  cursor: not-allowed;
+
+  box-shadow: none;
+}
+
+.gps-button.gps-enabled {
+  background: var(--moss);
+}
+
     /* =========================================================
        BUTTONS
        ========================================================= */
@@ -1588,18 +1644,26 @@
 
       <div class="data-card">
 
-        <span class="data-label">
-          GPS
-        </span>
+  <span class="data-label">
+    GPS
+  </span>
 
-        <span
-          id="gps-display"
-          class="data-value status-pending"
-        >
-          Waiting for permission...
-        </span>
+  <span
+    id="gps-display"
+    class="data-value status-pending"
+  >
+    GPS tracking is not enabled.
+  </span>
 
-      </div>
+  <button
+    type="button"
+    id="gps-button"
+    class="gps-button"
+  >
+    Enable GPS Tracking
+  </button>
+
+</div>
 
     </div>
 
@@ -1900,6 +1964,11 @@
       'gps-display'
     );
 
+const gpsButton =
+  document.getElementById(
+    'gps-button'
+  );
+
 
   let gpsReady = false;
   let photoReady = false;
@@ -2012,10 +2081,146 @@
 
   function requestGPS() {
 
-    if (!navigator.geolocation) {
+  if (!navigator.geolocation) {
+
+    gpsDisplay.textContent =
+      'GPS is not supported by this browser.';
+
+    gpsDisplay.classList.remove(
+      'status-pending'
+    );
+
+    gpsDisplay.classList.add(
+      'status-error'
+    );
+
+    gpsButton.disabled = true;
+
+    showMessage(
+      'This browser does not provide GPS location access. Please use a modern mobile browser.',
+      'error'
+    );
+
+    return;
+  }
+
+
+  gpsButton.disabled = true;
+
+  gpsButton.textContent =
+    'Requesting GPS...';
+
+  gpsDisplay.textContent =
+    'Requesting location permission...';
+
+  gpsDisplay.classList.remove(
+    'status-error',
+    'status-success'
+  );
+
+  gpsDisplay.classList.add(
+    'status-pending'
+  );
+
+
+  navigator.geolocation.getCurrentPosition(
+
+    function(position) {
+
+      const latitude =
+        position.coords.latitude;
+
+      const longitude =
+        position.coords.longitude;
+
+
+      latitudeInput.value =
+        latitude.toFixed(8);
+
+      longitudeInput.value =
+        longitude.toFixed(8);
+
+
+      locationInput.value =
+        `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
+
 
       gpsDisplay.textContent =
-        'GPS is not supported by this browser.';
+        `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
+
+
+      gpsDisplay.classList.remove(
+        'status-pending',
+        'status-error'
+      );
+
+      gpsDisplay.classList.add(
+        'status-success'
+      );
+
+
+      gpsButton.textContent =
+        'GPS Tracking Enabled';
+
+      gpsButton.classList.add(
+        'gps-enabled'
+      );
+
+      gpsButton.disabled = true;
+
+
+      gpsReady = true;
+
+      updateAnalyzeButton();
+
+
+      showMessage(
+        'GPS location enabled successfully.',
+        'success'
+      );
+
+    },
+
+
+    function(error) {
+
+      let errorMessage =
+        'Unable to obtain your location.';
+
+
+      if (
+        error.code ===
+        error.PERMISSION_DENIED
+      ) {
+
+        errorMessage =
+          'Location permission was denied. Please allow location access and press the GPS button again.';
+
+      }
+
+      else if (
+        error.code ===
+        error.POSITION_UNAVAILABLE
+      ) {
+
+        errorMessage =
+          'Your location could not be determined. Please check your device location settings and try again.';
+
+      }
+
+      else if (
+        error.code ===
+        error.TIMEOUT
+      ) {
+
+        errorMessage =
+          'The GPS request timed out. Please try again.';
+
+      }
+
+
+      gpsDisplay.textContent =
+        'Location unavailable';
 
       gpsDisplay.classList.remove(
         'status-pending'
@@ -2025,14 +2230,47 @@
         'status-error'
       );
 
+
+      gpsButton.disabled = false;
+
+      gpsButton.textContent =
+        'Enable GPS Tracking';
+
+
+      gpsReady = false;
+
+      updateAnalyzeButton();
+
+
       showMessage(
-        'This browser does not provide GPS location access. Please use a modern mobile browser.',
+        errorMessage,
         'error'
       );
 
-      return;
+    },
 
+
+    {
+      enableHighAccuracy: true,
+
+      timeout: 15000,
+
+      maximumAge: 0
     }
+
+  );
+}
+
+gpsButton.addEventListener(
+  'click',
+  () => {
+
+    clearMessage();
+
+    requestGPS();
+
+  }
+);
 
 
     gpsDisplay.textContent =
@@ -2166,14 +2404,6 @@
   }
 
 
-  /*
-    Request GPS as soon as the page loads.
-
-    On supported phones, the browser will show
-    its normal location permission prompt.
-  */
-
-  requestGPS();
 
 
   /* =========================================================
@@ -2316,16 +2546,15 @@
 
       if (!gpsReady) {
 
-        showMessage(
-          'Please allow GPS access before analyzing the observation.',
-          'warning'
-        );
+  showMessage(
+    'Please enable GPS tracking before analyzing the observation.',
+    'warning'
+  );
 
-        requestGPS();
+  gpsButton.focus();
 
-        return;
-
-      }
+  return;
+}
 
 
       const file =
