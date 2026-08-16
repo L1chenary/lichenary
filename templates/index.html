@@ -3631,6 +3631,7 @@ footer::before {
   </p>
 
   <!-- MODIFICAT: ruta Flask către pagina din templates -->
+
   <a
     href="{{ url_for('despre_ai') }}"
     class="btn"
@@ -3756,6 +3757,7 @@ footer::before {
   <!-- MODIFICAT:
        autentificat -> dashboard
        neautentificat -> login -->
+
   <a
     href="{{ url_for('dashboard') if current_user.is_authenticated else url_for('login') }}"
     class="btn"
@@ -4062,6 +4064,7 @@ footer::before {
     <!-- MODIFICAT:
          autentificat -> dashboard
          neautentificat -> login -->
+
     <a
       href="{{ url_for('dashboard') if current_user.is_authenticated else url_for('login') }}"
       class="btn"
@@ -4169,8 +4172,6 @@ document
   });
 
 
-<script>
-
 /* =========================================================
    HOME MAP PREVIEW
    ========================================================= */
@@ -4211,42 +4212,9 @@ function getColor(pollutionLevel) {
   return colorMap[
     Math.max(1, Math.min(10, level))
   ] || '#888';
+
 }
 
-
-/* =========================================================
-   LOAD OBSERVATIONS
-   ========================================================= */
-
-fetch('/api/observations')
-
-  .then(res => {
-
-    if (!res.ok) {
-      throw new Error(
-        `HTTP error: ${res.status}`
-      );
-    }
-
-    return res.json();
-
-  })
-
-  .then(data => {
-
-    data.forEach(obs => {
-
-      if (
-        obs.latitude !== null &&
-        obs.latitude !== undefined &&
-        obs.longitude !== null &&
-        obs.longitude !== undefined &&
-        obs.pollution_level !== null &&
-        obs.pollution_level !== undefined
-      ) {
-
-        const color =
-          getColor(obs.pollution_level);
 
 /* =========================================================
    LEGEND
@@ -4305,6 +4273,41 @@ homeLegend.onAdd = function () {
 };
 
 homeLegend.addTo(homeMap);
+
+
+/* =========================================================
+   LOAD OBSERVATIONS
+   ========================================================= */
+
+fetch('/api/observations')
+
+  .then(res => {
+
+    if (!res.ok) {
+      throw new Error(
+        `HTTP error: ${res.status}`
+      );
+    }
+
+    return res.json();
+
+  })
+
+  .then(data => {
+
+    data.forEach(obs => {
+
+      if (
+        obs.latitude !== null &&
+        obs.latitude !== undefined &&
+        obs.longitude !== null &&
+        obs.longitude !== undefined &&
+        obs.pollution_level !== null &&
+        obs.pollution_level !== undefined
+      ) {
+
+        const color =
+          getColor(obs.pollution_level);
 
 
         /* ===============================================
@@ -4400,8 +4403,6 @@ setTimeout(() => {
   homeMap.invalidateSize();
 
 }, 300);
-
-</script>
 
 
 /* =========================================================
