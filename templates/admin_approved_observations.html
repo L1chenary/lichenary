@@ -1,166 +1,1295 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="ro">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Observații aprobate</title>
+
     <style>
+        :root {
+            --forest-dark: #102f29;
+            --forest: #173f36;
+            --forest-light: #2b6657;
+            --sage: #91a998;
+            --cream: #f3f0e7;
+            --cream-light: #faf9f4;
+            --white: #ffffff;
+            --text: #17342d;
+            --muted: #63756d;
+            --accent: #c8d9c8;
+            --border: rgba(23, 63, 54, 0.12);
+            --shadow: 0 25px 70px rgba(19, 53, 45, 0.14);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f7f9fc;
-            margin: 0; padding: 0;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at 10% 10%,
+                    rgba(200, 217, 200, 0.5),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 90% 80%,
+                    rgba(211, 224, 211, 0.55),
+                    transparent 32%
+                ),
+                var(--cream);
+
+            color: var(--text);
+
+            overflow-x: hidden;
+            position: relative;
         }
-        main {
-            max-width: 1000px;
-            margin: 30px auto;
-            background: white;
-            padding: 20px;
-            border-radius: 6px;
-            box-shadow: 0 0 10px #aaa;
+
+        body::before {
+            content: "";
+
+            position: fixed;
+
+            width: 420px;
+            height: 420px;
+
+            border-radius:
+                48% 52% 63% 37% /
+                42% 36% 64% 58%;
+
+            background: rgba(145, 169, 152, 0.12);
+
+            top: -160px;
+            left: -140px;
+
+            z-index: 0;
+            pointer-events: none;
+
+            filter: blur(1px);
         }
-        h2 {
-            margin-top: 0;
+
+        body::after {
+            content: "";
+
+            position: fixed;
+
+            width: 500px;
+            height: 500px;
+
+            border-radius:
+                63% 37% 44% 56% /
+                58% 48% 52% 42%;
+
+            background: rgba(190, 210, 193, 0.15);
+
+            right: -200px;
+            bottom: -180px;
+
+            z-index: 0;
+            pointer-events: none;
         }
-        table {
+
+        #cloud-canvas {
+            position: fixed;
+
+            top: 0;
+            left: 0;
+
+            width: 100vw;
+            height: 100vh;
+
+            z-index: 0;
+            pointer-events: none;
+
+            opacity: 0.35;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        header {
+            position: relative;
+            z-index: 20;
+
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+
+            padding: 20px 5%;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 30px;
+
+            background: rgba(250, 249, 244, 0.82);
+
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+
+            border-bottom: 1px solid rgba(23, 63, 54, 0.08);
         }
-        th, td {
-            padding: 12px 15px;
-            border: 1px solid #ddd;
+
+        .logo {
+            font-size: 1.65rem;
+            font-weight: 700;
+
+            letter-spacing: -0.04em;
+
+            color: var(--forest);
+
+            cursor: pointer;
+            white-space: nowrap;
+
+            transition:
+                opacity 0.25s ease,
+                transform 0.25s ease;
+        }
+
+        .logo:hover {
+            opacity: 0.7;
+            transform: translateY(-1px);
+        }
+
+        /* =========================
+           NAVIGATION
+        ========================= */
+
+        nav {
+            display: flex;
+
+            align-items: center;
+            justify-content: flex-end;
+
+            gap: 5px;
+
+            z-index: 20;
+
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: var(--forest);
+
+            text-decoration: none;
+
+            padding: 9px 13px;
+
+            border-radius: 999px;
+
+            white-space: nowrap;
+
+            font-size: 0.92rem;
+            font-weight: 500;
+
+            transition:
+                background 0.25s ease,
+                color 0.25s ease,
+                transform 0.25s ease;
+        }
+
+        nav a:hover {
+            background: rgba(43, 102, 87, 0.1);
+
+            color: var(--forest-light);
+
+            transform: translateY(-1px);
+        }
+
+        /* =========================
+           BURGER
+        ========================= */
+
+        .burger {
+            display: none;
+
+            flex-direction: column;
+
+            justify-content: center;
+            align-items: center;
+
+            cursor: pointer;
+
+            gap: 5px;
+
+            width: 44px;
+            height: 44px;
+
+            border-radius: 50%;
+
+            background: rgba(23, 63, 54, 0.08);
+
+            z-index: 30;
+        }
+
+        .burger div {
+            width: 20px;
+            height: 2px;
+
+            background-color: var(--forest);
+
+            border-radius: 2px;
+
+            transition:
+                transform 0.25s ease,
+                opacity 0.25s ease;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        main {
+            position: relative;
+            z-index: 10;
+
+            width: min(1180px, 90%);
+
+            margin: 0 auto;
+
+            padding: 70px 0 90px;
+        }
+
+        /* =========================
+           INTRO
+        ========================= */
+
+        main::before {
+            content: "OBSERVATIONS";
+
+            display: block;
+
+            width: fit-content;
+
+            margin: 0 auto 18px;
+
+            color: var(--forest-light);
+
+            font-size: 0.78rem;
+            font-weight: 700;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.16em;
+        }
+
+        h2 {
+            position: relative;
+            z-index: 2;
+
+            margin: 0;
+
+            color: var(--forest-dark);
+
             text-align: center;
+
+            font-size: clamp(1.8rem, 4vw, 2.4rem);
+
+            line-height: 1.2;
+
+            letter-spacing: -0.035em;
         }
+
+        /* =========================
+           BACK LINK
+        ========================= */
+
+        .back-link {
+            display: block;
+
+            width: fit-content;
+
+            margin: 0 auto 28px;
+
+            text-decoration: none;
+
+            color: var(--forest-light);
+
+            font-size: 0.92rem;
+
+            font-weight: 600;
+
+            transition:
+                color 0.25s ease,
+                transform 0.25s ease;
+        }
+
+        .back-link:hover {
+            text-decoration: none;
+
+            color: var(--forest-dark);
+
+            transform: translateX(-3px);
+        }
+
+        /* =========================
+           TABLE CONTAINER
+        ========================= */
+
+        main {
+            background:
+                rgba(255, 255, 255, 0.72);
+
+            border:
+                1px solid rgba(23, 63, 54, 0.08);
+
+            border-radius: 30px;
+
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+
+            box-shadow: var(--shadow);
+        }
+
+        main::after {
+            content: "";
+
+            position: absolute;
+
+            width: 180px;
+            height: 180px;
+
+            right: -70px;
+            bottom: -70px;
+
+            border-radius: 50%;
+
+            background: rgba(145, 169, 152, 0.08);
+
+            pointer-events: none;
+
+            z-index: -1;
+        }
+
+        /* =========================
+           TABLE
+        ========================= */
+
+        table {
+            position: relative;
+            z-index: 2;
+
+            width: 100%;
+
+            border-collapse: separate;
+
+            border-spacing: 0;
+
+            margin-top: 30px;
+
+            overflow: hidden;
+
+            border:
+                1px solid rgba(23, 63, 54, 0.09);
+
+            border-radius: 18px;
+
+            background: rgba(250, 249, 244, 0.58);
+
+            box-shadow:
+                0 12px 35px rgba(19, 53, 45, 0.07);
+        }
+
+        th,
+        td {
+            padding: 14px 15px;
+
+            border: none;
+
+            border-bottom:
+                1px solid rgba(23, 63, 54, 0.08);
+
+            text-align: center;
+
+            color: var(--text);
+
+            font-size: 0.9rem;
+        }
+
         th {
-            background-color: #2980b9;
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--forest),
+                    var(--forest-light)
+                );
+
             color: white;
+
+            font-size: 0.82rem;
+
+            font-weight: 700;
+
+            letter-spacing: 0.02em;
         }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr {
+            transition:
+                background 0.25s ease;
+        }
+
+        tbody tr:hover {
+            background:
+                rgba(200, 217, 200, 0.18);
+        }
+
+        td {
+            color: var(--muted);
+        }
+
+        td:first-child {
+            color: var(--forest-dark);
+
+            font-weight: 700;
+        }
+
+        /* =========================
+           IMAGES
+        ========================= */
+
         img {
             max-width: 150px;
-            border-radius: 4px;
+
+            border-radius: 12px;
+
             cursor: pointer;
+
+            border:
+                1px solid rgba(23, 63, 54, 0.08);
+
+            box-shadow:
+                0 8px 22px rgba(19, 53, 45, 0.1);
+
+            transition:
+                transform 0.3s ease,
+                box-shadow 0.3s ease;
         }
+
+        img:hover {
+            transform: scale(1.04);
+
+            box-shadow:
+                0 12px 28px rgba(19, 53, 45, 0.16);
+        }
+
+        /* =========================
+           BUTTONS
+        ========================= */
+
         form {
             display: inline-block;
         }
-        button, .edit-link {
-            padding: 6px 12px;
-            background-color: #2980b9;
+
+        button,
+        .edit-link {
+            padding: 8px 14px;
+
+            background-color: var(--forest);
+
             color: white;
+
             border: none;
-            border-radius: 4px;
+
+            border-radius: 999px;
+
             cursor: pointer;
+
             text-decoration: none;
-            font-size: 14px;
+
+            font-family: inherit;
+
+            font-size: 0.82rem;
+
+            font-weight: 600;
+
+            transition:
+                background-color 0.25s ease,
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
         }
+
         button:hover,
         .edit-link:hover {
-            background-color: #1c5980;
+            background-color: var(--forest-light);
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 7px 18px rgba(23, 63, 54, 0.15);
         }
-        .back-link {
-            display: inline-block;
-            margin-bottom: 20px;
-            text-decoration: none;
-            color: #2980b9;
-            font-weight: bold;
-        }
-        .back-link:hover {
-            text-decoration: underline;
-        }
+
+        /* =========================
+           MODAL
+        ========================= */
+
         .modal {
             display: none;
+
             position: fixed;
+
             z-index: 1000;
+
             padding-top: 50px;
+
             left: 0;
             top: 0;
+
             width: 100%;
             height: 100%;
+
             overflow: auto;
-            background-color: rgba(0,0,0,0.85);
+
+            background-color:
+                rgba(16, 47, 41, 0.88);
+
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
         }
+
         .modal-content {
             display: block;
+
             margin: auto;
+
             max-width: 90%;
             max-height: 80%;
-            border: 3px solid #fff;
-            border-radius: 6px;
+
+            border:
+                3px solid rgba(255, 255, 255, 0.9);
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 25px 70px rgba(0, 0, 0, 0.3);
         }
+
         .close {
             color: white;
+
             position: absolute;
+
             top: 30px;
             right: 50px;
-            font-size: 30px;
+
+            font-size: 38px;
+
             cursor: pointer;
+
+            transition:
+                opacity 0.25s ease,
+                transform 0.25s ease;
+        }
+
+        .close:hover {
+            opacity: 0.7;
+
+            transform: scale(1.05);
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            position: relative;
+            z-index: 10;
+
+            padding: 24px 20px;
+
+            background: var(--forest);
+
+            color: rgba(255, 255, 255, 0.72);
+
+            text-align: center;
+
+            font-size: 0.85rem;
+
+            letter-spacing: 0.01em;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 1050px) {
+
+            header {
+                padding-left: 4%;
+                padding-right: 4%;
+            }
+
+            main {
+                width: min(94%, 1000px);
+
+                padding-top: 60px;
+            }
+
+            table {
+                display: block;
+
+                overflow-x: auto;
+
+                white-space: nowrap;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            header {
+                padding: 15px 20px;
+            }
+
+            .logo {
+                font-size: 1.45rem;
+            }
+
+            .burger {
+                display: flex;
+            }
+
+            nav {
+                position: absolute;
+
+                top: 100%;
+                left: 0;
+
+                width: 100%;
+
+                max-height: 0;
+
+                overflow: hidden;
+
+                flex-direction: column;
+
+                align-items: stretch;
+
+                gap: 4px;
+
+                padding: 0 20px;
+
+                background:
+                    rgba(250, 249, 244, 0.96);
+
+                backdrop-filter: blur(18px);
+                -webkit-backdrop-filter: blur(18px);
+
+                border-bottom:
+                    1px solid rgba(23, 63, 54, 0.08);
+
+                transition:
+                    max-height 0.4s ease,
+                    padding 0.4s ease;
+            }
+
+            nav.open {
+                max-height: 600px;
+
+                padding:
+                    12px 20px 18px;
+            }
+
+            nav a {
+                width: 100%;
+
+                padding: 12px 14px;
+
+                border-radius: 12px;
+            }
+
+            nav a:hover {
+                transform: none;
+            }
+
+            main {
+                width: min(92%, 620px);
+
+                padding:
+                    50px 20px 65px;
+
+                border-radius: 25px;
+            }
+
+            main::before {
+                margin-bottom: 15px;
+            }
+
+            table {
+                margin-top: 25px;
+            }
+
+            th,
+            td {
+                padding: 12px 13px;
+
+                font-size: 0.84rem;
+            }
+
+            img {
+                max-width: 120px;
+            }
+
+            .close {
+                right: 25px;
+                top: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            main {
+                width: 90%;
+
+                padding:
+                    40px 14px 55px;
+
+                border-radius: 21px;
+            }
+
+            main::before {
+                font-size: 0.68rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .back-link {
+                font-size: 0.86rem;
+
+                margin-bottom: 22px;
+            }
+
+            table {
+                margin-top: 22px;
+            }
+
+            th,
+            td {
+                padding: 10px;
+
+                font-size: 0.78rem;
+            }
+
+            img {
+                max-width: 100px;
+            }
+
+            button,
+            .edit-link {
+                padding: 7px 11px;
+
+                font-size: 0.76rem;
+            }
+
+            footer {
+                padding:
+                    20px 12px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            html {
+                scroll-behavior: auto;
+            }
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+
+                animation-iteration-count: 1 !important;
+
+                transition-duration: 0.01ms !important;
+            }
         }
     </style>
 </head>
+
 <body>
+
+<canvas id="cloud-canvas"></canvas>
+
+<header>
+
+    <div
+        class="logo"
+        onclick="window.location='/'"
+    >
+        Lichenary
+    </div>
+
+    <div
+        id="burger"
+        class="burger"
+        aria-label="Menu"
+        tabindex="0"
+    >
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+
+    <nav id="nav-links">
+
+        <a href="{{ url_for('dashboard') }}">
+            Dashboard
+        </a>
+
+        <a href="{{ url_for('logout') }}">
+            Logout
+        </a>
+
+    </nav>
+
+</header>
+
+
 <main>
-    <a href="{{ url_for('dashboard') }}" class="back-link">← Înapoi la dashboard</a>
-    <h2>Observații aprobate</h2>
+
+    <a href="{{ url_for('dashboard') }}" class="back-link">
+        ← Înapoi la dashboard
+    </a>
+
+    <h2>
+        Observații aprobate
+    </h2>
+
 
     {% if observations %}
+
     <table>
+
         <thead>
+
             <tr>
+
                 <th>ID</th>
+
                 <th>Imagine</th>
+
                 <th>Data și ora</th>
+
                 <th>Locație</th>
+
                 <th>Specie</th>
+
                 <th>Poluare</th>
+
                 <th>Utilizator</th>
+
                 <th>Acțiuni</th>
+
             </tr>
+
         </thead>
+
+
         <tbody>
+
             {% for obs in observations %}
+
             <tr>
-                <td>{{ obs.id }}</td>
+
                 <td>
-                    <img src="{{ obs.image_filename }}" alt="observatie" onclick="showModal(this.src)">
+                    {{ obs.id }}
                 </td>
-                <td>{{ obs.date_time.strftime("%Y-%m-%d %H:%M") }}</td>
-                <td>{{ obs.location }}</td>
-                <td>{{ obs.species if obs.species else 'Necompletat' }}</td>
-                <td>{{ obs.pollution_level if obs.pollution_level is not none else 'Necompletat' }}</td>
-                <td>{{ obs.user.username }}</td>
+
                 <td>
-                    <form method="POST" action="{{ url_for('disapprove_observation', obs_id=obs.id) }}">
-                        <button type="submit">Dezaprobă</button>
+
+                    <img
+                        src="{{ obs.image_filename }}"
+                        alt="observatie"
+                        onclick="showModal(this.src)"
+                    >
+
+                </td>
+
+                <td>
+                    {{ obs.date_time.strftime("%Y-%m-%d %H:%M") }}
+                </td>
+
+                <td>
+                    {{ obs.location }}
+                </td>
+
+                <td>
+                    {{ obs.species if obs.species else 'Necompletat' }}
+                </td>
+
+                <td>
+                    {{ obs.pollution_level if obs.pollution_level is not none else 'Necompletat' }}
+                </td>
+
+                <td>
+                    {{ obs.user.username }}
+                </td>
+
+                <td>
+
+                    <form
+                        method="POST"
+                        action="{{ url_for('disapprove_observation', obs_id=obs.id) }}"
+                    >
+
+                        <button type="submit">
+                            Dezaprobă
+                        </button>
+
                     </form>
-                    <a href="{{ url_for('edit_observation', obs_id=obs.id) }}" class="edit-link">Editează</a>
+
+                    <a
+                        href="{{ url_for('edit_observation', obs_id=obs.id) }}"
+                        class="edit-link"
+                    >
+                        Editează
+                    </a>
+
                 </td>
+
             </tr>
+
             {% endfor %}
+
         </tbody>
+
     </table>
+
     {% else %}
-    <p>Nu există observații aprobate.</p>
+
+    <p>
+        Nu există observații aprobate.
+    </p>
+
     {% endif %}
+
 </main>
 
+
+<footer>
+    © 2025 Lichenary • All rights reserved
+</footer>
+
+
 <!-- Modal Viewer -->
+
 <div id="imgModal" class="modal">
-    <span class="close" onclick="document.getElementById('imgModal').style.display='none'">&times;</span>
-    <img id="modalImg" class="modal-content">
+
+    <span
+        class="close"
+        onclick="document.getElementById('imgModal').style.display='none'"
+    >
+        &times;
+    </span>
+
+    <img
+        id="modalImg"
+        class="modal-content"
+    >
+
 </div>
 
+
 <script>
+
     function showModal(src) {
+
         document.getElementById('modalImg').src = src;
+
         document.getElementById('imgModal').style.display = 'block';
+
     }
+
 
     window.onclick = function(event) {
-        const modal = document.getElementById('imgModal');
+
+        const modal =
+            document.getElementById('imgModal');
+
         if (event.target === modal) {
+
             modal.style.display = "none";
+
         }
+
     }
+
 </script>
+
+
+<script>
+
+    const burger =
+        document.getElementById('burger');
+
+    const navLinks =
+        document.getElementById('nav-links');
+
+
+    burger.addEventListener('click', () => {
+
+        const isOpen =
+            navLinks.classList.toggle('open');
+
+        document.body.classList.toggle(
+            'menu-open',
+            isOpen
+        );
+
+    });
+
+
+    document
+        .querySelectorAll('#nav-links a')
+        .forEach(link => {
+
+            link.addEventListener('click', () => {
+
+                navLinks.classList.remove('open');
+
+                document.body.classList.remove(
+                    'menu-open'
+                );
+
+            });
+
+        });
+
+
+    burger.addEventListener('keydown', (event) => {
+
+        if (
+            event.key === 'Enter' ||
+            event.key === ' '
+        ) {
+
+            event.preventDefault();
+
+            const isOpen =
+                navLinks.classList.toggle('open');
+
+            document.body.classList.toggle(
+                'menu-open',
+                isOpen
+            );
+
+        }
+
+    });
+
+</script>
+
+
+<script>
+
+    const canvas =
+        document.getElementById('cloud-canvas');
+
+    const ctx =
+        canvas.getContext('2d');
+
+    let width;
+    let height;
+
+
+    function resize() {
+
+        width = window.innerWidth;
+
+        height = window.innerHeight;
+
+        canvas.width = width;
+
+        canvas.height = height;
+
+    }
+
+
+    window.addEventListener(
+        'resize',
+        resize
+    );
+
+    resize();
+
+
+    class Cloud {
+
+        constructor(
+            x,
+            y,
+            size,
+            color,
+            speed
+        ) {
+
+            this.x = x;
+            this.y = y;
+            this.size = size;
+            this.color = color;
+            this.speed = speed;
+
+        }
+
+
+        draw(ctx) {
+
+            const gradient =
+                ctx.createRadialGradient(
+                    this.x,
+                    this.y,
+                    this.size * 0.3,
+                    this.x,
+                    this.y,
+                    this.size
+                );
+
+
+            gradient.addColorStop(
+                0,
+                this.color
+            );
+
+            gradient.addColorStop(
+                1,
+                'rgba(0,0,0,0)'
+            );
+
+
+            ctx.fillStyle = gradient;
+
+
+            ctx.beginPath();
+
+
+            ctx.arc(
+                this.x,
+                this.y,
+                this.size,
+                0,
+                Math.PI * 2
+            );
+
+
+            ctx.fill();
+
+        }
+
+
+        update() {
+
+            this.x += this.speed;
+
+
+            if (
+                this.x - this.size > width
+            ) {
+
+                this.x = -this.size;
+
+                this.y =
+                    Math.random() * height * 0.8 +
+                    height * 0.1;
+
+            }
+
+        }
+
+    }
+
+
+    const clouds = [];
+
+
+    const cloudColors = [
+
+        'rgba(180,220,180,0.18)',
+
+        'rgba(150,190,150,0.14)',
+
+        'rgba(120,160,120,0.11)'
+
+    ];
+
+
+    cloudColors.forEach(color => {
+
+        for (
+            let i = 0;
+            i < 8;
+            i++
+        ) {
+
+            clouds.push(
+
+                new Cloud(
+
+                    Math.random() * width,
+
+                    Math.random() * height,
+
+                    60 +
+                        Math.random() * 50,
+
+                    color,
+
+                    0.15 +
+                        Math.random() * 0.2
+
+                )
+
+            );
+
+        }
+
+    });
+
+
+    function animate() {
+
+        ctx.clearRect(
+            0,
+            0,
+            width,
+            height
+        );
+
+
+        clouds.forEach(cloud => {
+
+            cloud.draw(ctx);
+
+            cloud.update();
+
+        });
+
+
+        requestAnimationFrame(
+            animate
+        );
+
+    }
+
+
+    animate();
+
+</script>
+
 </body>
 </html>
-
