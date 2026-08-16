@@ -1200,12 +1200,12 @@ def upload_observation_ai():
 
         try:
 
-    latitude, longitude = validate_coordinates(
-        latitude_str,
-        longitude_str
-    )
+            latitude, longitude = validate_coordinates(
+                latitude_str,
+                longitude_str
+            )
 
-except ValueError:
+        except ValueError:
 
             flash(
                 'Invalid GPS coordinates.',
