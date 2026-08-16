@@ -399,19 +399,19 @@ IMPORTANT:
             ),
             prompt
         ],
-        config=types.GenerateContentConfig(
-            temperature=0
-        )
+        config=types.GenerateContentConfig()
     )
 
     species = response.text.strip()
 
-    if not species:
-        raise RuntimeError(
-            "Gemini returned an empty identification."
-        )
+if not species:
+    raise RuntimeError(
+        "Gemini returned an empty identification."
+    )
 
-    species = normalize_species_name(species)
+species = species.strip(" .,:;\"'")
+
+species = normalize_species_name(species)
 
     if not species:
         raise RuntimeError(
@@ -1200,15 +1200,12 @@ def upload_observation_ai():
 
         try:
 
-            latitude = float(
-                latitude_str
-            )
+    latitude, longitude = validate_coordinates(
+        latitude_str,
+        longitude_str
+    )
 
-            longitude = float(
-                longitude_str
-            )
-
-        except ValueError:
+except ValueError:
 
             flash(
                 'Invalid GPS coordinates.',

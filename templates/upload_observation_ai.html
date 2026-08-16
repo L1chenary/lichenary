@@ -1900,74 +1900,30 @@
 
 <script>
 
-  const form =
-    document.getElementById(
-      'ai-observation-form'
-    );
+  const form = document.getElementById('ai-observation-form');
 
-  const photoInput =
-    document.getElementById('photo');
+  const photoInput = document.getElementById('photo');
+  const photoPreview = document.getElementById('photo-preview');
 
-  const photoPreview =
-    document.getElementById(
-      'photo-preview'
-    );
+  const analyzeButton = document.getElementById('analyze-button');
+  const submitButton = document.getElementById('submit-button');
 
-  const analyzeButton =
-    document.getElementById(
-      'analyze-button'
-    );
+  const loading = document.getElementById('loading');
+  const message = document.getElementById('message');
 
-  const submitButton =
-    document.getElementById(
-      'submit-button'
-    );
+  const speciesInput = document.getElementById('species');
+  const pollutionInput = document.getElementById('pollution_level');
 
-  const loading =
-    document.getElementById('loading');
+  const confidence = document.getElementById('confidence');
 
-  const message =
-    document.getElementById('message');
+  const datetimeInput = document.getElementById('date_time');
+  const latitudeInput = document.getElementById('latitude');
+  const longitudeInput = document.getElementById('longitude');
+  const locationInput = document.getElementById('location');
 
-  const speciesInput =
-    document.getElementById('species');
-
-  const pollutionInput =
-    document.getElementById(
-      'pollution_level'
-    );
-
-  const confidence =
-    document.getElementById(
-      'confidence'
-    );
-
-  const datetimeInput =
-    document.getElementById('date_time');
-
-  const latitudeInput =
-    document.getElementById('latitude');
-
-  const longitudeInput =
-    document.getElementById('longitude');
-
-  const locationInput =
-    document.getElementById('location');
-
-  const datetimeDisplay =
-    document.getElementById(
-      'datetime-display'
-    );
-
-  const gpsDisplay =
-    document.getElementById(
-      'gps-display'
-    );
-
-const gpsButton =
-  document.getElementById(
-    'gps-button'
-  );
+  const datetimeDisplay = document.getElementById('datetime-display');
+  const gpsDisplay = document.getElementById('gps-display');
+  const gpsButton = document.getElementById('gps-button');
 
 
   let gpsReady = false;
@@ -1976,13 +1932,10 @@ const gpsButton =
 
 
   /* =========================================================
-     MESSAGE HELPER
+     MESSAGE
      ========================================================= */
 
-  function showMessage(
-    text,
-    type = 'warning'
-  ) {
+  function showMessage(text, type = 'warning') {
 
     message.textContent = text;
 
@@ -1996,59 +1949,40 @@ const gpsButton =
 
     message.textContent = '';
 
-    message.className =
-      'message';
+    message.className = 'message';
 
   }
 
 
   /* =========================================================
-     CURRENT DATE / TIME
+     DATE AND TIME
      ========================================================= */
 
   function setCurrentDateTime() {
 
     const now = new Date();
 
-    /*
-      datetime-local expects:
-
-      YYYY-MM-DDTHH:MM
-
-      We deliberately use the user's
-      local browser time.
-    */
-
     const year =
       now.getFullYear();
 
     const month =
-      String(
-        now.getMonth() + 1
-      ).padStart(2, '0');
+      String(now.getMonth() + 1).padStart(2, '0');
 
     const day =
-      String(
-        now.getDate()
-      ).padStart(2, '0');
+      String(now.getDate()).padStart(2, '0');
 
     const hours =
-      String(
-        now.getHours()
-      ).padStart(2, '0');
+      String(now.getHours()).padStart(2, '0');
 
     const minutes =
-      String(
-        now.getMinutes()
-      ).padStart(2, '0');
+      String(now.getMinutes()).padStart(2, '0');
 
 
     const value =
       `${year}-${month}-${day}T${hours}:${minutes}`;
 
 
-    datetimeInput.value =
-      value;
+    datetimeInput.value = value;
 
 
     datetimeDisplay.textContent =
@@ -2072,6 +2006,10 @@ const gpsButton =
   }
 
 
+  /*
+     This reads the current date/time from the
+     user's device/browser.
+  */
   setCurrentDateTime();
 
 
@@ -2081,146 +2019,10 @@ const gpsButton =
 
   function requestGPS() {
 
-  if (!navigator.geolocation) {
-
-    gpsDisplay.textContent =
-      'GPS is not supported by this browser.';
-
-    gpsDisplay.classList.remove(
-      'status-pending'
-    );
-
-    gpsDisplay.classList.add(
-      'status-error'
-    );
-
-    gpsButton.disabled = true;
-
-    showMessage(
-      'This browser does not provide GPS location access. Please use a modern mobile browser.',
-      'error'
-    );
-
-    return;
-  }
-
-
-  gpsButton.disabled = true;
-
-  gpsButton.textContent =
-    'Requesting GPS...';
-
-  gpsDisplay.textContent =
-    'Requesting location permission...';
-
-  gpsDisplay.classList.remove(
-    'status-error',
-    'status-success'
-  );
-
-  gpsDisplay.classList.add(
-    'status-pending'
-  );
-
-
-  navigator.geolocation.getCurrentPosition(
-
-    function(position) {
-
-      const latitude =
-        position.coords.latitude;
-
-      const longitude =
-        position.coords.longitude;
-
-
-      latitudeInput.value =
-        latitude.toFixed(8);
-
-      longitudeInput.value =
-        longitude.toFixed(8);
-
-
-      locationInput.value =
-        `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
-
+    if (!navigator.geolocation) {
 
       gpsDisplay.textContent =
-        `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
-
-
-      gpsDisplay.classList.remove(
-        'status-pending',
-        'status-error'
-      );
-
-      gpsDisplay.classList.add(
-        'status-success'
-      );
-
-
-      gpsButton.textContent =
-        'GPS Tracking Enabled';
-
-      gpsButton.classList.add(
-        'gps-enabled'
-      );
-
-      gpsButton.disabled = true;
-
-
-      gpsReady = true;
-
-      updateAnalyzeButton();
-
-
-      showMessage(
-        'GPS location enabled successfully.',
-        'success'
-      );
-
-    },
-
-
-    function(error) {
-
-      let errorMessage =
-        'Unable to obtain your location.';
-
-
-      if (
-        error.code ===
-        error.PERMISSION_DENIED
-      ) {
-
-        errorMessage =
-          'Location permission was denied. Please allow location access and press the GPS button again.';
-
-      }
-
-      else if (
-        error.code ===
-        error.POSITION_UNAVAILABLE
-      ) {
-
-        errorMessage =
-          'Your location could not be determined. Please check your device location settings and try again.';
-
-      }
-
-      else if (
-        error.code ===
-        error.TIMEOUT
-      ) {
-
-        errorMessage =
-          'The GPS request timed out. Please try again.';
-
-      }
-
-
-      gpsDisplay.textContent =
-        'Location unavailable';
+        'GPS is not supported by this browser.';
 
       gpsDisplay.classList.remove(
         'status-pending'
@@ -2230,51 +2032,31 @@ const gpsButton =
         'status-error'
       );
 
-
-      gpsButton.disabled = false;
-
-      gpsButton.textContent =
-        'Enable GPS Tracking';
-
-
-      gpsReady = false;
-
-      updateAnalyzeButton();
-
-
       showMessage(
-        errorMessage,
+        'This browser does not support location access.',
         'error'
       );
 
-    },
-
-
-    {
-      enableHighAccuracy: true,
-
-      timeout: 15000,
-
-      maximumAge: 0
+      return;
     }
 
-  );
-}
 
-gpsButton.addEventListener(
-  'click',
-  () => {
+    gpsButton.disabled = true;
 
-    clearMessage();
-
-    requestGPS();
-
-  }
-);
-
+    gpsButton.textContent =
+      'Requesting GPS...';
 
     gpsDisplay.textContent =
       'Requesting location permission...';
+
+    gpsDisplay.classList.remove(
+      'status-error',
+      'status-success'
+    );
+
+    gpsDisplay.classList.add(
+      'status-pending'
+    );
 
 
     navigator.geolocation.getCurrentPosition(
@@ -2296,13 +2078,7 @@ gpsButton.addEventListener(
 
 
         /*
-          The exact coordinates are what the backend
-          should use as the authoritative location.
-
-          For now, the location field contains the
-          coordinates. The backend can later perform
-          reverse geocoding if a human-readable location
-          is required.
+           We use the coordinates as the location value.
         */
 
         locationInput.value =
@@ -2323,11 +2099,28 @@ gpsButton.addEventListener(
         );
 
 
+        gpsButton.textContent =
+          'GPS Tracking Enabled';
+
+        gpsButton.classList.add(
+          'gps-enabled'
+        );
+
+        gpsButton.disabled = true;
+
+
         gpsReady = true;
 
         updateAnalyzeButton();
 
+
+        showMessage(
+          'GPS location enabled successfully.',
+          'success'
+        );
+
       },
+
 
       function(error) {
 
@@ -2351,7 +2144,7 @@ gpsButton.addEventListener(
         ) {
 
           errorMessage =
-            'Your location could not be determined. Please try again outdoors or with GPS enabled.';
+            'Your location could not be determined. Please check that location services are enabled.';
 
         }
 
@@ -2378,25 +2171,29 @@ gpsButton.addEventListener(
         );
 
 
-        showMessage(
-          errorMessage,
-          'error'
-        );
+        gpsButton.disabled = false;
+
+        gpsButton.textContent =
+          'Enable GPS Tracking';
 
 
         gpsReady = false;
 
         updateAnalyzeButton();
 
+
+        showMessage(
+          errorMessage,
+          'error'
+        );
+
       },
+
 
       {
         enableHighAccuracy: true,
-
         timeout: 15000,
-
         maximumAge: 0
-
       }
 
     );
@@ -2404,6 +2201,16 @@ gpsButton.addEventListener(
   }
 
 
+  gpsButton.addEventListener(
+    'click',
+    function() {
+
+      clearMessage();
+
+      requestGPS();
+
+    }
+  );
 
 
   /* =========================================================
@@ -2412,14 +2219,13 @@ gpsButton.addEventListener(
 
   photoInput.addEventListener(
     'change',
-    () => {
+    function() {
 
       clearMessage();
 
       aiReady = false;
 
       speciesInput.value = '';
-
       pollutionInput.value = '';
 
       confidence.textContent = '';
@@ -2478,11 +2284,6 @@ gpsButton.addEventListener(
       photoReady = true;
 
 
-      /*
-        Show a local preview without uploading
-        anything yet.
-      */
-
       const reader =
         new FileReader();
 
@@ -2510,7 +2311,7 @@ gpsButton.addEventListener(
 
 
   /* =========================================================
-     ENABLE / DISABLE ANALYZE BUTTON
+     ANALYZE BUTTON
      ========================================================= */
 
   function updateAnalyzeButton() {
@@ -2527,7 +2328,7 @@ gpsButton.addEventListener(
 
   analyzeButton.addEventListener(
     'click',
-    async () => {
+    async function() {
 
       clearMessage();
 
@@ -2535,7 +2336,7 @@ gpsButton.addEventListener(
       if (!photoReady) {
 
         showMessage(
-          'Please take or select a lichen photograph first.',
+          'Please select a lichen photograph first.',
           'warning'
         );
 
@@ -2546,15 +2347,16 @@ gpsButton.addEventListener(
 
       if (!gpsReady) {
 
-  showMessage(
-    'Please enable GPS tracking before analyzing the observation.',
-    'warning'
-  );
+        showMessage(
+          'Please enable GPS tracking first.',
+          'warning'
+        );
 
-  gpsButton.focus();
+        gpsButton.focus();
 
-  return;
-}
+        return;
+
+      }
 
 
       const file =
@@ -2596,7 +2398,6 @@ gpsButton.addEventListener(
       analyzeButton.textContent =
         'Analyzing...';
 
-
       loading.classList.add(
         'visible'
       );
@@ -2604,39 +2405,18 @@ gpsButton.addEventListener(
 
       try {
 
-        /*
-          This endpoint will be created in app.py.
-
-          It should:
-          1. receive the image;
-          2. send it to Gemini;
-          3. receive the predicted species;
-          4. compare the species against the
-             pollution database;
-          5. return JSON.
-
-          Expected response:
-
-          {
-            "success": true,
-            "species": "Xanthoria parietina",
-            "pollution_level": 10,
-            "confidence": 0.91
-          }
-        */
-
         const response =
           await fetch(
             "{{ url_for('analyze_observation_ai') }}",
             {
               method: 'POST',
-
               body: formData
             }
           );
 
 
         let data;
+
 
         try {
 
@@ -2667,9 +2447,9 @@ gpsButton.addEventListener(
         }
 
 
-        /*
-          Populate AI results.
-        */
+        /* =================================================
+           DISPLAY RESULT
+           ================================================= */
 
         speciesInput.value =
           data.species || 'Unknown';
@@ -2687,55 +2467,25 @@ gpsButton.addEventListener(
 
         else {
 
-          pollutionInput.value =
-            '';
+          pollutionInput.value = '';
 
         }
 
 
-        /*
-          Optional AI confidence value.
-        */
+        confidence.textContent =
+          'The AI identification is a suggestion. ' +
+          'The observation will still be reviewed before approval.';
 
-        if (
-          data.confidence !== undefined &&
-          data.confidence !== null
-        ) {
-
-          const percentage =
-            Math.round(
-              Number(data.confidence) * 100
-            );
-
-
-          confidence.textContent =
-            `AI identification confidence: ${percentage}%. ` +
-            `Please remember that AI identification is a suggestion and observations are still reviewed before approval.`;
-
-
-          confidence.classList.add(
-            'visible'
-          );
-
-        }
-
-        else {
-
-          confidence.textContent =
-            'The AI identification is a suggestion and the observation will still be reviewed before approval.';
-
-          confidence.classList.add(
-            'visible'
-          );
-
-        }
+        confidence.classList.add(
+          'visible'
+        );
 
 
         aiReady = true;
 
 
         showMessage(
-          'The photograph has been analyzed successfully. Please review the result and submit the observation.',
+          'The photograph was analyzed successfully. You can now submit the observation.',
           'success'
         );
 
@@ -2745,6 +2495,7 @@ gpsButton.addEventListener(
         );
 
       }
+
 
       catch (error) {
 
@@ -2763,17 +2514,15 @@ gpsButton.addEventListener(
 
       }
 
+
       finally {
 
         loading.classList.remove(
           'visible'
         );
 
-        analyzeButton.disabled = false;
-
         analyzeButton.textContent =
           'Analyze Lichen with AI';
-
 
         updateAnalyzeButton();
 
@@ -2791,17 +2540,14 @@ gpsButton.addEventListener(
     'submit',
     function(event) {
 
-      /*
-        The user should not be able to submit an AI
-        observation before the AI has returned a result.
-      */
+setCurrentDateTime();
 
       if (!aiReady) {
 
         event.preventDefault();
 
         showMessage(
-          'Please analyze the lichen photograph before submitting the observation.',
+          'Please analyze the lichen photograph before submitting.',
           'warning'
         );
 
@@ -2815,7 +2561,7 @@ gpsButton.addEventListener(
         event.preventDefault();
 
         showMessage(
-          'No species was identified. The observation cannot be submitted yet.',
+          'No species was identified.',
           'error'
         );
 
@@ -2829,7 +2575,7 @@ gpsButton.addEventListener(
         event.preventDefault();
 
         showMessage(
-          'No pollution indicator was found for this species.',
+          'No pollution indicator was found.',
           'error'
         );
 
@@ -2843,7 +2589,7 @@ gpsButton.addEventListener(
         event.preventDefault();
 
         showMessage(
-          'GPS location is required for this observation.',
+          'GPS location is required.',
           'error'
         );
 
@@ -2854,8 +2600,8 @@ gpsButton.addEventListener(
     }
   );
 
-</script>
 
+</script>
 
 <!-- =========================================================
      BACKGROUND CANVAS
