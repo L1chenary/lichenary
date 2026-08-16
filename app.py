@@ -404,14 +404,14 @@ IMPORTANT:
 
     species = response.text.strip()
 
-if not species:
-    raise RuntimeError(
-        "Gemini returned an empty identification."
-    )
+    if not species:
+        raise RuntimeError(
+            "Gemini returned an empty identification."
+        )
 
-species = species.strip(" .,:;\"'")
+    species = species.strip(" .,:;\"'")
 
-species = normalize_species_name(species)
+    species = normalize_species_name(species)
 
     if not species:
         raise RuntimeError(
