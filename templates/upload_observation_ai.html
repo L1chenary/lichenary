@@ -1854,13 +1854,14 @@
       Specific Place:
     </label>
 
-    <input
-      type="text"
-      id="specific_place"
-      name="specific_place"
-      class="specific-place-input"
-      placeholder="e.g. Tineretului Park, near the old church"
+    <input 
+      type="text" 
+      id="specific_place" 
+      name="specific_place" 
+      class="specific-place-input" 
+      placeholder="e.g. Tineretului Park, near the old church" 
       autocomplete="street-address"
+      required
     >
 
     <p class="specific-place-help">
@@ -2288,14 +2289,6 @@
           longitude.toFixed(8);
 
 
-        /*
-           We use the coordinates as the location value.
-        */
-
-        locationInput.value =
-          `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
-
-
         gpsDisplay.textContent =
           `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
 
@@ -2632,7 +2625,7 @@
 
       formData.append(
         'location',
-        locationInput.value
+        specificPlaceInput.value.trim()
       );
 
       formData.append(

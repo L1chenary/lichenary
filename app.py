@@ -1128,7 +1128,7 @@ def upload_observation_ai():
         )
 
         location = (
-            request.form.get('location') or ''
+            request.form.get('specific_place') or ''
         ).strip()
 
         latitude_str = request.form.get(

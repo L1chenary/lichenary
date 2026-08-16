@@ -840,40 +840,48 @@
             >
 
 
-            <div class="actions">
+<div class="actions">
 
-                <button type="submit">
-                    💾 Salvează modificările
-                </button>
+    <button type="submit">
+        💾 Salvează modificările
+    </button>
 
-                <div>
+    <div>
 
-                    <a
-                        href="{{ url_for('admin_observations') }}"
-                        class="link-button"
-                    >
-                        ← Înapoi la observații
-                    </a>
+        <a
+            href="{{ url_for('admin_observations') }}"
+            class="link-button"
+        >
+            ← Înapoi la observații neaprobate
+        </a>
 
-                    <br>
+        <br>
 
-                    <a
-                        href="{{ url_for('dashboard') }}"
-                        class="link-button"
-                    >
-                        🏠 Înapoi la dashboard
-                    </a>
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="link-button"
+        >
+            🏠 Înapoi la dashboard
+        </a>
 
-                </div>
+        <br>
 
-            </div>
-
-        </form>
+        <a
+            href="{{ url_for('approved_observations') }}"
+            class="link-button"
+        >
+            ← Înapoi la observații aprobate
+        </a>
 
     </div>
 
-</main>
+</div>
 
+</form>
+
+</div>
+
+</main>
 
 <footer>
     © 2025 Lichenary • All rights reserved
