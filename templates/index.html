@@ -1,3722 +1,4325 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Welcome – Lichenary</title>
-
-  <!-- Leaflet CSS -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
-
-  <style>
-    /* =========================================================
-       LICHENARY — ORGANIC / EDITORIAL / CITIZEN SCIENCE
-       ========================================================= */
-
-    :root {
-      --cream: #f5f3ea;
-      --cream-light: #fbfaf5;
-      --paper: #eeece1;
-
-      --forest: #173f35;
-      --forest-dark: #102f28;
-      --forest-soft: #315c4d;
-
-      --moss: #718d57;
-      --sage: #a8b89a;
-      --lichen: #d9e4bb;
-
-      --ink: #18231f;
-      --muted: #65716a;
 
-      --white: #ffffff;
+<meta charset="UTF-8" />
 
-      --radius-xl: 42px;
-      --radius-lg: 28px;
-      --radius-md: 18px;
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-      --shadow-soft: 0 20px 60px rgba(23, 63, 53, 0.10);
-      --shadow-image: 0 30px 70px rgba(23, 63, 53, 0.18);
-    }
+<title>Welcome – Lichenary</title>
 
-    * {
-      box-sizing: border-box;
-    }
+<!-- Leaflet CSS -->
 
-    html {
-      scroll-behavior: smooth;
-    }
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
 
-    body {
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
+<style>
 
-      font-family:
-        "Segoe UI",
-        Tahoma,
-        Geneva,
-        Verdana,
-        sans-serif;
+/* =========================================================
+   LICHENARY — ORGANIC / EDITORIAL / CITIZEN SCIENCE
+   ========================================================= */
 
-      background: var(--cream);
-      color: var(--ink);
+:root {
 
-      overflow-x: hidden;
-    }
+  --cream: #f5f3ea;
+  --cream-light: #fbfaf5;
+  --paper: #eeece1;
 
-    a {
-      color: inherit;
-    }
+  --forest: #173f35;
+  --forest-dark: #102f28;
+  --forest-soft: #315c4d;
 
-    /* =========================================================
-       HEADER
-       ========================================================= */
+  --moss: #718d57;
+  --sage: #a8b89a;
+  --lichen: #d9e4bb;
 
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
+  --ink: #18231f;
+  --muted: #65716a;
 
-      width: 100%;
+  --white: #ffffff;
 
-      padding: 20px 5vw;
+  --radius-xl: 42px;
+  --radius-lg: 28px;
+  --radius-md: 18px;
 
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 30px;
+  --shadow-soft: 0 20px 60px rgba(23, 63, 53, 0.10);
+  --shadow-image: 0 30px 70px rgba(23, 63, 53, 0.18);
 
-      background: rgba(245, 243, 234, 0.88);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
+}
 
-      border-bottom: 1px solid rgba(23, 63, 53, 0.08);
-    }
+* {
 
-    .logo {
-      color: var(--forest);
+  box-sizing: border-box;
 
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: 1.7rem;
-      font-weight: bold;
-      letter-spacing: -0.04em;
+}
 
-      cursor: pointer;
+html {
 
-      transition:
-        transform 0.25s ease,
-        color 0.25s ease;
-    }
+  scroll-behavior: smooth;
 
-    .logo:hover {
-      color: var(--moss);
-      transform: translateY(-1px);
-    }
+}
 
-    nav {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 5px;
+body {
 
-      flex-wrap: wrap;
-    }
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
 
-    nav a {
-      position: relative;
+  font-family:
+    "Segoe UI",
+    Tahoma,
+    Geneva,
+    Verdana,
+    sans-serif;
 
-      color: var(--forest);
+  background: var(--cream);
+  color: var(--ink);
 
-      text-decoration: none;
+  overflow-x: hidden;
 
-      padding: 9px 12px;
+}
 
-      font-size: 0.92rem;
-      font-weight: 500;
+a {
 
-      border-radius: 999px;
+  color: inherit;
 
-      white-space: nowrap;
+}
 
-      transition:
-        color 0.25s ease,
-        background 0.25s ease,
-        transform 0.25s ease;
-    }
+/* =========================================================
+   HEADER
+   ========================================================= */
 
-    nav a:hover {
-      color: var(--forest);
-      background: rgba(113, 141, 87, 0.14);
-      transform: translateY(-1px);
-    }
+header {
 
-    /* =========================================================
-       BURGER
-       ========================================================= */
+  position: sticky;
+  top: 0;
+  z-index: 100;
 
-    .burger {
-      display: none;
+  width: 100%;
 
-      flex-direction: column;
-      justify-content: center;
-      gap: 5px;
+  padding: 20px 5vw;
 
-      width: 42px;
-      height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
 
-      padding: 8px;
+  background: rgba(245, 243, 234, 0.88);
 
-      cursor: pointer;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 
-      border-radius: 50%;
-      background: var(--forest);
-    }
+  border-bottom: 1px solid rgba(23, 63, 53, 0.08);
 
-    .burger div {
-      width: 100%;
-      height: 2px;
+}
 
-      background: white;
-      border-radius: 10px;
+.logo {
 
-      transition:
-        transform 0.25s ease,
-        opacity 0.25s ease;
-    }
+  color: var(--forest);
 
-    /* =========================================================
-       MAIN
-       ========================================================= */
+  font-family: Georgia, "Times New Roman", serif;
 
-    main {
-      width: 100%;
-      max-width: 1320px;
+  font-size: 1.7rem;
+  font-weight: bold;
 
-      margin: 0 auto;
+  letter-spacing: -0.04em;
 
-      padding: 0 5vw 80px;
-    }
+  cursor: pointer;
 
-    /* =========================================================
-       HERO
-       ========================================================= */
+  transition:
+    transform 0.25s ease,
+    color 0.25s ease;
 
-    .hero {
-      min-height: calc(100vh - 83px);
+}
 
-      display: grid;
-      grid-template-columns: 1.05fr 0.95fr;
+.logo:hover {
 
-      align-items: center;
+  color: var(--moss);
 
-      gap: clamp(50px, 7vw, 110px);
+  transform: translateY(-1px);
 
-      padding: 80px 0 100px;
+}
 
-      position: relative;
-    }
+nav {
 
-    .hero::before {
-      content: "";
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 
-      position: absolute;
+  gap: 5px;
 
-      width: 360px;
-      height: 360px;
+  flex-wrap: wrap;
 
-      top: 8%;
-      left: -180px;
+}
 
-      background: var(--lichen);
+nav a {
 
-      border-radius:
-        62% 38% 65% 35% /
-        40% 57% 43% 60%;
+  position: relative;
 
-      opacity: 0.45;
+  color: var(--forest);
 
-      z-index: -1;
+  text-decoration: none;
 
-      filter: blur(1px);
-    }
+  padding: 9px 12px;
 
-    .hero-content {
-      position: relative;
-      z-index: 2;
-    }
+  font-size: 0.92rem;
+  font-weight: 500;
 
-    .title {
-      margin: 0 0 25px;
+  border-radius: 999px;
 
-      max-width: 720px;
+  white-space: nowrap;
 
-      color: var(--forest);
+  transition:
+    color 0.25s ease,
+    background 0.25s ease,
+    transform 0.25s ease;
 
-      font-family: Georgia, "Times New Roman", serif;
+}
 
-      font-size: clamp(4rem, 8vw, 7.5rem);
-      line-height: 0.88;
+nav a:hover {
 
-      font-weight: normal;
+  color: var(--forest);
 
-      letter-spacing: -0.065em;
-    }
+  background: rgba(113, 141, 87, 0.14);
 
-    .subtitle {
-      max-width: 580px;
+  transform: translateY(-1px);
 
-      margin-bottom: 40px;
+}
 
-      color: var(--forest-soft);
+/* =========================================================
+   BURGER
+   ========================================================= */
 
-      font-size: clamp(1.2rem, 2vw, 1.5rem);
-      line-height: 1.55;
+.burger {
 
-      letter-spacing: 0.01em;
-    }
+  display: none;
 
-    /* =========================================================
-       BUTTONS
-       ========================================================= */
+  flex-direction: column;
+  justify-content: center;
 
-    .btn-group {
-      display: flex;
+  gap: 5px;
 
-      align-items: center;
+  width: 42px;
+  height: 42px;
 
-      gap: 14px;
+  padding: 8px;
 
-      flex-wrap: wrap;
+  cursor: pointer;
 
-      margin: 0;
-    }
+  border-radius: 50%;
+  background: var(--forest);
 
-    .btn {
-      display: inline-flex;
+}
 
-      align-items: center;
-      justify-content: center;
+.burger div {
 
-      min-height: 52px;
+  width: 100%;
+  height: 2px;
 
-      padding: 14px 22px;
+  background: white;
 
-      border-radius: 999px;
+  border-radius: 10px;
 
-      background: var(--forest);
-      color: white;
+  transition:
+    transform 0.25s ease,
+    opacity 0.25s ease;
 
-      text-decoration: none;
+}
 
-      font-size: 0.95rem;
-      font-weight: 600;
+/* =========================================================
+   MAIN
+   ========================================================= */
 
-      box-shadow: 0 10px 25px rgba(23, 63, 53, 0.18);
+main {
 
-      transition:
-        transform 0.3s ease,
-        background 0.3s ease,
-        box-shadow 0.3s ease;
-    }
+  width: 100%;
+  max-width: 1320px;
 
-    .btn::after {
-      content: "→";
+  margin: 0 auto;
 
-      margin-left: 10px;
+  padding: 0 5vw 80px;
 
-      font-size: 1.15rem;
+}
 
-      transition: transform 0.3s ease;
-    }
+/* =========================================================
+   HERO
+   ========================================================= */
 
-    .btn:hover {
-      transform: translateY(-3px);
+.hero {
 
-      background: var(--moss);
+  min-height: calc(100vh - 83px);
 
-      box-shadow: 0 15px 35px rgba(23, 63, 53, 0.22);
-    }
+  display: grid;
 
-    .btn:hover::after {
-      transform: translateX(4px);
-    }
+  grid-template-columns: 1.05fr 0.95fr;
 
-    /* =========================================================
-       HERO IMAGE
-       ========================================================= */
+  align-items: center;
 
-    .hero-visual {
-      position: relative;
+  gap: clamp(50px, 7vw, 110px);
 
-      min-height: 610px;
+  padding: 80px 0 100px;
 
-      display: flex;
+  position: relative;
 
-      align-items: center;
-      justify-content: center;
-    }
+}
 
-    .hero-image {
-      position: relative;
+.hero::before {
 
-      width: min(100%, 570px);
-      height: 650px;
+  content: "";
 
-      overflow: hidden;
+  position: absolute;
 
-      border-radius:
-        48% 52% 42% 58% /
-        38% 42% 58% 62%;
+  width: 360px;
+  height: 360px;
 
-      background-color: var(--sage);
+  top: 8%;
+  left: -180px;
 
-      background-position: center;
-      background-size: cover;
-      background-repeat: no-repeat;
+  background: var(--lichen);
 
-      box-shadow: var(--shadow-image);
+  border-radius:
+    62% 38% 65% 35% /
+    40% 57% 43% 60%;
 
-      transform: rotate(2deg);
+  opacity: 0.45;
 
-      transition: transform 0.7s ease;
-    }
+  z-index: -1;
 
-    .hero-image:hover {
-      transform: rotate(0deg) scale(1.015);
-    }
+  filter: blur(1px);
 
-    .hero-image::after {
-      content: "";
+}
 
-      position: absolute;
-      inset: 0;
+.hero-content {
 
-      background:
-        linear-gradient(
-          180deg,
-          rgba(16, 47, 40, 0.02) 30%,
-          rgba(16, 47, 40, 0.25) 100%
-        );
-    }
+  position: relative;
+  z-index: 2;
 
-    .hero-note {
-      position: absolute;
+}
 
-      right: -20px;
-      bottom: 45px;
+.title {
 
-      z-index: 3;
+  margin: 0 0 25px;
 
-      padding: 18px 22px;
+  max-width: 720px;
 
-      background: var(--cream-light);
+  color: var(--forest);
 
-      color: var(--forest);
+  font-family: Georgia, "Times New Roman", serif;
 
-      border-radius: 22px 22px 22px 5px;
+  font-size: clamp(4rem, 8vw, 7.5rem);
 
-      box-shadow: var(--shadow-soft);
+  line-height: 0.88;
 
-      font-size: 0.8rem;
-      font-weight: 700;
+  font-weight: normal;
 
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
+  letter-spacing: -0.065em;
 
-      transform: rotate(-4deg);
-    }
+}
 
-    /* =========================================================
-       ORGANIC DIVIDER
-       ========================================================= */
+.subtitle {
 
-    .organic-divider {
-      width: 100%;
+  max-width: 580px;
 
-      margin: 10px 0 100px;
+  margin-bottom: 40px;
 
-      display: flex;
-      justify-content: center;
+  color: var(--forest-soft);
 
-      overflow: hidden;
-    }
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
 
-    .organic-divider svg {
-      width: min(700px, 80%);
+  line-height: 1.55;
 
-      height: 75px;
+  letter-spacing: 0.01em;
 
-      overflow: visible;
-    }
+}
 
-    .organic-divider path {
-      fill: none;
+/* =========================================================
+   BUTTONS
+   ========================================================= */
 
-      stroke: var(--sage);
-      stroke-width: 2;
+.btn-group {
 
-      stroke-linecap: round;
+  display: flex;
 
-      stroke-dasharray: 4 9;
-    }
+  align-items: center;
 
-    /* =========================================================
-       GENERAL SECTION
-       ========================================================= */
+  gap: 14px;
 
-    .section {
-      position: relative;
+  flex-wrap: wrap;
 
-      margin: 0 0 120px;
+  margin: 0;
 
-      padding: 80px;
+}
 
-      text-align: left;
+.btn {
 
-      border-radius: var(--radius-xl);
+  display: inline-flex;
 
-      overflow: hidden;
-    }
+  align-items: center;
+  justify-content: center;
 
-    .section h3 {
-      margin: 0 0 28px;
+  min-height: 52px;
 
-      color: var(--forest);
+  padding: 14px 22px;
 
-      font-family: Georgia, "Times New Roman", serif;
+  border-radius: 999px;
 
-      font-size: clamp(2.3rem, 4vw, 4.2rem);
+  background: var(--forest);
+  color: white;
 
-      font-weight: normal;
+  text-decoration: none;
 
-      line-height: 0.98;
+  font-size: 0.95rem;
+  font-weight: 600;
 
-      letter-spacing: -0.05em;
-    }
+  box-shadow: 0 10px 25px rgba(23, 63, 53, 0.18);
 
-    .section p {
-      margin: 0 0 22px;
+  transition:
+    transform 0.3s ease,
+    background 0.3s ease,
+    box-shadow 0.3s ease;
 
-      color: var(--ink);
+}
 
-      font-size: 1.08rem;
-      line-height: 1.8;
-    }
+.btn::after {
 
-    .section strong {
-      color: var(--forest);
+  content: "→";
 
-      font-weight: 700;
-    }
+  margin-left: 10px;
 
-    .section ul {
-      margin: 25px 0 0;
-      padding: 0;
+  font-size: 1.15rem;
 
-      list-style: none;
-    }
+  transition: transform 0.3s ease;
 
-    .section li {
-      position: relative;
+}
 
-      padding: 15px 0 15px 35px;
+.btn:hover {
 
-      border-bottom: 1px solid rgba(23, 63, 53, 0.12);
+  transform: translateY(-3px);
 
-      color: var(--forest);
+  background: var(--moss);
 
-      font-size: 1rem;
-      line-height: 1.6;
-    }
+  box-shadow: 0 15px 35px rgba(23, 63, 53, 0.22);
 
-    .section li::before {
-      content: "✦";
+}
 
-      position: absolute;
-      left: 4px;
-      top: 15px;
+.btn:hover::after {
 
-      color: var(--moss);
-    }
+  transform: translateX(4px);
 
-    /* =========================================================
-       WHAT IS LICHENARY
-       ========================================================= */
+}
 
-    .what-section {
-      min-height: 580px;
+/* =========================================================
+   HERO IMAGE
+   ========================================================= */
 
-      display: grid;
-      grid-template-columns: 0.8fr 1.2fr;
+.hero-visual {
 
-      align-items: center;
+  position: relative;
 
-      gap: 80px;
+  min-height: 610px;
 
-      background: var(--forest);
+  display: flex;
 
-      color: white;
+  align-items: center;
+  justify-content: center;
 
-      border-radius:
-        35px 110px 35px 90px;
-    }
+}
 
-    .what-section::before {
-      content: "";
+.hero-image {
 
-      position: absolute;
+  position: relative;
 
-      width: 380px;
-      height: 380px;
+  width: min(100%, 570px);
+  height: 650px;
 
-      right: -150px;
-      top: -150px;
+  overflow: hidden;
 
-      border-radius: 50%;
+  border-radius:
+    48% 52% 42% 58% /
+    38% 42% 58% 62%;
 
-      background: var(--moss);
+  background-color: var(--sage);
 
-      opacity: 0.22;
-    }
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 
-    .what-section::after {
-      content: "";
+  box-shadow: var(--shadow-image);
 
-      position: absolute;
+  transform: rotate(2deg);
 
-      width: 240px;
-      height: 240px;
+  transition: transform 0.7s ease;
 
-      left: -100px;
-      bottom: -120px;
+}
 
-      border-radius: 50%;
+.hero-image:hover {
 
-      background: var(--sage);
+  transform: rotate(0deg) scale(1.015);
 
-      opacity: 0.10;
-    }
+}
 
-    .what-section h3,
-    .what-section p,
-    .what-section strong {
-      color: white;
-    }
+.hero-image::after {
 
-    .what-section h3 {
-      position: relative;
-      z-index: 2;
-    }
+  content: "";
 
-    .what-section p {
-      position: relative;
-      z-index: 2;
+  position: absolute;
 
-      color: rgba(255, 255, 255, 0.86);
-    }
+  inset: 0;
 
-    /* =========================================================
-       IMPACT STATS
-       ========================================================= */
+  background:
+    linear-gradient(
+      180deg,
+      rgba(16, 47, 40, 0.02) 30%,
+      rgba(16, 47, 40, 0.25) 100%
+    );
 
-    .stats-section {
-      position: relative;
+}
 
-      margin: 0 0 120px;
+.hero-note {
 
-      padding: 0;
+  position: absolute;
 
-      overflow: visible;
-    }
+  right: -20px;
+  bottom: 45px;
 
-    .stats-intro {
-      margin: 0 0 35px;
+  z-index: 3;
 
-      text-align: center;
+  padding: 18px 22px;
 
-      color: var(--forest-soft);
+  background: var(--cream-light);
+  color: var(--forest);
 
-      font-family: Georgia, "Times New Roman", serif;
+  border-radius: 22px 22px 22px 5px;
 
-      font-size: clamp(1.6rem, 3vw, 2.3rem);
+  box-shadow: var(--shadow-soft);
 
-      letter-spacing: -0.03em;
-    }
+  font-size: 0.8rem;
+  font-weight: 700;
 
-    .stats-grid {
-      display: grid;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 
-      grid-template-columns: repeat(3, 1fr);
+  transform: rotate(-4deg);
 
-      gap: 20px;
-    }
+}
 
-    .stat-card {
-      position: relative;
+/* =========================================================
+   ORGANIC DIVIDER
+   ========================================================= */
 
-      min-height: 220px;
+.organic-divider {
 
-      padding: 38px 28px;
+  width: 100%;
 
-      display: flex;
+  margin: 10px 0 100px;
 
-      flex-direction: column;
+  display: flex;
+  justify-content: center;
 
-      justify-content: center;
+  overflow: hidden;
 
-      text-align: center;
+}
 
-      background: var(--cream-light);
+.organic-divider svg {
 
-      border:
-        1px solid rgba(23, 63, 53, 0.09);
+  width: min(700px, 80%);
+  height: 75px;
 
-      border-radius:
-        28px 60px 28px 45px;
+  overflow: visible;
 
-      box-shadow: var(--shadow-soft);
+}
 
-      overflow: hidden;
+.organic-divider path {
 
-      transition:
-        transform 0.3s ease,
-        box-shadow 0.3s ease;
-    }
+  fill: none;
 
-    .stat-card:nth-child(2) {
-      border-radius:
-        60px 28px 45px 28px;
+  stroke: var(--sage);
 
-      background: var(--paper);
-    }
+  stroke-width: 2;
 
-    .stat-card:nth-child(3) {
-      border-radius:
-        28px 45px 60px 28px;
-    }
+  stroke-linecap: round;
 
-    .stat-card::before {
-      content: "";
+  stroke-dasharray: 4 9;
 
-      position: absolute;
+}
 
-      width: 120px;
-      height: 120px;
+/* =========================================================
+   GENERAL SECTION
+   ========================================================= */
 
-      right: -45px;
-      top: -45px;
+.section {
 
-      background: var(--lichen);
+  position: relative;
 
-      border-radius: 50%;
+  margin: 0 0 120px;
 
-      opacity: 0.65;
-    }
+  padding: 80px;
 
-    .stat-card:hover {
-      transform: translateY(-6px);
+  text-align: left;
 
-      box-shadow:
-        0 25px 60px rgba(23, 63, 53, 0.14);
-    }
+  border-radius: var(--radius-xl);
 
-    .stat-number {
-      position: relative;
-      z-index: 2;
+  overflow: hidden;
 
-      color: var(--forest);
+}
 
-      font-family: Georgia, "Times New Roman", serif;
+.section h3 {
 
-      font-size: clamp(3rem, 5vw, 4.8rem);
+  margin: 0 0 28px;
 
-      line-height: 0.9;
+  color: var(--forest);
 
-      letter-spacing: -0.06em;
+  font-family: Georgia, "Times New Roman", serif;
 
-      margin-bottom: 15px;
-    }
+  font-size: clamp(2.3rem, 4vw, 4.2rem);
 
-    .stat-label {
-      position: relative;
-      z-index: 2;
+  font-weight: normal;
 
-      color: var(--forest-soft);
+  line-height: 0.98;
 
-      font-size: 0.95rem;
+  letter-spacing: -0.05em;
 
-      line-height: 1.55;
+}
 
-      max-width: 220px;
+.section p {
 
-      margin: 0 auto;
-    }
+  margin: 0 0 22px;
 
-    /* =========================================================
-       NATIONAL GEOGRAPHIC AWARD
-       ========================================================= */
+  color: var(--ink);
 
-    .award-section {
-      position: relative;
+  font-size: 1.08rem;
 
-      margin: 0 0 120px;
+  line-height: 1.8;
 
-      padding: 75px 85px;
+}
 
-      display: grid;
+.section strong {
 
-      grid-template-columns: 0.75fr 1.25fr;
+  color: var(--forest);
 
-      align-items: center;
+  font-weight: 700;
 
-      gap: 70px;
+}
 
-      background: var(--forest);
+.section ul {
 
-      color: white;
+  margin: 25px 0 0;
+  padding: 0;
 
-      border-radius:
-        110px 35px 90px 35px;
+  list-style: none;
 
-      overflow: hidden;
+}
 
-      box-shadow:
-        0 25px 70px rgba(23, 63, 53, 0.18);
-    }
+.section li {
 
-    .award-section::before {
-      content: "";
+  position: relative;
 
-      position: absolute;
+  padding: 15px 0 15px 35px;
 
-      width: 390px;
-      height: 390px;
+  border-bottom: 1px solid rgba(23, 63, 53, 0.12);
 
-      left: -170px;
-      top: -170px;
+  color: var(--forest);
 
-      border-radius: 50%;
+  font-size: 1rem;
 
-      background: var(--moss);
+  line-height: 1.6;
 
-      opacity: 0.20;
-    }
+}
 
-    .award-section::after {
-      content: "";
+.section li::before {
 
-      position: absolute;
+  content: "✦";
 
-      width: 260px;
-      height: 260px;
+  position: absolute;
 
-      right: -100px;
-      bottom: -110px;
+  left: 4px;
+  top: 15px;
 
-      background: var(--sage);
+  color: var(--moss);
 
-      border-radius:
-        55% 45% 35% 65% / 
-        45% 58% 42% 55%;
+}
 
-      opacity: 0.13;
-    }
+/* =========================================================
+   WHAT IS LICHENARY
+   ========================================================= */
 
-    .award-badge {
-      position: relative;
-      z-index: 2;
+.what-section {
 
-      min-height: 240px;
+  min-height: 580px;
 
-      display: flex;
+  display: grid;
 
-      flex-direction: column;
+  grid-template-columns: 0.8fr 1.2fr;
 
-      align-items: center;
-      justify-content: center;
+  align-items: center;
 
-      padding: 30px;
+  gap: 80px;
 
-      text-align: center;
+  background: var(--forest);
 
-      background: rgba(251, 250, 245, 0.10);
+  color: white;
 
-      border:
-        1px solid rgba(255, 255, 255, 0.16);
+  border-radius:
+    35px 110px 35px 90px;
 
-      border-radius:
-        50% 42% 55% 45% / 
-        45% 55% 42% 58%;
+}
 
-      transform: rotate(-2deg);
-    }
+.what-section::before {
 
-    .award-badge-small {
-      margin-bottom: 12px;
+  content: "";
 
-      color: var(--lichen);
+  position: absolute;
 
-      font-size: 0.8rem;
+  width: 380px;
+  height: 380px;
 
-      font-weight: 700;
+  right: -150px;
+  top: -150px;
 
-      letter-spacing: 0.16em;
+  border-radius: 50%;
 
-      text-transform: uppercase;
-    }
+  background: var(--moss);
 
-    .award-badge-title {
-      color: white;
+  opacity: 0.22;
 
-      font-family: Georgia, "Times New Roman", serif;
+}
 
-      font-size: clamp(1.8rem, 3vw, 2.7rem);
+.what-section::after {
 
-      line-height: 1;
+  content: "";
 
-      letter-spacing: -0.04em;
-    }
+  position: absolute;
 
-    .award-content {
-      position: relative;
-      z-index: 2;
-    }
+  width: 240px;
+  height: 240px;
 
-    .award-content h3 {
-      margin: 0 0 25px;
+  left: -100px;
+  bottom: -120px;
 
-      color: white;
+  border-radius: 50%;
 
-      font-family: Georgia, "Times New Roman", serif;
+  background: var(--sage);
 
-      font-size: clamp(2.4rem, 4vw, 4rem);
+  opacity: 0.10;
 
-      font-weight: normal;
+}
 
-      line-height: 0.98;
+.what-section h3,
+.what-section p,
+.what-section strong {
 
-      letter-spacing: -0.05em;
-    }
+  color: white;
 
-    .award-content p {
-      margin: 0 0 22px;
+}
 
-      color: rgba(255, 255, 255, 0.84);
+.what-section h3 {
 
-      font-size: 1.06rem;
+  position: relative;
+  z-index: 2;
 
-      line-height: 1.75;
-    }
+}
 
-    .award-content strong {
-      color: white;
-    }
+.what-section p {
 
-    .award-btn {
-      display: inline-flex;
+  position: relative;
+  z-index: 2;
 
-      align-items: center;
+  color: rgba(255, 255, 255, 0.86);
 
-      margin-top: 10px;
+}
 
-      padding: 13px 20px;
+/* =========================================================
+   IMPACT STATS
+   ========================================================= */
 
-      border-radius: 999px;
+.stats-section {
 
-      background: var(--lichen);
+  position: relative;
 
-      color: var(--forest);
+  margin: 0 0 120px;
 
-      text-decoration: none;
+  padding: 0;
 
-      font-size: 0.92rem;
+  overflow: visible;
 
-      font-weight: 700;
+}
 
-      transition:
-        transform 0.3s ease,
-        background 0.3s ease;
-    }
+.stats-intro {
 
-    .award-btn::after {
-      content: "→";
+  margin: 0 0 35px;
 
-      margin-left: 9px;
+  text-align: center;
 
-      transition: transform 0.3s ease;
-    }
+  color: var(--forest-soft);
 
-    .award-btn:hover {
-      transform: translateY(-3px);
+  font-family: Georgia, "Times New Roman", serif;
 
-      background: white;
-    }
+  font-size: clamp(1.6rem, 3vw, 2.3rem);
 
-    .award-btn:hover::after {
-      transform: translateX(4px);
-    }
+  letter-spacing: -0.03em;
 
-    /* =========================================================
-       HOW IT WORKS
-       ========================================================= */
+}
 
-    .how-section {
-      position: relative;
+.stats-grid {
 
-      margin: 0 0 120px;
+  display: grid;
 
-      padding: 75px 0;
+  grid-template-columns: repeat(3, 1fr);
 
-      text-align: center;
-    }
+  gap: 20px;
 
-    .how-section h3 {
-      margin: 0 0 18px;
+}
 
-      color: var(--forest);
+.stat-card {
 
-      font-family: Georgia, "Times New Roman", serif;
+  position: relative;
 
-      font-size: clamp(2.7rem, 5vw, 4.5rem);
+  min-height: 220px;
 
-      font-weight: normal;
+  padding: 38px 28px;
 
-      line-height: 0.98;
+  display: flex;
 
-      letter-spacing: -0.05em;
-    }
+  flex-direction: column;
 
-    .how-intro {
-      max-width: 650px;
+  justify-content: center;
 
-      margin: 0 auto 50px;
+  text-align: center;
 
-      color: var(--muted);
+  background: var(--cream-light);
 
-      font-size: 1.05rem;
+  border:
+    1px solid rgba(23, 63, 53, 0.09);
 
-      line-height: 1.7;
-    }
+  border-radius:
+    28px 60px 28px 45px;
 
-    .how-grid {
-      display: grid;
+  box-shadow: var(--shadow-soft);
 
-      grid-template-columns: repeat(3, 1fr);
+  overflow: hidden;
 
-      gap: 22px;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 
-      text-align: left;
-    }
+}
 
-    .how-card {
-      position: relative;
+.stat-card:nth-child(2) {
 
-      padding: 40px 32px 35px;
+  border-radius:
+    60px 28px 45px 28px;
 
-      background: var(--cream-light);
+  background: var(--paper);
 
-      border:
-        1px solid rgba(23, 63, 53, 0.08);
+}
 
-      border-radius:
-        45px 22px 45px 22px;
+.stat-card:nth-child(3) {
 
-      box-shadow: var(--shadow-soft);
+  border-radius:
+    28px 45px 60px 28px;
 
-      overflow: hidden;
-    }
+}
 
-    .how-card:nth-child(2) {
-      border-radius:
-        22px 45px 22px 45px;
+.stat-card::before {
 
-      background: var(--paper);
-    }
+  content: "";
 
-    .how-card:nth-child(3) {
-      border-radius:
-        45px 22px 22px 45px;
-    }
+  position: absolute;
 
-    .how-number {
-      color: var(--moss);
+  width: 120px;
+  height: 120px;
 
-      font-family: Georgia, "Times New Roman", serif;
+  right: -45px;
+  top: -45px;
 
-      font-size: 1.1rem;
+  background: var(--lichen);
 
-      font-weight: bold;
+  border-radius: 50%;
 
-      margin-bottom: 25px;
-    }
+  opacity: 0.65;
 
-    .how-card h4 {
-      margin: 0 0 15px;
+}
 
-      color: var(--forest);
+.stat-card:hover {
 
-      font-family: Georgia, "Times New Roman", serif;
+  transform: translateY(-6px);
 
-      font-size: 2rem;
+  box-shadow:
+    0 25px 60px rgba(23, 63, 53, 0.14);
 
-      font-weight: normal;
+}
 
-      letter-spacing: -0.04em;
-    }
+.stat-number {
 
-    .how-card p {
-      margin: 0;
+  position: relative;
+  z-index: 2;
 
-      color: var(--muted);
+  color: var(--forest);
 
-      font-size: 0.98rem;
+  font-family: Georgia, "Times New Roman", serif;
 
-      line-height: 1.7;
-    }
+  font-size: clamp(3rem, 5vw, 4.8rem);
 
-    /* =========================================================
-       LICHENARY AI
-       ========================================================= */
+  line-height: 0.9;
 
-    .ai-section {
-      position: relative;
+  letter-spacing: -0.06em;
 
-      margin: 0 0 120px;
+  margin-bottom: 15px;
 
-      padding: 80px;
+}
 
-      background:
-        linear-gradient(
-          135deg,
-          var(--paper),
-          #e5e8d8
-        );
+.stat-label {
 
-      border-radius:
-        35px 110px 35px 90px;
+  position: relative;
+  z-index: 2;
 
-      overflow: hidden;
+  color: var(--forest-soft);
 
-      text-align: center;
-    }
+  font-size: 0.95rem;
 
-    .ai-section::before {
-      content: "";
+  line-height: 1.55;
 
-      position: absolute;
+  max-width: 220px;
 
-      width: 260px;
-      height: 260px;
+  margin: 0 auto;
 
-      right: -100px;
-      top: -100px;
+}
 
-      background: var(--sage);
+/* =========================================================
+   NATIONAL GEOGRAPHIC AWARD
+   ========================================================= */
 
-      opacity: 0.18;
+.award-section {
 
-      border-radius: 50%;
-    }
+  position: relative;
 
-    .ai-section::after {
-      content: "";
+  margin: 0 0 120px;
 
-      position: absolute;
+  padding: 75px 85px;
 
-      width: 180px;
-      height: 180px;
+  display: grid;
 
-      left: -80px;
-      bottom: -90px;
+  grid-template-columns: 0.75fr 1.25fr;
 
-      background: var(--lichen);
+  align-items: center;
 
-      opacity: 0.50;
+  gap: 70px;
 
-      border-radius:
-        55% 45% 35% 65% /
-        45% 58% 42% 55%;
-    }
+  background: var(--forest);
 
-    .ai-section h3,
-    .ai-section p,
-    .ai-section a {
-      position: relative;
+  color: white;
 
-      z-index: 2;
-    }
+  border-radius:
+    110px 35px 90px 35px;
 
-    .ai-section h3 {
-      margin: 0 0 25px;
+  overflow: hidden;
 
-      color: var(--forest);
+  box-shadow:
+    0 25px 70px rgba(23, 63, 53, 0.18);
 
-      font-family: Georgia, "Times New Roman", serif;
+}
 
-      font-size: clamp(2.7rem, 5vw, 4.5rem);
+.award-section::before {
 
-      font-weight: normal;
+  content: "";
 
-      line-height: 0.98;
+  position: absolute;
 
-      letter-spacing: -0.05em;
-    }
+  width: 390px;
+  height: 390px;
 
-    .ai-section p {
-      max-width: 720px;
+  left: -170px;
+  top: -170px;
 
-      margin: 0 auto 30px;
+  border-radius: 50%;
 
-      color: var(--forest-soft);
+  background: var(--moss);
 
-      font-size: 1.08rem;
+  opacity: 0.20;
 
-      line-height: 1.75;
-    }
+}
 
-    /* =========================================================
-       MAP PREVIEW
-       ========================================================= */
+.award-section::after {
 
-    .map-preview-section {
-      position: relative;
+  content: "";
 
-      margin: 0 0 120px;
+  position: absolute;
 
-      padding: 65px 75px;
+  width: 260px;
+  height: 260px;
 
-      background: var(--cream-light);
+  right: -100px;
+  bottom: -110px;
 
-      border-radius:
-        38px 95px 38px 75px;
+  background: var(--sage);
 
-      border:
-        1px solid rgba(23, 63, 53, 0.08);
+  border-radius:
+    55% 45% 35% 65% /
+    45% 58% 42% 55%;
 
-      box-shadow: var(--shadow-soft);
+  opacity: 0.13;
 
-      overflow: hidden;
-    }
+}
 
-    .map-preview-section::before {
-      content: "";
+.award-badge {
 
-      position: absolute;
+  position: relative;
+  z-index: 2;
 
-      width: 220px;
-      height: 220px;
+  min-height: 240px;
 
-      right: -100px;
-      top: -105px;
+  display: flex;
 
-      background: var(--lichen);
+  flex-direction: column;
 
-      border-radius:
-        55% 45% 35% 65% /
-        45% 58% 42% 55%;
+  align-items: center;
+  justify-content: center;
 
-      opacity: 0.58;
-    }
+  padding: 30px;
 
-    .map-preview-heading {
-      position: relative;
+  text-align: center;
 
-      z-index: 2;
+  background: rgba(251, 250, 245, 0.10);
 
-      display: flex;
+  border:
+    1px solid rgba(255, 255, 255, 0.16);
 
-      align-items: flex-end;
+  border-radius:
+    50% 42% 55% 45% /
+    45% 55% 42% 58%;
 
-      justify-content: space-between;
+  transform: rotate(-2deg);
 
-      gap: 30px;
+}
 
-      margin-bottom: 35px;
-    }
+.award-badge-small {
 
-    .map-preview-heading h3 {
-      margin: 0;
+  margin-bottom: 12px;
 
-      color: var(--forest);
+  color: var(--lichen);
 
-      font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.8rem;
 
-      font-size: clamp(2.5rem, 4.5vw, 4.2rem);
+  font-weight: 700;
 
-      font-weight: normal;
+  letter-spacing: 0.16em;
 
-      line-height: 0.98;
+  text-transform: uppercase;
 
-      letter-spacing: -0.05em;
-    }
+}
 
-    .map-preview-heading p {
-      max-width: 430px;
+.award-badge-title {
 
-      margin: 0;
+  color: white;
 
-      color: var(--muted);
+  font-family: Georgia, "Times New Roman", serif;
 
-      font-size: 0.98rem;
+  font-size: clamp(1.8rem, 3vw, 2.7rem);
 
-      line-height: 1.65;
-    }
+  line-height: 1;
 
-    #home-map {
-      position: relative;
+  letter-spacing: -0.04em;
 
-      z-index: 2;
+}
 
-      width: 100%;
+.award-content {
 
-      height: 420px;
+  position: relative;
+  z-index: 2;
 
-      border-radius:
-        28px 12px 28px 12px;
+}
 
-      background: var(--paper);
+.award-content h3 {
 
-      border:
-        1px solid rgba(23, 63, 53, 0.10);
+  margin: 0 0 25px;
 
-      box-shadow:
-        0 20px 50px rgba(23, 63, 53, 0.12),
-        inset 0 1px 0 rgba(255,255,255,0.6);
+  color: white;
 
-      overflow: hidden;
-    }
+  font-family: Georgia, "Times New Roman", serif;
 
-    .map-preview-action {
-      position: relative;
+  font-size: clamp(2.4rem, 4vw, 4rem);
 
-      z-index: 2;
+  font-weight: normal;
 
-      margin-top: 25px;
+  line-height: 0.98;
 
-      display: flex;
+  letter-spacing: -0.05em;
 
-      justify-content: center;
-    }
+}
 
-    .leaflet-container {
-      font-family:
-        "Segoe UI",
-        Tahoma,
-        Geneva,
-        Verdana,
-        sans-serif;
-    }
+.award-content p {
 
-    .leaflet-control-zoom {
-      border: none !important;
+  margin: 0 0 22px;
 
-      box-shadow:
-        0 8px 25px rgba(23, 63, 53, 0.16) !important;
+  color: rgba(255, 255, 255, 0.84);
 
-      overflow: hidden;
+  font-size: 1.06rem;
 
-      border-radius: 14px !important;
-    }
+  line-height: 1.75;
 
-    .leaflet-control-zoom a {
-      color: var(--forest) !important;
+}
 
-      background: rgba(251, 250, 245, 0.95) !important;
+.award-content strong {
 
-      border: none !important;
+  color: white;
 
-      width: 38px !important;
-      height: 38px !important;
+}
 
-      line-height: 38px !important;
+.award-btn {
 
-      font-weight: 600;
+  display: inline-flex;
 
-      transition:
-        background 0.2s ease,
-        color 0.2s ease;
-    }
+  align-items: center;
 
-    .leaflet-control-zoom a:hover {
-      background: var(--lichen) !important;
+  margin-top: 10px;
 
-      color: var(--forest-dark) !important;
-    }
+  padding: 13px 20px;
 
-    .leaflet-control-attribution {
-      background: rgba(251, 250, 245, 0.90) !important;
+  border-radius: 999px;
 
-      color: var(--muted) !important;
+  background: var(--lichen);
 
-      border-radius: 8px 0 0 0;
+  color: var(--forest);
 
-      font-size: 10px;
-    }
+  text-decoration: none;
 
-    .leaflet-control-attribution a {
-      color: var(--forest-soft) !important;
-    }
+  font-size: 0.92rem;
 
-    .leaflet-popup-content-wrapper {
-      background: var(--cream-light);
+  font-weight: 700;
 
-      color: var(--ink);
+  transition:
+    transform 0.3s ease,
+    background 0.3s ease;
 
-      border-radius:
-        18px 7px 18px 7px;
+}
 
-      box-shadow:
-        0 15px 40px rgba(23, 63, 53, 0.18);
-    }
+.award-btn::after {
 
-    .leaflet-popup-tip {
-      background: var(--cream-light);
-    }
+  content: "→";
 
-    .leaflet-popup-content {
-      margin: 15px 17px;
+  margin-left: 9px;
 
-      font-size: 0.92rem;
+  transition: transform 0.3s ease;
 
-      line-height: 1.55;
-    }
+}
 
-    /* =========================================================
-       WHY DO WE DO THIS
-       ========================================================= */
+.award-btn:hover {
 
-    .why-section {
-      max-width: 1120px;
+  transform: translateY(-3px);
 
-      margin-left: auto;
-      margin-right: 0;
+  background: white;
 
-      padding: 90px 90px 85px 150px;
+}
 
-      background: var(--cream-light);
+.award-btn:hover::after {
 
-      border:
-        1px solid rgba(23, 63, 53, 0.09);
+  transform: translateX(4px);
 
-      border-radius:
-        120px 30px 110px 35px;
+}
 
-      box-shadow: var(--shadow-soft);
-    }
+/* =========================================================
+   HOW IT WORKS
+   ========================================================= */
 
-    .why-section::before {
-      content: "";
+.how-section {
 
-      position: absolute;
+  position: relative;
 
-      width: 150px;
-      height: 150px;
+  margin: 0 0 120px;
 
-      left: -55px;
-      top: 65px;
+  padding: 75px 0;
 
-      border: 2px solid var(--sage);
+  text-align: center;
 
-      border-radius:
-        67% 33% 52% 48% /
-        44% 57% 43% 56%;
+}
 
-      transform: rotate(-20deg);
+.how-section h3 {
 
-      opacity: 0.6;
-    }
+  margin: 0 0 18px;
 
-    .why-section::after {
-      content: "";
+  color: var(--forest);
 
-      position: absolute;
+  font-family: Georgia, "Times New Roman", serif;
 
-      width: 90px;
-      height: 90px;
+  font-size: clamp(2.7rem, 5vw, 4.5rem);
 
-      left: 8px;
-      top: 150px;
+  font-weight: normal;
 
-      background: var(--lichen);
+  line-height: 0.98;
 
-      border-radius: 50%;
+  letter-spacing: -0.05em;
 
-      opacity: 0.7;
+}
 
-      z-index: 0;
-    }
+.how-intro {
 
-    .why-section h3,
-    .why-section p,
-    .why-section ul {
-      position: relative;
-      z-index: 2;
-    }
+  max-width: 650px;
 
-    /* =========================================================
-       EVERY OBSERVATION MATTERS
-       ========================================================= */
+  margin: 0 auto 50px;
 
-    .matters-section {
-      position: relative;
+  color: var(--muted);
 
-      margin: 0 0 120px;
+  font-size: 1.05rem;
 
-      padding: 85px 10%;
+  line-height: 1.7;
 
-      text-align: center;
+}
 
-      background: var(--forest);
+.how-grid {
 
-      color: white;
+  display: grid;
 
-      border-radius:
-        30px 100px 30px 120px;
+  grid-template-columns: repeat(3, 1fr);
 
-      overflow: hidden;
-    }
+  gap: 22px;
 
-    .matters-section::before {
-      content: "";
+  text-align: left;
 
-      position: absolute;
+}
 
-      width: 280px;
-      height: 280px;
+.how-card {
 
-      right: -100px;
-      top: -110px;
+  position: relative;
 
-      background: var(--moss);
+  padding: 40px 32px 35px;
 
-      opacity: 0.20;
+  background: var(--cream-light);
 
-      border-radius: 50%;
-    }
+  border:
+    1px solid rgba(23, 63, 53, 0.08);
 
-    .matters-section::after {
-      content: "";
+  border-radius:
+    45px 22px 45px 22px;
 
-      position: absolute;
+  box-shadow: var(--shadow-soft);
 
-      width: 200px;
-      height: 200px;
+  overflow: hidden;
 
-      left: -90px;
-      bottom: -90px;
+}
 
-      background: var(--sage);
+.how-card:nth-child(2) {
 
-      opacity: 0.10;
+  border-radius:
+    22px 45px 22px 45px;
 
-      border-radius:
-        55% 45% 35% 65%;
-    }
+  background: var(--paper);
 
-    .matters-section h3,
-    .matters-section p,
-    .matters-section a {
-      position: relative;
+}
 
-      z-index: 2;
-    }
+.how-card:nth-child(3) {
 
-    .matters-section h3 {
-      margin: 0 0 22px;
+  border-radius:
+    45px 22px 22px 45px;
 
-      color: white;
+}
 
-      font-family: Georgia, "Times New Roman", serif;
+.how-number {
 
-      font-size: clamp(2.8rem, 5vw, 4.7rem);
+  color: var(--moss);
 
-      font-weight: normal;
+  font-family: Georgia, "Times New Roman", serif;
 
-      line-height: 0.98;
+  font-size: 1.1rem;
 
-      letter-spacing: -0.05em;
-    }
+  font-weight: bold;
 
-    .matters-section p {
-      max-width: 720px;
+  margin-bottom: 25px;
 
-      margin: 0 auto 30px;
+}
 
-      color: rgba(255, 255, 255, 0.82);
+.how-card h4 {
 
-      font-size: 1.12rem;
+  margin: 0 0 15px;
 
-      line-height: 1.75;
-    }
+  color: var(--forest);
 
-    .matters-section .btn {
-      background: var(--lichen);
+  font-family: Georgia, "Times New Roman", serif;
 
-      color: var(--forest);
+  font-size: 2rem;
 
-      box-shadow:
-        0 10px 25px rgba(0, 0, 0, 0.12);
-    }
+  font-weight: normal;
 
-    .matters-section .btn:hover {
-      background: white;
-    }
+  letter-spacing: -0.04em;
 
-    /* =========================================================
-       PRESS
-       ========================================================= */
+}
 
-    .press-section {
-      position: relative;
+.how-card p {
 
-      margin: 0 0 120px;
+  margin: 0;
 
-      padding: 0;
-    }
+  color: var(--muted);
 
-    .press-heading {
-      margin-bottom: 40px;
+  font-size: 0.98rem;
 
-      text-align: center;
-    }
+  line-height: 1.7;
 
-    .press-heading h3 {
-      margin: 0 0 18px;
+}
 
-      color: var(--forest);
+/* =========================================================
+   LICHENARY AI
+   ========================================================= */
 
-      font-family: Georgia, "Times New Roman", serif;
+.ai-section {
 
-      font-size: clamp(2.7rem, 5vw, 4.5rem);
+  position: relative;
 
-      font-weight: normal;
+  margin: 0 0 120px;
 
-      line-height: 0.98;
+  padding: 80px;
 
-      letter-spacing: -0.05em;
-    }
+  background:
+    linear-gradient(
+      135deg,
+      var(--paper),
+      #e5e8d8
+    );
 
-    .press-heading p {
-      margin: 0 auto;
+  border-radius:
+    35px 110px 35px 90px;
 
-      max-width: 620px;
+  overflow: hidden;
 
-      color: var(--muted);
+  text-align: center;
 
-      font-size: 1rem;
+}
 
-      line-height: 1.7;
-    }
+.ai-section::before {
 
-    .press-grid {
-      display: grid;
+  content: "";
 
-      grid-template-columns: repeat(3, 1fr);
+  position: absolute;
 
-      gap: 20px;
-    }
+  width: 260px;
+  height: 260px;
 
-    .press-card {
-      position: relative;
+  right: -100px;
+  top: -100px;
 
-      min-height: 330px;
+  background: var(--sage);
 
-      padding: 35px 30px;
+  opacity: 0.18;
 
-      display: flex;
+  border-radius: 50%;
 
-      flex-direction: column;
+}
 
-      background: var(--cream-light);
+.ai-section::after {
 
-      border:
-        1px solid rgba(23, 63, 53, 0.09);
+  content: "";
 
-      box-shadow: var(--shadow-soft);
+  position: absolute;
 
-      overflow: hidden;
+  width: 180px;
+  height: 180px;
 
-      transition:
-        transform 0.3s ease,
-        box-shadow 0.3s ease;
-    }
+  left: -80px;
+  bottom: -90px;
 
-    .press-card:nth-child(1) {
-      border-radius:
-        45px 22px 45px 22px;
-    }
+  background: var(--lichen);
 
-    .press-card:nth-child(2) {
-      border-radius:
-        22px 45px 22px 45px;
+  opacity: 0.50;
 
-      background: var(--paper);
-    }
+  border-radius:
+    55% 45% 35% 65% /
+    45% 58% 42% 55%;
 
-    .press-card:nth-child(3) {
-      border-radius:
-        45px 22px 22px 45px;
-    }
+}
 
-    .press-card::before {
-      content: "";
+.ai-section h3,
+.ai-section p,
+.ai-section a {
 
-      position: absolute;
+  position: relative;
 
-      width: 130px;
-      height: 130px;
+  z-index: 2;
 
-      right: -55px;
-      top: -55px;
+}
 
-      background: var(--lichen);
+.ai-section h3 {
 
-      border-radius: 50%;
+  margin: 0 0 25px;
 
-      opacity: 0.6;
-    }
+  color: var(--forest);
 
-    .press-card:hover {
-      transform: translateY(-6px);
+  font-family: Georgia, "Times New Roman", serif;
 
-      box-shadow:
-        0 25px 60px rgba(23, 63, 53, 0.14);
-    }
+  font-size: clamp(2.7rem, 5vw, 4.5rem);
 
-    .press-source {
-      position: relative;
+  font-weight: normal;
 
-      z-index: 2;
+  line-height: 0.98;
 
-      margin-bottom: 20px;
+  letter-spacing: -0.05em;
 
-      color: var(--moss);
+}
 
-      font-size: 0.78rem;
+.ai-section p {
 
-      font-weight: 800;
+  max-width: 720px;
 
-      letter-spacing: 0.12em;
+  margin: 0 auto 30px;
 
-      text-transform: uppercase;
-    }
+  color: var(--forest-soft);
 
-    .press-card h4 {
-      position: relative;
+  font-size: 1.08rem;
 
-      z-index: 2;
+  line-height: 1.75;
 
-      margin: 0 0 18px;
+}
 
-      color: var(--forest);
+/* =========================================================
+   MAP PREVIEW
+   ========================================================= */
 
-      font-family: Georgia, "Times New Roman", serif;
+.map-preview-section {
 
-      font-size: 1.75rem;
+  position: relative;
 
-      font-weight: normal;
+  margin: 0 0 120px;
 
-      line-height: 1.05;
+  padding: 65px 75px;
 
-      letter-spacing: -0.035em;
-    }
+  background: var(--cream-light);
 
-    .press-card p {
-      position: relative;
+  border-radius:
+    38px 95px 38px 75px;
 
-      z-index: 2;
+  border:
+    1px solid rgba(23, 63, 53, 0.08);
 
-      margin: 0 0 25px;
+  box-shadow: var(--shadow-soft);
 
-      color: var(--muted);
+  overflow: hidden;
 
-      font-size: 0.94rem;
+}
 
-      line-height: 1.65;
-    }
+.map-preview-section::before {
 
-    .press-link {
-      position: relative;
+  content: "";
 
-      z-index: 2;
+  position: absolute;
 
-      margin-top: auto;
+  width: 220px;
+  height: 220px;
 
-      color: var(--forest);
+  right: -100px;
+  top: -105px;
 
-      text-decoration: none;
+  background: var(--lichen);
 
-      font-size: 0.9rem;
+  border-radius:
+    55% 45% 35% 65% /
+    45% 58% 42% 55%;
 
-      font-weight: 700;
-    }
+  opacity: 0.58;
 
-    .press-link::after {
-      content: " →";
+}
 
-      transition: margin-left 0.25s ease;
-    }
+.map-preview-heading {
 
-    .press-link:hover::after {
-      margin-left: 5px;
-    }
+  position: relative;
 
-    /* =========================================================
-       NEED HELP
-       ========================================================= */
+  z-index: 2;
 
-    .help-section {
-      position: relative;
+  display: flex;
 
-      margin: 0 0 120px;
+  align-items: flex-end;
 
-      padding: 0;
-    }
+  justify-content: space-between;
 
-    .help-heading {
-      margin-bottom: 40px;
+  gap: 30px;
 
-      text-align: center;
-    }
+  margin-bottom: 35px;
 
-    .help-heading h3 {
-      margin: 0 0 18px;
+}
 
-      color: var(--forest);
+.map-preview-heading h3 {
 
-      font-family: Georgia, "Times New Roman", serif;
+  margin: 0;
 
-      font-size: clamp(2.7rem, 5vw, 4.5rem);
+  color: var(--forest);
 
-      font-weight: normal;
+  font-family: Georgia, "Times New Roman", serif;
 
-      line-height: 0.98;
+  font-size: clamp(2.5rem, 4.5vw, 4.2rem);
 
-      letter-spacing: -0.05em;
-    }
+  font-weight: normal;
 
-    .help-heading p {
-      margin: 0 auto;
+  line-height: 0.98;
 
-      max-width: 650px;
+  letter-spacing: -0.05em;
 
-      color: var(--muted);
+}
 
-      font-size: 1rem;
+.map-preview-heading p {
 
-      line-height: 1.7;
-    }
+  max-width: 430px;
 
-    .help-grid {
-      display: grid;
+  margin: 0;
 
-      grid-template-columns: repeat(3, 1fr);
+  color: var(--muted);
 
-      gap: 20px;
-    }
+  font-size: 0.98rem;
 
-    .help-card {
-      position: relative;
+  line-height: 1.65;
 
-      min-height: 245px;
+}
 
-      padding: 35px 30px;
+#home-map {
 
-      display: flex;
+  position: relative;
 
-      flex-direction: column;
+  z-index: 2;
 
-      justify-content: space-between;
+  width: 100%;
 
-      background: var(--cream-light);
+  height: 420px;
 
-      border:
-        1px solid rgba(23, 63, 53, 0.09);
+  border-radius:
+    28px 12px 28px 12px;
 
-      box-shadow: var(--shadow-soft);
+  background: var(--paper);
 
-      overflow: hidden;
+  border:
+    1px solid rgba(23, 63, 53, 0.10);
 
-      text-decoration: none;
+  box-shadow:
+    0 20px 50px rgba(23, 63, 53, 0.12),
+    inset 0 1px 0 rgba(255,255,255,0.6);
 
-      transition:
-        transform 0.3s ease,
-        box-shadow 0.3s ease;
-    }
+  overflow: hidden;
 
-    .help-card:nth-child(1) {
-      border-radius:
-        45px 22px 45px 22px;
-    }
+}
 
-    .help-card:nth-child(2) {
-      border-radius:
-        22px 45px 22px 45px;
+.map-preview-action {
 
-      background: var(--paper);
-    }
+  position: relative;
 
-    .help-card:nth-child(3) {
-      border-radius:
-        45px 22px 22px 45px;
-    }
+  z-index: 2;
 
-    .help-card::before {
-      content: "";
+  margin-top: 25px;
 
-      position: absolute;
+  display: flex;
 
-      width: 120px;
-      height: 120px;
+  justify-content: center;
 
-      right: -50px;
-      bottom: -50px;
+}
 
-      background: var(--lichen);
+.leaflet-container {
 
-      border-radius: 50%;
+  font-family:
+    "Segoe UI",
+    Tahoma,
+    Geneva,
+    Verdana,
+    sans-serif;
 
-      opacity: 0.65;
-    }
+}
 
-    .help-card:hover {
-      transform: translateY(-6px);
+.leaflet-control-zoom {
 
-      box-shadow:
-        0 25px 60px rgba(23, 63, 53, 0.14);
-    }
+  border: none !important;
 
-    .help-icon {
-      position: relative;
+  box-shadow:
+    0 8px 25px rgba(23, 63, 53, 0.16) !important;
 
-      z-index: 2;
+  overflow: hidden;
 
-      color: var(--moss);
+  border-radius: 14px !important;
 
-      font-size: 1.8rem;
+}
 
-      margin-bottom: 20px;
-    }
+.leaflet-control-zoom a {
 
-    .help-card h4 {
-      position: relative;
+  color: var(--forest) !important;
 
-      z-index: 2;
+  background: rgba(251, 250, 245, 0.95) !important;
 
-      margin: 0 0 12px;
+  border: none !important;
 
-      color: var(--forest);
+  width: 38px !important;
+  height: 38px !important;
 
-      font-family: Georgia, "Times New Roman", serif;
+  line-height: 38px !important;
 
-      font-size: 1.75rem;
+  font-weight: 600;
 
-      font-weight: normal;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 
-      line-height: 1.05;
+}
 
-      letter-spacing: -0.035em;
-    }
+.leaflet-control-zoom a:hover {
 
-    .help-card p {
-      position: relative;
+  background: var(--lichen) !important;
 
-      z-index: 2;
+  color: var(--forest-dark) !important;
 
-      margin: 0 0 20px;
+}
 
-      color: var(--muted);
+.leaflet-control-attribution {
 
-      font-size: 0.92rem;
+  background: rgba(251, 250, 245, 0.90) !important;
 
-      line-height: 1.6;
-    }
+  color: var(--muted) !important;
 
-    .help-arrow {
-      position: relative;
+  border-radius: 8px 0 0 0;
 
-      z-index: 2;
+  font-size: 10px;
 
-      color: var(--forest);
+}
 
-      font-size: 0.9rem;
+.leaflet-control-attribution a {
 
-      font-weight: 700;
-    }
+  color: var(--forest-soft) !important;
 
-    /* =========================================================
-       VISION
-       ========================================================= */
+}
 
-    .vision-section {
-      min-height: 550px;
+.leaflet-popup-content-wrapper {
 
-      display: flex;
+  background: var(--cream-light);
 
-      flex-direction: column;
+  color: var(--ink);
 
-      justify-content: center;
+  border-radius:
+    18px 7px 18px 7px;
 
-      padding: 100px 10%;
+  box-shadow:
+    0 15px 40px rgba(23, 63, 53, 0.18);
 
-      background:
-        linear-gradient(
-          135deg,
-          var(--paper),
-          #e5e8d8
-        );
+}
 
-      border-radius:
-        30px 100px 30px 120px;
+.leaflet-popup-tip {
 
-      text-align: center;
-    }
+  background: var(--cream-light);
 
-    .vision-section::before {
-      content: "";
+}
 
-      position: absolute;
+.leaflet-popup-content {
 
-      width: 300px;
-      height: 300px;
+  margin: 15px 17px;
 
-      right: -90px;
-      top: -100px;
+  font-size: 0.92rem;
 
-      background: var(--sage);
+  line-height: 1.55;
 
-      opacity: 0.18;
+}
 
-      border-radius:
-        42% 58% 63% 37% /
-        54% 40% 60% 46%;
-    }
+/* =========================================================
+   WHY DO WE DO THIS
+   ========================================================= */
 
-    .vision-section::after {
-      content: "";
+.why-section {
 
-      position: absolute;
+  max-width: 1120px;
 
-      width: 230px;
-      height: 230px;
+  margin-left: auto;
+  margin-right: 0;
 
-      left: -90px;
-      bottom: -100px;
+  padding: 90px 90px 85px 150px;
 
-      background: var(--lichen);
+  background: var(--cream-light);
 
-      opacity: 0.45;
+  border:
+    1px solid rgba(23, 63, 53, 0.09);
 
-      border-radius:
-        55% 45% 35% 65% /
-        45% 58% 42% 55%;
-    }
+  border-radius:
+    120px 30px 110px 35px;
 
-    .vision-section h3,
-    .vision-section p {
-      position: relative;
-      z-index: 2;
-    }
+  box-shadow: var(--shadow-soft);
 
-    .vision-section h3 {
-      max-width: 800px;
+}
 
-      margin-left: auto;
-      margin-right: auto;
-    }
+.why-section::before {
 
-    .vision-section p {
-      max-width: 780px;
+  content: "";
 
-      margin-left: auto;
-      margin-right: auto;
+  position: absolute;
 
-      color: var(--forest-soft);
-    }
+  width: 150px;
+  height: 150px;
 
-    /* =========================================================
-       FINAL MESSAGE
-       ========================================================= */
+  left: -55px;
+  top: 65px;
 
-    .vision-section p:last-child {
-      margin-top: 30px;
+  border: 2px solid var(--sage);
 
-      font-family: Georgia, "Times New Roman", serif;
+  border-radius:
+    67% 33% 52% 48% /
+    44% 57% 43% 56%;
 
-      font-size: 1.4rem;
+  transform: rotate(-20deg);
 
-      color: var(--forest);
-    }
+  opacity: 0.6;
 
-    /* =========================================================
-       FINAL CTA
-       ========================================================= */
+}
 
-    .final-cta {
-      position: relative;
+.why-section::after {
 
-      margin: 0 0 80px;
+  content: "";
 
-      padding: 80px 40px;
+  position: absolute;
 
-      text-align: center;
-    }
+  width: 90px;
+  height: 90px;
 
-    .final-cta h3 {
-      margin: 0 0 15px;
+  left: 8px;
+  top: 150px;
 
-      color: var(--forest);
+  background: var(--lichen);
 
-      font-family: Georgia, "Times New Roman", serif;
+  border-radius: 50%;
 
-      font-size: clamp(2.8rem, 5vw, 5rem);
+  opacity: 0.7;
 
-      font-weight: normal;
+  z-index: 0;
 
-      line-height: 0.95;
+}
 
-      letter-spacing: -0.06em;
-    }
+.why-section h3,
+.why-section p,
+.why-section ul {
 
-    .final-cta p {
-      margin: 0 auto 30px;
+  position: relative;
 
-      color: var(--muted);
+  z-index: 2;
 
-      font-size: 1.05rem;
+}
 
-      line-height: 1.7;
-    }
+/* =========================================================
+   EVERY OBSERVATION MATTERS
+   ========================================================= */
 
-    .final-cta .btn-group {
-      justify-content: center;
-    }
+.matters-section {
 
-    /* =========================================================
-       FOOTER
-       ========================================================= */
+  position: relative;
 
-    footer {
-      position: relative;
+  margin: 0 0 120px;
 
-      width: 100%;
+  padding: 85px 10%;
 
-      padding: 50px 20px;
+  text-align: center;
 
-      background: var(--forest);
+  background: var(--forest);
 
-      color: rgba(255, 255, 255, 0.72);
+  color: white;
 
-      text-align: center;
+  border-radius:
+    30px 100px 30px 120px;
 
-      font-size: 0.85rem;
+  overflow: hidden;
 
-      letter-spacing: 0.03em;
-    }
+}
 
-    footer::before {
-      content: "";
+.matters-section::before {
 
-      position: absolute;
+  content: "";
 
-      top: -35px;
-      left: 0;
+  position: absolute;
 
-      width: 100%;
-      height: 70px;
+  width: 280px;
+  height: 280px;
 
-      background: var(--forest);
+  right: -100px;
+  top: -110px;
 
-      clip-path:
-        ellipse(55% 45% at 50% 100%);
-    }
+  background: var(--moss);
 
-    /* =========================================================
-       SCROLL ANIMATION
-       ========================================================= */
+  opacity: 0.20;
 
-    .section,
-    .hero-content,
-    .hero-visual,
-    .stats-section,
-    .award-section,
-    .how-section,
-    .ai-section,
-    .map-preview-section,
-    .matters-section,
-    .press-section,
-    .help-section,
-    .final-cta {
-      opacity: 0;
+  border-radius: 50%;
 
-      transform: translateY(35px);
+}
 
-      transition:
-        opacity 0.8s ease,
-        transform 0.8s ease;
-    }
+.matters-section::after {
 
-    .visible {
-      opacity: 1;
+  content: "";
 
-      transform: translateY(0);
-    }
+  position: absolute;
 
-    /* =========================================================
-       RESPONSIVE
-       ========================================================= */
+  width: 200px;
+  height: 200px;
 
-    @media (max-width: 1100px) {
+  left: -90px;
+  bottom: -90px;
 
-      header {
-        padding: 18px 4vw;
-      }
+  background: var(--sage);
 
-      main {
-        padding-left: 4vw;
-        padding-right: 4vw;
-      }
+  opacity: 0.10;
 
-      .hero {
-        gap: 50px;
-      }
+  border-radius:
+    55% 45% 35% 65%;
 
-      .hero-image {
-        height: 560px;
-      }
+}
 
-      .what-section {
-        gap: 50px;
+.matters-section h3,
+.matters-section p,
+.matters-section a {
 
-        padding: 65px;
-      }
+  position: relative;
 
-      .why-section {
-        padding: 70px 70px 70px 110px;
-      }
+  z-index: 2;
 
-      .award-section {
-        padding: 65px;
-      }
+}
 
-      .map-preview-section {
-        padding: 60px;
-      }
-    }
+.matters-section h3 {
 
-    @media (max-width: 850px) {
+  margin: 0 0 22px;
 
-      header {
-        position: relative;
+  color: white;
 
-        flex-wrap: wrap;
-      }
+  font-family: Georgia, "Times New Roman", serif;
 
-      .burger {
-        display: flex;
-      }
+  font-size: clamp(2.8rem, 5vw, 4.7rem);
 
-      nav {
-        position: absolute;
+  font-weight: normal;
 
-        top: 100%;
+  line-height: 0.98;
 
-        left: 0;
+  letter-spacing: -0.05em;
 
-        width: 100%;
+}
 
-        max-height: 0;
+.matters-section p {
 
-        overflow: hidden;
+  max-width: 720px;
 
-        flex-direction: column;
+  margin: 0 auto 30px;
 
-        align-items: stretch;
+  color: rgba(255, 255, 255, 0.82);
 
-        gap: 4px;
+  font-size: 1.12rem;
 
-        padding: 0 5vw;
+  line-height: 1.75;
 
-        background: rgba(245, 243, 234, 0.97);
+}
 
-        backdrop-filter: blur(18px);
+.matters-section .btn {
 
-        border-bottom:
-          1px solid rgba(23, 63, 53, 0.08);
+  background: var(--lichen);
 
-        transition:
-          max-height 0.45s ease,
-          padding 0.45s ease;
-      }
+  color: var(--forest);
 
-      nav.open {
-        max-height: 600px;
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.12);
 
-        padding-top: 15px;
-        padding-bottom: 18px;
-      }
+}
 
-      nav a {
-        width: 100%;
+.matters-section .btn:hover {
 
-        padding: 13px 15px;
+  background: white;
 
-        border-radius: 14px;
-      }
+}
 
-      .hero {
-        min-height: auto;
+/* =========================================================
+   PRESS
+   ========================================================= */
 
-        grid-template-columns: 1fr;
+.press-section {
 
-        padding-top: 70px;
-        padding-bottom: 70px;
-      }
+  position: relative;
 
-      .hero-content {
-        text-align: center;
-      }
+  margin: 0 0 120px;
 
-      .title {
-        max-width: none;
-      }
+  padding: 0;
 
-      .subtitle {
-        margin-left: auto;
-        margin-right: auto;
-      }
+}
 
-      .btn-group {
-        justify-content: center;
-      }
+.press-heading {
 
-      .hero-visual {
-        min-height: auto;
+  margin-bottom: 40px;
 
-        margin-top: 20px;
-      }
+  text-align: center;
 
-      .hero-image {
-        width: 85%;
+}
 
-        height: 520px;
-      }
+.press-heading h3 {
 
-      .hero-note {
-        right: 3%;
-      }
+  margin: 0 0 18px;
 
-      .section {
-        margin-bottom: 80px;
-      }
+  color: var(--forest);
 
-      .what-section {
-        grid-template-columns: 1fr;
+  font-family: Georgia, "Times New Roman", serif;
 
-        gap: 20px;
+  font-size: clamp(2.7rem, 5vw, 4.5rem);
 
-        min-height: auto;
+  font-weight: normal;
 
-        border-radius:
-          35px 70px 35px 70px;
-      }
+  line-height: 0.98;
 
-      .why-section {
-        margin-left: 0;
+  letter-spacing: -0.05em;
 
-        padding-left: 80px;
+}
 
-        border-radius:
-          80px 25px 80px 25px;
-      }
+.press-heading p {
 
-      .vision-section {
-        min-height: auto;
-      }
+  margin: 0 auto;
 
-      .stats-grid,
-      .how-grid,
-      .press-grid,
-      .help-grid {
-        grid-template-columns: 1fr;
-      }
+  max-width: 620px;
 
-      .stat-card {
-        min-height: 190px;
-      }
+  color: var(--muted);
 
-      .award-section {
-        grid-template-columns: 1fr;
+  font-size: 1rem;
 
-        gap: 45px;
+  line-height: 1.7;
 
-        border-radius:
-          70px 30px 70px 30px;
-      }
+}
 
-      .award-badge {
-        max-width: 330px;
+.press-grid {
 
-        width: 100%;
+  display: grid;
 
-        margin: 0 auto;
-      }
+  grid-template-columns: repeat(3, 1fr);
 
-      .map-preview-heading {
-        flex-direction: column;
+  gap: 20px;
 
-        align-items: flex-start;
-      }
+}
 
-      .organic-divider {
-        margin-bottom: 70px;
-      }
-    }
+.press-card {
 
-    @media (max-width: 600px) {
+  position: relative;
 
-      header {
-        padding: 15px 20px;
-      }
+  min-height: 330px;
 
-      .logo {
-        font-size: 1.5rem;
-      }
+  padding: 35px 30px;
 
-      main {
-        padding-left: 20px;
-        padding-right: 20px;
-      }
+  display: flex;
 
-      .hero {
-        padding-top: 55px;
-      }
+  flex-direction: column;
 
-      .title {
-        font-size: clamp(3.5rem, 18vw, 5.2rem);
+  background: var(--cream-light);
 
-        line-height: 0.9;
-      }
+  border:
+    1px solid rgba(23, 63, 53, 0.09);
 
-      .subtitle {
-        font-size: 1.15rem;
+  box-shadow: var(--shadow-soft);
 
-        margin-bottom: 30px;
-      }
+  overflow: hidden;
 
-      .btn-group {
-        flex-direction: column;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 
-        width: 100%;
-      }
+}
 
-      .btn {
-        width: 100%;
+.press-card:nth-child(1) {
 
-        max-width: 320px;
-      }
+  border-radius:
+    45px 22px 45px 22px;
 
-      .hero-image {
-        width: 92%;
+}
 
-        height: 430px;
+.press-card:nth-child(2) {
 
-        border-radius:
-          45% 55% 40% 60% /
-          35% 45% 55% 65%;
-      }
+  border-radius:
+    22px 45px 22px 45px;
 
-      .hero-note {
-        right: 0;
-        bottom: 20px;
+  background: var(--paper);
 
-        padding: 14px 16px;
+}
 
-        font-size: 0.68rem;
-      }
+.press-card:nth-child(3) {
 
-      .section {
-        padding: 50px 30px !important;
+  border-radius:
+    45px 22px 22px 45px;
 
-        margin-bottom: 65px;
-      }
+}
 
-      .section h3 {
-        font-size: 2.6rem;
+.press-card::before {
 
-        margin-bottom: 22px;
-      }
+  content: "";
 
-      .section p {
-        font-size: 1rem;
+  position: absolute;
 
-        line-height: 1.7;
-      }
+  width: 130px;
+  height: 130px;
 
-      .what-section {
-        border-radius:
-          28px 55px 28px 55px;
-      }
+  right: -55px;
+  top: -55px;
 
-      .why-section {
-        border-radius:
-          55px 22px 55px 22px;
-      }
+  background: var(--lichen);
 
-      .why-section::before {
-        width: 100px;
-        height: 100px;
+  border-radius: 50%;
 
-        left: -45px;
-        top: 35px;
-      }
+  opacity: 0.6;
 
-      .why-section::after {
-        width: 60px;
-        height: 60px;
+}
 
-        left: -5px;
-        top: 95px;
-      }
+.press-card:hover {
 
-      .vision-section {
-        border-radius:
-          25px 70px 25px 80px;
-      }
+  transform: translateY(-6px);
 
-      .vision-section p:last-child {
-        font-size: 1.2rem;
-      }
+  box-shadow:
+    0 25px 60px rgba(23, 63, 53, 0.14);
 
-      .organic-divider {
-        margin: 0 0 60px;
-      }
+}
 
-      .organic-divider svg {
-        width: 100%;
+.press-source {
 
-        height: 50px;
-      }
+  position: relative;
 
-      .stats-section,
-      .award-section,
-      .how-section,
-      .ai-section,
-      .map-preview-section,
-      .matters-section,
-      .press-section,
-      .help-section {
-        margin-bottom: 65px;
-      }
+  z-index: 2;
 
-      .stats-intro {
-        font-size: 1.45rem;
+  margin-bottom: 20px;
 
-        margin-bottom: 25px;
-      }
+  color: var(--moss);
 
-      .stat-card {
-        min-height: 180px;
+  font-size: 0.78rem;
 
-        padding: 32px 25px;
-      }
+  font-weight: 800;
 
-      .stat-number {
-        font-size: 3.6rem;
-      }
+  letter-spacing: 0.12em;
 
-      .award-section {
-        padding: 50px 30px;
+  text-transform: uppercase;
 
-        border-radius:
-          55px 25px 55px 25px;
-      }
+}
 
-      .award-content h3 {
-        font-size: 2.6rem;
-      }
+.press-card h4 {
 
-      .award-content p {
-        font-size: 1rem;
-      }
+  position: relative;
 
-      .how-section {
-        padding: 30px 0;
-      }
+  z-index: 2;
 
-      .how-section h3,
-      .ai-section h3,
-      .press-heading h3,
-      .help-heading h3 {
-        font-size: 2.8rem;
-      }
+  margin: 0 0 18px;
 
-      .ai-section {
-        padding: 55px 30px;
+  color: var(--forest);
 
-        border-radius:
-          28px 70px 28px 70px;
-      }
+  font-family: Georgia, "Times New Roman", serif;
 
-      .map-preview-section {
-        padding: 50px 25px;
+  font-size: 1.75rem;
 
-        border-radius:
-          28px 55px 28px 55px;
-      }
+  font-weight: normal;
 
-      .map-preview-heading h3 {
-        font-size: 2.6rem;
-      }
+  line-height: 1.05;
 
-      #home-map {
-        height: 380px;
+  letter-spacing: -0.035em;
 
-        border-radius:
-          22px 9px 22px 9px;
-      }
+}
 
-      .matters-section {
-        padding: 60px 30px;
+.press-card p {
 
-        border-radius:
-          25px 70px 25px 80px;
-      }
+  position: relative;
 
-      .matters-section h3 {
-        font-size: 2.8rem;
-      }
+  z-index: 2;
 
-      .press-card,
-      .help-card {
-        min-height: 280px;
-      }
+  margin: 0 0 25px;
 
-      .final-cta {
-        padding: 45px 10px;
+  color: var(--muted);
 
-        margin-bottom: 50px;
-      }
+  font-size: 0.94rem;
 
-      .final-cta h3 {
-        font-size: 3rem;
-      }
+  line-height: 1.65;
 
-      footer {
-        padding: 45px 20px;
-      }
-    }
+}
 
-    /* =========================================================
-       REDUCED MOTION
-       ========================================================= */
+.press-link {
 
-    @media (prefers-reduced-motion: reduce) {
+  position: relative;
 
-      html {
-        scroll-behavior: auto;
-      }
+  z-index: 2;
 
-      *,
-      *::before,
-      *::after {
-        transition-duration: 0.01ms !important;
-        animation-duration: 0.01ms !important;
-      }
+  margin-top: auto;
 
-      .section,
-      .hero-content,
-      .hero-visual,
-      .stats-section,
-      .award-section,
-      .how-section,
-      .ai-section,
-      .map-preview-section,
-      .matters-section,
-      .press-section,
-      .help-section,
-      .final-cta {
-        opacity: 1;
+  color: var(--forest);
 
-        transform: none;
-      }
-    }
-  </style>
+  text-decoration: none;
+
+  font-size: 0.9rem;
+
+  font-weight: 700;
+
+}
+
+.press-link::after {
+
+  content: " →";
+
+  transition: margin-left 0.25s ease;
+
+}
+
+.press-link:hover::after {
+
+  margin-left: 5px;
+
+}
+
+/* =========================================================
+   NEED HELP
+   ========================================================= */
+
+.help-section {
+
+  position: relative;
+
+  margin: 0 0 120px;
+
+  padding: 0;
+
+}
+
+.help-heading {
+
+  margin-bottom: 40px;
+
+  text-align: center;
+
+}
+
+.help-heading h3 {
+
+  margin: 0 0 18px;
+
+  color: var(--forest);
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: clamp(2.7rem, 5vw, 4.5rem);
+
+  font-weight: normal;
+
+  line-height: 0.98;
+
+  letter-spacing: -0.05em;
+
+}
+
+.help-heading p {
+
+  margin: 0 auto;
+
+  max-width: 650px;
+
+  color: var(--muted);
+
+  font-size: 1rem;
+
+  line-height: 1.7;
+
+}
+
+.help-grid {
+
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 20px;
+
+}
+
+.help-card {
+
+  position: relative;
+
+  min-height: 245px;
+
+  padding: 35px 30px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: space-between;
+
+  background: var(--cream-light);
+
+  border:
+    1px solid rgba(23, 63, 53, 0.09);
+
+  box-shadow: var(--shadow-soft);
+
+  overflow: hidden;
+
+  text-decoration: none;
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+
+}
+
+.help-card:nth-child(1) {
+
+  border-radius:
+    45px 22px 45px 22px;
+
+}
+
+.help-card:nth-child(2) {
+
+  border-radius:
+    22px 45px 22px 45px;
+
+  background: var(--paper);
+
+}
+
+.help-card:nth-child(3) {
+
+  border-radius:
+    45px 22px 22px 45px;
+
+}
+
+.help-card::before {
+
+  content: "";
+
+  position: absolute;
+
+  width: 120px;
+  height: 120px;
+
+  right: -50px;
+  bottom: -50px;
+
+  background: var(--lichen);
+
+  border-radius: 50%;
+
+  opacity: 0.65;
+
+}
+
+.help-card:hover {
+
+  transform: translateY(-6px);
+
+  box-shadow:
+    0 25px 60px rgba(23, 63, 53, 0.14);
+
+}
+
+.help-icon {
+
+  position: relative;
+
+  z-index: 2;
+
+  color: var(--moss);
+
+  font-size: 1.8rem;
+
+  margin-bottom: 20px;
+
+}
+
+.help-card h4 {
+
+  position: relative;
+
+  z-index: 2;
+
+  margin: 0 0 12px;
+
+  color: var(--forest);
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 1.75rem;
+
+  font-weight: normal;
+
+  line-height: 1.05;
+
+  letter-spacing: -0.035em;
+
+}
+
+.help-card p {
+
+  position: relative;
+
+  z-index: 2;
+
+  margin: 0 0 20px;
+
+  color: var(--muted);
+
+  font-size: 0.92rem;
+
+  line-height: 1.6;
+
+}
+
+.help-arrow {
+
+  position: relative;
+
+  z-index: 2;
+
+  color: var(--forest);
+
+  font-size: 0.9rem;
+
+  font-weight: 700;
+
+}
+
+/* =========================================================
+   VISION
+   ========================================================= */
+
+.vision-section {
+
+  min-height: 550px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  padding: 100px 10%;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--paper),
+      #e5e8d8
+    );
+
+  border-radius:
+    30px 100px 30px 120px;
+
+  text-align: center;
+
+}
+
+.vision-section::before {
+
+  content: "";
+
+  position: absolute;
+
+  width: 300px;
+  height: 300px;
+
+  right: -90px;
+  top: -100px;
+
+  background: var(--sage);
+
+  opacity: 0.18;
+
+  border-radius:
+    42% 58% 63% 37% /
+    54% 40% 60% 46%;
+
+}
+
+.vision-section::after {
+
+  content: "";
+
+  position: absolute;
+
+  width: 230px;
+  height: 230px;
+
+  left: -90px;
+  bottom: -100px;
+
+  background: var(--lichen);
+
+  opacity: 0.45;
+
+  border-radius:
+    55% 45% 35% 65% /
+    45% 58% 42% 55%;
+
+}
+
+.vision-section h3,
+.vision-section p {
+
+  position: relative;
+
+  z-index: 2;
+
+}
+
+.vision-section h3 {
+
+  max-width: 800px;
+
+  margin-left: auto;
+  margin-right: auto;
+
+}
+
+.vision-section p {
+
+  max-width: 780px;
+
+  margin-left: auto;
+  margin-right: auto;
+
+  color: var(--forest-soft);
+
+}
+
+/* =========================================================
+   FINAL MESSAGE
+   ========================================================= */
+
+.vision-section p:last-child {
+
+  margin-top: 30px;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 1.4rem;
+
+  color: var(--forest);
+
+}
+
+/* =========================================================
+   FINAL CTA
+   ========================================================= */
+
+.final-cta {
+
+  position: relative;
+
+  margin: 0 0 80px;
+
+  padding: 80px 40px;
+
+  text-align: center;
+
+}
+
+.final-cta h3 {
+
+  margin: 0 0 15px;
+
+  color: var(--forest);
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: clamp(2.8rem, 5vw, 5rem);
+
+  font-weight: normal;
+
+  line-height: 0.95;
+
+  letter-spacing: -0.06em;
+
+}
+
+.final-cta p {
+
+  margin: 0 auto 30px;
+
+  color: var(--muted);
+
+  font-size: 1.05rem;
+
+  line-height: 1.7;
+
+}
+
+.final-cta .btn-group {
+
+  justify-content: center;
+
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+footer {
+
+  position: relative;
+
+  width: 100%;
+
+  padding: 50px 20px;
+
+  background: var(--forest);
+
+  color: rgba(255, 255, 255, 0.72);
+
+  text-align: center;
+
+  font-size: 0.85rem;
+
+  letter-spacing: 0.03em;
+
+}
+
+footer::before {
+
+  content: "";
+
+  position: absolute;
+
+  top: -35px;
+  left: 0;
+
+  width: 100%;
+  height: 70px;
+
+  background: var(--forest);
+
+  clip-path:
+    ellipse(55% 45% at 50% 100%);
+
+}
+
+/* =========================================================
+   SCROLL ANIMATION
+   ========================================================= */
+
+.section,
+.hero-content,
+.hero-visual,
+.stats-section,
+.award-section,
+.how-section,
+.ai-section,
+.map-preview-section,
+.matters-section,
+.press-section,
+.help-section,
+.final-cta {
+
+  opacity: 0;
+
+  transform: translateY(35px);
+
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s ease;
+
+}
+
+.visible {
+
+  opacity: 1;
+
+  transform: translateY(0);
+
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+  header {
+
+    padding: 18px 4vw;
+
+  }
+
+  main {
+
+    padding-left: 4vw;
+    padding-right: 4vw;
+
+  }
+
+  .hero {
+
+    gap: 50px;
+
+  }
+
+  .hero-image {
+
+    height: 560px;
+
+  }
+
+  .what-section {
+
+    gap: 50px;
+
+    padding: 65px;
+
+  }
+
+  .why-section {
+
+    padding: 70px 70px 70px 110px;
+
+  }
+
+  .award-section {
+
+    padding: 65px;
+
+  }
+
+  .map-preview-section {
+
+    padding: 60px;
+
+  }
+
+}
+
+@media (max-width: 850px) {
+
+  header {
+
+    position: relative;
+
+    flex-wrap: wrap;
+
+  }
+
+  .burger {
+
+    display: flex;
+
+  }
+
+  nav {
+
+    position: absolute;
+
+    top: 100%;
+
+    left: 0;
+
+    width: 100%;
+
+    max-height: 0;
+
+    overflow: hidden;
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 4px;
+
+    padding: 0 5vw;
+
+    background: rgba(245, 243, 234, 0.97);
+
+    backdrop-filter: blur(18px);
+
+    border-bottom:
+      1px solid rgba(23, 63, 53, 0.08);
+
+    transition:
+      max-height 0.45s ease,
+      padding 0.45s ease;
+
+  }
+
+  nav.open {
+
+    max-height: 600px;
+
+    padding-top: 15px;
+    padding-bottom: 18px;
+
+  }
+
+  nav a {
+
+    width: 100%;
+
+    padding: 13px 15px;
+
+    border-radius: 14px;
+
+  }
+
+  .hero {
+
+    min-height: auto;
+
+    grid-template-columns: 1fr;
+
+    padding-top: 70px;
+    padding-bottom: 70px;
+
+  }
+
+  .hero-content {
+
+    text-align: center;
+
+  }
+
+  .title {
+
+    max-width: none;
+
+  }
+
+  .subtitle {
+
+    margin-left: auto;
+    margin-right: auto;
+
+  }
+
+  .btn-group {
+
+    justify-content: center;
+
+  }
+
+  .hero-visual {
+
+    min-height: auto;
+
+    margin-top: 20px;
+
+  }
+
+  .hero-image {
+
+    width: 85%;
+
+    height: 520px;
+
+  }
+
+  .hero-note {
+
+    right: 3%;
+
+  }
+
+  .section {
+
+    margin-bottom: 80px;
+
+  }
+
+  .what-section {
+
+    grid-template-columns: 1fr;
+
+    gap: 20px;
+
+    min-height: auto;
+
+    border-radius:
+      35px 70px 35px 70px;
+
+  }
+
+  .why-section {
+
+    margin-left: 0;
+
+    padding-left: 80px;
+
+    border-radius:
+      80px 25px 80px 25px;
+
+  }
+
+  .vision-section {
+
+    min-height: auto;
+
+  }
+
+  .stats-grid,
+  .how-grid,
+  .press-grid,
+  .help-grid {
+
+    grid-template-columns: 1fr;
+
+  }
+
+  .stat-card {
+
+    min-height: 190px;
+
+  }
+
+  .award-section {
+
+    grid-template-columns: 1fr;
+
+    gap: 45px;
+
+    border-radius:
+      70px 30px 70px 30px;
+
+  }
+
+  .award-badge {
+
+    max-width: 330px;
+
+    width: 100%;
+
+    margin: 0 auto;
+
+  }
+
+  .map-preview-heading {
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+  }
+
+  .organic-divider {
+
+    margin-bottom: 70px;
+
+  }
+
+}
+
+@media (max-width: 600px) {
+
+  header {
+
+    padding: 15px 20px;
+
+  }
+
+  .logo {
+
+    font-size: 1.5rem;
+
+  }
+
+  main {
+
+    padding-left: 20px;
+    padding-right: 20px;
+
+  }
+
+  .hero {
+
+    padding-top: 55px;
+
+  }
+
+  .title {
+
+    font-size: clamp(3.5rem, 18vw, 5.2rem);
+
+    line-height: 0.9;
+
+  }
+
+  .subtitle {
+
+    font-size: 1.15rem;
+
+    margin-bottom: 30px;
+
+  }
+
+  .btn-group {
+
+    flex-direction: column;
+
+    width: 100%;
+
+  }
+
+  .btn {
+
+    width: 100%;
+
+    max-width: 320px;
+
+  }
+
+  .hero-image {
+
+    width: 92%;
+
+    height: 430px;
+
+    border-radius:
+      45% 55% 40% 60% /
+      35% 45% 55% 65%;
+
+  }
+
+  .hero-note {
+
+    right: 0;
+
+    bottom: 20px;
+
+    padding: 14px 16px;
+
+    font-size: 0.68rem;
+
+  }
+
+  .section {
+
+    padding: 50px 30px !important;
+
+    margin-bottom: 65px;
+
+  }
+
+  .section h3 {
+
+    font-size: 2.6rem;
+
+    margin-bottom: 22px;
+
+  }
+
+  .section p {
+
+    font-size: 1rem;
+
+    line-height: 1.7;
+
+  }
+
+  .what-section {
+
+    border-radius:
+      28px 55px 28px 55px;
+
+  }
+
+  .why-section {
+
+    border-radius:
+      55px 22px 55px 22px;
+
+  }
+
+  .why-section::before {
+
+    width: 100px;
+    height: 100px;
+
+    left: -45px;
+    top: 35px;
+
+  }
+
+  .why-section::after {
+
+    width: 60px;
+    height: 60px;
+
+    left: -5px;
+    top: 95px;
+
+  }
+
+  .vision-section {
+
+    border-radius:
+      25px 70px 25px 80px;
+
+  }
+
+  .vision-section p:last-child {
+
+    font-size: 1.2rem;
+
+  }
+
+  .organic-divider {
+
+    margin: 0 0 60px;
+
+  }
+
+  .organic-divider svg {
+
+    width: 100%;
+
+    height: 50px;
+
+  }
+
+  .stats-section,
+  .award-section,
+  .how-section,
+  .ai-section,
+  .map-preview-section,
+  .matters-section,
+  .press-section,
+  .help-section {
+
+    margin-bottom: 65px;
+
+  }
+
+  .stats-intro {
+
+    font-size: 1.45rem;
+
+    margin-bottom: 25px;
+
+  }
+
+  .stat-card {
+
+    min-height: 180px;
+
+    padding: 32px 25px;
+
+  }
+
+  .stat-number {
+
+    font-size: 3.6rem;
+
+  }
+
+  .award-section {
+
+    padding: 50px 30px;
+
+    border-radius:
+      55px 25px 55px 25px;
+
+  }
+
+  .award-content h3 {
+
+    font-size: 2.6rem;
+
+  }
+
+  .award-content p {
+
+    font-size: 1rem;
+
+  }
+
+  .how-section {
+
+    padding: 30px 0;
+
+  }
+
+  .how-section h3,
+  .ai-section h3,
+  .press-heading h3,
+  .help-heading h3 {
+
+    font-size: 2.8rem;
+
+  }
+
+  .ai-section {
+
+    padding: 55px 30px;
+
+    border-radius:
+      28px 70px 28px 70px;
+
+  }
+
+  .map-preview-section {
+
+    padding: 50px 25px;
+
+    border-radius:
+      28px 55px 28px 55px;
+
+  }
+
+  .map-preview-heading h3 {
+
+    font-size: 2.6rem;
+
+  }
+
+  #home-map {
+
+    height: 380px;
+
+    border-radius:
+      22px 9px 22px 9px;
+
+  }
+
+  .matters-section {
+
+    padding: 60px 30px;
+
+    border-radius:
+      25px 70px 25px 80px;
+
+  }
+
+  .matters-section h3 {
+
+    font-size: 2.8rem;
+
+  }
+
+  .press-card,
+  .help-card {
+
+    min-height: 280px;
+
+  }
+
+  .final-cta {
+
+    padding: 45px 10px;
+
+    margin-bottom: 50px;
+
+  }
+
+  .final-cta h3 {
+
+    font-size: 3rem;
+
+  }
+
+  footer {
+
+    padding: 45px 20px;
+
+  }
+
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  html {
+
+    scroll-behavior: auto;
+
+  }
+
+  *,
+  *::before,
+  *::after {
+
+    transition-duration: 0.01ms !important;
+
+    animation-duration: 0.01ms !important;
+
+  }
+
+  .section,
+  .hero-content,
+  .hero-visual,
+  .stats-section,
+  .award-section,
+  .how-section,
+  .ai-section,
+  .map-preview-section,
+  .matters-section,
+  .press-section,
+  .help-section,
+  .final-cta {
+
+    opacity: 1;
+
+    transform: none;
+
+  }
+
+}
+
+</style>
+
 </head>
 
 <body>
 
 <header>
 
-  <div
-    class="logo"
-    onclick="location='{{ url_for('home') }}'"
-  >
-    Lichenary
-  </div>
+<div
+  class="logo"
+  onclick="location='{{ url_for('home') }}'"
+>
+  Lichenary
+</div>
 
-  <div
-    id="burger"
-    class="burger"
-    aria-label="Menu"
-    aria-expanded="false"
-    tabindex="0"
-  >
-    <div></div>
-    <div></div>
-    <div></div>
-  </div>
+<div
+  id="burger"
+  class="burger"
+  aria-label="Menu"
+  aria-expanded="false"
+  tabindex="0"
+>
+  <div></div>
+  <div></div>
+  <div></div>
+</div>
 
-  <nav id="nav-links">
+<nav id="nav-links">
 
-    <a href="{{ url_for('home') }}">
-      Home
+  <a href="{{ url_for('home') }}">
+    Home
+  </a>
+
+  <a href="{{ url_for('despre') }}">
+    About
+  </a>
+
+  <a href="{{ url_for('participa') }}">
+    How to Participate
+  </a>
+
+  <a href="{{ url_for('galerie') }}">
+    Gallery
+  </a>
+
+  <a href="{{ url_for('harta') }}">
+    Map
+  </a>
+
+  <a href="{{ url_for('contact') }}">
+    Contact
+  </a>
+
+  {% if current_user.is_authenticated %}
+
+    <a href="{{ url_for('dashboard') }}">
+      Dashboard
     </a>
 
-    <a href="{{ url_for('despre') }}">
-      About
+    <a href="{{ url_for('logout') }}">
+      Logout
     </a>
 
-    <a href="{{ url_for('participa') }}">
-      How to Participate
+  {% else %}
+
+    <a href="{{ url_for('login') }}">
+      Login
     </a>
 
-    <a href="{{ url_for('galerie') }}">
-      Gallery
+    <a href="{{ url_for('register') }}">
+      Register
     </a>
 
-    <a href="{{ url_for('harta') }}">
-      Map
-    </a>
+  {% endif %}
 
-    <a href="{{ url_for('contact') }}">
-      Contact
-    </a>
-
-    {% if current_user.is_authenticated %}
-
-      <a href="{{ url_for('dashboard') }}">
-        Dashboard
-      </a>
-
-      <a href="{{ url_for('logout') }}">
-        Logout
-      </a>
-
-    {% else %}
-
-      <a href="{{ url_for('login') }}">
-        Login
-      </a>
-
-      <a href="{{ url_for('register') }}">
-        Register
-      </a>
-
-    {% endif %}
-
-  </nav>
+</nav>
 
 </header>
 
-
 <main>
 
-  <!-- =======================================================
-       HERO
-       ======================================================= -->
+<!-- =======================================================
+     HERO
+     ======================================================= -->
 
-  <section class="hero">
+<section class="hero">
 
-    <div class="hero-content">
+  <div class="hero-content">
 
-      <div class="title">
-        Welcome<br>
-        to Lichenary
+    <div class="title">
+
+      Welcome<br>
+
+      to Lichenary
+
+    </div>
+
+    <div class="subtitle">
+
+      Nature speaks. You listen. We understand.
+
+    </div>
+
+    <div class="btn-group">
+
+      <a
+        href="{{ url_for('despre') }}"
+        class="btn"
+      >
+        About the Project
+      </a>
+
+      <a
+        href="{{ url_for('participa') }}"
+        class="btn"
+      >
+        How to Participate
+      </a>
+
+      <a
+        href="{{ url_for('harta') }}"
+        class="btn"
+      >
+        Map
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <div class="hero-visual">
+
+    <div
+      class="hero-image"
+      id="hero-image"
+    ></div>
+
+    <div class="hero-note">
+
+      Citizen science · Nature · Air
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- =======================================================
+     ORGANIC DIVIDER
+     ======================================================= -->
+
+<div class="organic-divider">
+
+  <svg
+    viewBox="0 0 700 75"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+
+    <path
+      d="
+        M 5 38
+        C 70 10, 105 68, 170 38
+        S 270 8, 330 40
+        S 440 70, 500 35
+        S 620 10, 695 42
+      "
+    />
+
+  </svg>
+
+</div>
+
+<!-- =======================================================
+     IMPACT / STATS
+     ======================================================= -->
+
+<div class="stats-section">
+
+  <div class="stats-intro">
+
+    A growing community. A growing picture of our air.
+
+  </div>
+
+  <div class="stats-grid">
+
+    <div class="stat-card">
+
+      <div class="stat-number">
+        1,000+
       </div>
 
-      <div class="subtitle">
-        Nature speaks. You listen. We understand.
-      </div>
-
-      <div class="btn-group">
-
-        <a
-          href="{{ url_for('despre') }}"
-          class="btn"
-        >
-          About the Project
-        </a>
-
-        <a
-          href="{{ url_for('participa') }}"
-          class="btn"
-        >
-          How to Participate
-        </a>
-
-        <a
-          href="{{ url_for('harta') }}"
-          class="btn"
-        >
-          Map
-        </a>
-
+      <div class="stat-label">
+        lichen observations collected over the past year
       </div>
 
     </div>
 
 
-    <div class="hero-visual">
+    <div class="stat-card">
 
-      <div
-        class="hero-image"
-        id="hero-image"
-      ></div>
+      <div class="stat-number">
+        15+
+      </div>
 
-      <div class="hero-note">
-        Citizen science · Nature · Air
+      <div class="stat-label">
+        countries involved in the Lichenary community
       </div>
 
     </div>
 
-  </section>
+
+    <div class="stat-card">
+
+      <div class="stat-number">
+        100+
+      </div>
+
+      <div class="stat-label">
+        people of all ages taking action for citizen science
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =======================================================
+     NATIONAL GEOGRAPHIC AWARD
+     ======================================================= -->
+
+<div class="award-section">
+
+  <div class="award-badge">
+
+    <div class="award-badge-small">
+      National Geographic
+    </div>
+
+    <div class="award-badge-title">
+
+      2026<br>
+      Distinguished<br>
+      Achievement
+
+    </div>
+
+  </div>
 
 
-  <!-- =======================================================
-       ORGANIC DIVIDER
-       ======================================================= -->
+  <div class="award-content">
 
-  <div class="organic-divider">
+    <h3>
+      Recognized by National Geographic
+    </h3>
 
-    <svg
-      viewBox="0 0 700 75"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
+    <p>
+
+      Lichenary was selected as a
+
+      <strong>2026 Distinguished Achievement Award</strong>
+
+      recipient in the National Geographic Society's Slingshot Challenge.
+
+    </p>
+
+    <p>
+
+      The recognition celebrates young people using creative ideas and
+
+      environmental action to better understand and protect the world around us.
+
+    </p>
+
+    <a
+      href="https://www.nationalgeographic.org/explore/programs/slingshot/award-recipients"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="award-btn"
     >
+      View Lichenary on National Geographic
+    </a>
 
-      <path
-        d="
-          M 5 38
-          C 70 10, 105 68, 170 38
-          S 270 8, 330 40
-          S 440 70, 500 35
-          S 620 10, 695 42
-        "
-      />
+  </div>
 
-    </svg>
+</div>
+
+<!-- =======================================================
+     WHAT IS LICHENARY?
+     ======================================================= -->
+
+<div class="section what-section">
+
+  <div>
+
+    <h3>
+      What is Lichenary?
+    </h3>
+
+  </div>
+
+  <div>
+
+    <p>
+
+      <strong>Lichenary</strong> is a citizen science project and a community of young people, students, and nature enthusiasts who monitor air quality — no labs needed, just a magnifying glass, curiosity, and attention.
+
+    </p>
+
+    <p>
+
+      By observing lichen species, we collect data that form a living map of air health. It’s ecology, education, and activism — all combined in one simple act: <strong>observation</strong>.
+
+    </p>
+
+  </div>
+
+</div>
+
+<!-- =======================================================
+     HOW IT WORKS
+     ======================================================= -->
+
+<div class="how-section">
+
+  <h3>
+    From a simple photo to a living map
+  </h3>
+
+  <p class="how-intro">
+
+    Lichenary turns a simple observation into useful citizen science data.
+
+    You don't need to be a scientist to take part.
+
+  </p>
+
+
+  <div class="how-grid">
+
+    <div class="how-card">
+
+      <div class="how-number">
+        01 — OBSERVE
+      </div>
+
+      <h4>
+        Find a lichen
+      </h4>
+
+      <p>
+
+        Look around your surroundings, find a lichen, and take a clear photograph of what you discover.
+
+      </p>
+
+    </div>
+
+
+    <div class="how-card">
+
+      <div class="how-number">
+        02 — IDENTIFY
+      </div>
+
+      <h4>
+        Discover what it is
+      </h4>
+
+      <p>
+
+        Use Lichenary's AI-assisted identification or identify the lichen yourself using the manual process.
+
+      </p>
+
+    </div>
+
+
+    <div class="how-card">
+
+      <div class="how-number">
+        03 — MAP
+      </div>
+
+      <h4>
+        Add your observation
+      </h4>
+
+      <p>
+
+        Submit your observation and help build a better understanding of the environment around us.
+
+      </p>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =======================================================
+     LICHENARY AI
+     ======================================================= -->
+
+<div class="ai-section">
+
+  <h3>
+    Technology meets nature
+  </h3>
+
+  <p>
+
+    Not sure what lichen you're looking at?
+
+    Lichenary uses artificial intelligence to help participants identify
+
+    lichens from photographs and make contributing to citizen science easier.
+
+  </p>
+
+  <p>
+
+    You don't need to be a lichen expert to get started.
+
+    <strong>Take a photo. Let AI help. Learn something new.</strong>
+
+  </p>
+
+  <!-- MODIFICAT: ruta Flask către pagina din templates -->
+  <a
+    href="{{ url_for('despre_ai') }}"
+    class="btn"
+  >
+    Discover How Lichenary AI Works
+  </a>
+
+</div>
+
+<!-- =======================================================
+     MAP PREVIEW
+     ======================================================= -->
+
+<div class="map-preview-section">
+
+  <div class="map-preview-heading">
+
+    <h3>
+
+      A living map<br>
+
+      of air health
+
+    </h3>
+
+    <p>
+
+      Every observation contributes to a growing picture of the environment
+
+      around us. Explore some of the observations collected by the Lichenary
+
+      community.
+
+    </p>
+
+  </div>
+
+  <div id="home-map"></div>
+
+  <div class="map-preview-action">
+
+    <a
+      href="{{ url_for('harta') }}"
+      class="btn"
+    >
+      Explore the Full Map
+    </a>
+
+  </div>
+
+</div>
+
+<!-- =======================================================
+     WHY DO WE DO THIS?
+     ======================================================= -->
+
+<div class="section why-section">
+
+  <h3>
+    Why do we do this?
+  </h3>
+
+  <div>
+
+    <p>
+      Because the air we breathe shapes our community’s health and our future.
+    </p>
+
+    <p>
+
+      Lichens respond to changes in the air around them, offering us a window
+
+      into environmental conditions that are otherwise difficult to see.
+
+    </p>
+
+    <p>
+
+      <strong>Through Lichenary, we:</strong>
+
+    </p>
+
+    <ul>
+
+      <li>
+        Open young people's eyes to the science around them
+      </li>
+
+      <li>
+        Build a global network of volunteers mapping the air
+      </li>
+
+      <li>
+        Unite communities around environmental protection
+      </li>
+
+    </ul>
+
+  </div>
+
+</div>
+
+<!-- =======================================================
+     EVERY OBSERVATION MATTERS
+     ======================================================= -->
+
+<div class="matters-section">
+
+  <h3>
+    Every observation tells a story.
+  </h3>
+
+  <p>
+
+    One photo may seem small. But hundreds of observations can reveal
+
+    patterns across communities, cities, and countries.
+
+    Your observation becomes part of something bigger.
+
+  </p>
+
+  <!-- MODIFICAT:
+       autentificat -> dashboard
+       neautentificat -> login -->
+  <a
+    href="{{ url_for('dashboard') if current_user.is_authenticated else url_for('login') }}"
+    class="btn"
+  >
+    Add an Observation
+  </a>
+
+</div>
+
+<!-- =======================================================
+     PRESS
+     ======================================================= -->
+
+<div class="press-section">
+
+  <div class="press-heading">
+
+    <h3>
+      Lichenary in the Press
+    </h3>
+
+    <p>
+      A project born in Buzău, now reaching the world.
+    </p>
 
   </div>
 
 
-  <!-- =======================================================
-       IMPACT / STATS
-       ======================================================= -->
+  <div class="press-grid">
 
-  <div class="stats-section">
+    <!-- National Geographic -->
 
-    <div class="stats-intro">
-      A growing community. A growing picture of our air.
-    </div>
+    <div class="press-card">
 
-    <div class="stats-grid">
-
-      <div class="stat-card">
-
-        <div class="stat-number">
-          1,000+
-        </div>
-
-        <div class="stat-label">
-          lichen observations collected over the past year
-        </div>
-
-      </div>
-
-
-      <div class="stat-card">
-
-        <div class="stat-number">
-          15+
-        </div>
-
-        <div class="stat-label">
-          countries involved in the Lichenary community
-        </div>
-
-      </div>
-
-
-      <div class="stat-card">
-
-        <div class="stat-number">
-          100+
-        </div>
-
-        <div class="stat-label">
-          people of all ages taking action for citizen science
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <!-- =======================================================
-       NATIONAL GEOGRAPHIC AWARD
-       ======================================================= -->
-
-  <div class="award-section">
-
-    <div class="award-badge">
-
-      <div class="award-badge-small">
+      <div class="press-source">
         National Geographic
       </div>
 
-      <div class="award-badge-title">
-        2026<br>
-        Distinguished<br>
-        Achievement
-      </div>
-
-    </div>
-
-
-    <div class="award-content">
-
-      <h3>
-        Recognized by National Geographic
-      </h3>
+      <h4>
+        2026 Distinguished Achievement Award Recipient
+      </h4>
 
       <p>
-        Lichenary was selected as a
-        <strong>2026 Distinguished Achievement Award</strong>
-        recipient in the National Geographic Society's Slingshot Challenge.
-      </p>
 
-      <p>
-        The recognition celebrates young people using creative ideas and
-        environmental action to better understand and protect the world around us.
+        Lichenary is recognized by the National Geographic Society for
+
+        using lichens as bioindicators and building a public map of air health.
+
       </p>
 
       <a
         href="https://www.nationalgeographic.org/explore/programs/slingshot/award-recipients"
         target="_blank"
         rel="noopener noreferrer"
-        class="award-btn"
+        class="press-link"
       >
-        View Lichenary on National Geographic
+        Read on National Geographic
+      </a>
+
+    </div>
+
+
+    <!-- Edupedu -->
+
+    <div class="press-card">
+
+      <div class="press-source">
+        Edupedu.ro
+      </div>
+
+      <h4>
+        Two teenagers from Buzău enter a global environmental competition — and win
+      </h4>
+
+      <p>
+
+        The story behind Lichenary, its founders, and the community growing
+
+        around the project.
+
+      </p>
+
+      <a
+        href="https://www.edupedu.ro/doi-adolescenti-din-buzau-au-aflat-de-la-profesoara-de-chineza-despre-o-competitie-globala-de-mediu-a-national-geographic-au-inscris-propriul-proiect-si-au-castigat-initiativa-lor-lichenary-despre/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="press-link"
+      >
+        Read the article
+      </a>
+
+    </div>
+
+
+    <!-- Libertatea -->
+
+    <div class="press-card">
+
+      <div class="press-source">
+        Libertatea
+      </div>
+
+      <h4>
+        Students from Buzău recognized by National Geographic
+      </h4>
+
+      <p>
+
+        How Lichenary turned lichens into a tool for understanding air
+
+        pollution and brought a project from Buzău onto an international stage.
+
+      </p>
+
+      <a
+        href="https://www.libertatea.ro/stiri/stiri-buzau-carla-rares-gheorghe-elevi-gemeni-premiu-national-geographic-proiect-ecologic-lichenary-unic-castigator-europa-5755329"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="press-link"
+      >
+        Read the article
       </a>
 
     </div>
 
   </div>
 
+</div>
 
-  <!-- =======================================================
-       WHAT IS LICHENARY?
-       ======================================================= -->
+<!-- =======================================================
+     NEED HELP?
+     ======================================================= -->
 
-  <div class="section what-section">
+<div class="help-section">
 
-    <div>
+  <div class="help-heading">
 
-      <h3>
-        What is Lichenary?
-      </h3>
+    <h3>
+      Need help?
+    </h3>
 
-    </div>
+    <p>
 
-    <div>
+      New to Lichenary? Learn how our tools work and how to submit
 
-      <p>
-        <strong>Lichenary</strong> is a citizen science project and a community of young people, students, and nature enthusiasts who monitor air quality — no labs needed, just a magnifying glass, curiosity, and attention.
-      </p>
+      your first observation.
 
-      <p>
-        By observing lichen species, we collect data that form a living map of air health. It’s ecology, education, and activism — all combined in one simple act: <strong>observation</strong>.
-      </p>
-
-    </div>
+    </p>
 
   </div>
 
 
-  <!-- =======================================================
-       HOW IT WORKS
-       ======================================================= -->
+  <div class="help-grid">
 
-  <div class="how-section">
-
-    <h3>
-      From a simple photo to a living map
-    </h3>
-
-    <p class="how-intro">
-      Lichenary turns a simple observation into useful citizen science data.
-      You don't need to be a scientist to take part.
-    </p>
-
-
-    <div class="how-grid">
-
-      <div class="how-card">
-
-        <div class="how-number">
-          01 — OBSERVE
-        </div>
-
-        <h4>
-          Find a lichen
-        </h4>
-
-        <p>
-          Look around your surroundings, find a lichen, and take a clear photograph of what you discover.
-        </p>
-
-      </div>
-
-
-      <div class="how-card">
-
-        <div class="how-number">
-          02 — IDENTIFY
-        </div>
-
-        <h4>
-          Discover what it is
-        </h4>
-
-        <p>
-          Use Lichenary's AI-assisted identification or identify the lichen yourself using the manual process.
-        </p>
-
-      </div>
-
-
-      <div class="how-card">
-
-        <div class="how-number">
-          03 — MAP
-        </div>
-
-        <h4>
-          Add your observation
-        </h4>
-
-        <p>
-          Submit your observation and help build a better understanding of the environment around us.
-        </p>
-
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <!-- =======================================================
-       LICHENARY AI
-       ======================================================= -->
-
-  <div class="ai-section">
-
-    <h3>
-      Technology meets nature
-    </h3>
-
-    <p>
-      Not sure what lichen you're looking at?
-      Lichenary uses artificial intelligence to help participants identify
-      lichens from photographs and make contributing to citizen science easier.
-    </p>
-
-    <p>
-      You don't need to be a lichen expert to get started.
-      <strong>Take a photo. Let AI help. Learn something new.</strong>
-    </p>
+    <!-- AI -->
 
     <a
-      href="despre_ai.html"
-      class="btn"
+      href="{{ url_for('despre_ai') }}"
+      class="help-card"
     >
-      Discover How Lichenary AI Works
+
+      <div>
+
+        <div class="help-icon">
+          ✦
+        </div>
+
+        <h4>
+          How does Lichenary AI work?
+        </h4>
+
+        <p>
+
+          Understand how AI helps identify lichens from photographs.
+
+        </p>
+
+      </div>
+
+      <div class="help-arrow">
+        Learn about AI →
+      </div>
+
+    </a>
+
+
+    <!-- AI UPLOAD -->
+
+    <a
+      href="{{ url_for('despre_how_to_upload_ai') }}"
+      class="help-card"
+    >
+
+      <div>
+
+        <div class="help-icon">
+          ✦
+        </div>
+
+        <h4>
+          How do I upload with AI?
+        </h4>
+
+        <p>
+
+          A step-by-step guide to taking a photo and submitting an
+
+          AI-assisted observation.
+
+        </p>
+
+      </div>
+
+      <div class="help-arrow">
+        Upload with AI →
+      </div>
+
+    </a>
+
+
+    <!-- MANUAL UPLOAD -->
+
+    <a
+      href="{{ url_for('despre_how_to_upload_manual') }}"
+      class="help-card"
+    >
+
+      <div>
+
+        <div class="help-icon">
+          ✦
+        </div>
+
+        <h4>
+          How do I upload manually?
+        </h4>
+
+        <p>
+
+          Prefer to identify the lichen yourself? Learn how to submit
+
+          a manual observation.
+
+        </p>
+
+      </div>
+
+      <div class="help-arrow">
+        Upload manually →
+      </div>
+
     </a>
 
   </div>
 
+</div>
 
-  <!-- =======================================================
-       MAP PREVIEW
-       ======================================================= -->
+<!-- =======================================================
+     OUR VISION
+     ======================================================= -->
 
-  <div class="map-preview-section">
+<div class="section vision-section">
 
-    <div class="map-preview-heading">
+  <h3>
+    Our Vision
+  </h3>
 
-      <h3>
-        A living map<br>
-        of air health
-      </h3>
+  <p>
 
-      <p>
-        Every observation contributes to a growing picture of the environment
-        around us. Explore some of the observations collected by the Lichenary
-        community.
-      </p>
+    A world where anyone can become a researcher, where nature is a dialogue partner,
 
-    </div>
+    and where air is no longer a mystery.
 
-    <div id="home-map"></div>
+  </p>
 
-    <div class="map-preview-action">
+  <p>
 
-      <a
-        href="{{ url_for('harta') }}"
-        class="btn"
-      >
-        Explore the Full Map
-      </a>
+    Change starts with a photo. With a simple observation. With you.
 
-    </div>
+  </p>
 
-  </div>
+</div>
 
+<!-- =======================================================
+     FINAL CTA
+     ======================================================= -->
 
-  <!-- =======================================================
-       WHY DO WE DO THIS?
-       ======================================================= -->
+<div class="final-cta">
 
-  <div class="section why-section">
+  <h3>
+    Nature is already speaking.
+  </h3>
 
-    <h3>
-      Why do we do this?
-    </h3>
+  <p>
 
-    <div>
+    You don't need to be a scientist.<br>
 
-      <p>
-        Because the air we breathe shapes our community’s health and our future.
-      </p>
+    You just need curiosity.
 
-      <p>
-        Lichens respond to changes in the air around them, offering us a window
-        into environmental conditions that are otherwise difficult to see.
-      </p>
+  </p>
 
-      <p>
-        <strong>Through Lichenary, we:</strong>
-      </p>
+  <div class="btn-group">
 
-      <ul>
-
-        <li>
-          Open young people's eyes to the science around them
-        </li>
-
-        <li>
-          Build a global network of volunteers mapping the air
-        </li>
-
-        <li>
-          Unite communities around environmental protection
-        </li>
-
-      </ul>
-
-    </div>
-
-  </div>
-
-
-  <!-- =======================================================
-       EVERY OBSERVATION MATTERS
-       ======================================================= -->
-
-  <div class="matters-section">
-
-    <h3>
-      Every observation tells a story.
-    </h3>
-
-    <p>
-      One photo may seem small. But hundreds of observations can reveal
-      patterns across communities, cities, and countries.
-      Your observation becomes part of something bigger.
-    </p>
-
+    <!-- MODIFICAT:
+         autentificat -> dashboard
+         neautentificat -> login -->
     <a
-      href="{{ url_for('participa') }}"
+      href="{{ url_for('dashboard') if current_user.is_authenticated else url_for('login') }}"
       class="btn"
     >
-      Add an Observation
+      Make an Observation
+    </a>
+
+    <a
+      href="{{ url_for('harta') }}"
+      class="btn"
+    >
+      Explore the Map
     </a>
 
   </div>
 
-
-  <!-- =======================================================
-       PRESS
-       ======================================================= -->
-
-  <div class="press-section">
-
-    <div class="press-heading">
-
-      <h3>
-        Lichenary in the Press
-      </h3>
-
-      <p>
-        A project born in Buzău, now reaching the world.
-      </p>
-
-    </div>
-
-
-    <div class="press-grid">
-
-      <!-- National Geographic -->
-
-      <div class="press-card">
-
-        <div class="press-source">
-          National Geographic
-        </div>
-
-        <h4>
-          2026 Distinguished Achievement Award Recipient
-        </h4>
-
-        <p>
-          Lichenary is recognized by the National Geographic Society for
-          using lichens as bioindicators and building a public map of air health.
-        </p>
-
-        <a
-          href="https://www.nationalgeographic.org/explore/programs/slingshot/award-recipients"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="press-link"
-        >
-          Read on National Geographic
-        </a>
-
-      </div>
-
-
-      <!-- Edupedu -->
-
-      <div class="press-card">
-
-        <div class="press-source">
-          Edupedu.ro
-        </div>
-
-        <h4>
-          Two teenagers from Buzău enter a global environmental competition — and win
-        </h4>
-
-        <p>
-          The story behind Lichenary, its founders, and the community growing
-          around the project.
-        </p>
-
-        <a
-          href="https://www.edupedu.ro/doi-adolescenti-din-buzau-au-aflat-de-la-profesoara-de-chineza-despre-o-competitie-globala-de-mediu-a-national-geographic-au-inscris-propriul-proiect-si-au-castigat-initiativa-lor-lichenary-despre/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="press-link"
-        >
-          Read the article
-        </a>
-
-      </div>
-
-
-      <!-- Libertatea -->
-
-      <div class="press-card">
-
-        <div class="press-source">
-          Libertatea
-        </div>
-
-        <h4>
-          Students from Buzău recognized by National Geographic
-        </h4>
-
-        <p>
-          How Lichenary turned lichens into a tool for understanding air
-          pollution and brought a project from Buzău onto an international stage.
-        </p>
-
-        <a
-          href="https://www.libertatea.ro/stiri/stiri-buzau-carla-rares-gheorghe-elevi-gemeni-premiu-national-geographic-proiect-ecologic-lichenary-unic-castigator-europa-5755329"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="press-link"
-        >
-          Read the article
-        </a>
-
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <!-- =======================================================
-       NEED HELP?
-       ======================================================= -->
-
-  <div class="help-section">
-
-    <div class="help-heading">
-
-      <h3>
-        Need help?
-      </h3>
-
-      <p>
-        New to Lichenary? Learn how our tools work and how to submit
-        your first observation.
-      </p>
-
-    </div>
-
-
-    <div class="help-grid">
-
-      <a
-        href="despre_ai.html"
-        class="help-card"
-      >
-
-        <div>
-
-          <div class="help-icon">
-            ✦
-          </div>
-
-          <h4>
-            How does Lichenary AI work?
-          </h4>
-
-          <p>
-            Understand how AI helps identify lichens from photographs.
-          </p>
-
-        </div>
-
-        <div class="help-arrow">
-          Learn about AI →
-        </div>
-
-      </a>
-
-
-      <a
-        href="despre_how_to_upload_ai.html"
-        class="help-card"
-      >
-
-        <div>
-
-          <div class="help-icon">
-            ✦
-          </div>
-
-          <h4>
-            How do I upload with AI?
-          </h4>
-
-          <p>
-            A step-by-step guide to taking a photo and submitting an
-            AI-assisted observation.
-          </p>
-
-        </div>
-
-        <div class="help-arrow">
-          Upload with AI →
-        </div>
-
-      </a>
-
-
-      <a
-        href="despre_how_to_upload_manual.html"
-        class="help-card"
-      >
-
-        <div>
-
-          <div class="help-icon">
-            ✦
-          </div>
-
-          <h4>
-            How do I upload manually?
-          </h4>
-
-          <p>
-            Prefer to identify the lichen yourself? Learn how to submit
-            a manual observation.
-          </p>
-
-        </div>
-
-        <div class="help-arrow">
-          Upload manually →
-        </div>
-
-      </a>
-
-    </div>
-
-  </div>
-
-
-  <!-- =======================================================
-       OUR VISION
-       ======================================================= -->
-
-  <div class="section vision-section">
-
-    <h3>
-      Our Vision
-    </h3>
-
-    <p>
-      A world where anyone can become a researcher, where nature is a dialogue partner,
-      and where air is no longer a mystery.
-    </p>
-
-    <p>
-      Change starts with a photo. With a simple observation. With you.
-    </p>
-
-  </div>
-
-
-  <!-- =======================================================
-       FINAL CTA
-       ======================================================= -->
-
-  <div class="final-cta">
-
-    <h3>
-      Nature is already speaking.
-    </h3>
-
-    <p>
-      You don't need to be a scientist.<br>
-      You just need curiosity.
-    </p>
-
-    <div class="btn-group">
-
-      <a
-        href="{{ url_for('participa') }}"
-        class="btn"
-      >
-        Make an Observation
-      </a>
-
-      <a
-        href="{{ url_for('harta') }}"
-        class="btn"
-      >
-        Explore the Map
-      </a>
-
-    </div>
-
-  </div>
+</div>
 
 </main>
 
-
 <footer>
-  © 2026 Lichenary • All rights reserved
+
+© 2026 Lichenary • All rights reserved
+
 </footer>
 
-
 <!-- Leaflet JS -->
+
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-
 <script>
-  /* =========================================================
-     CLOUDINARY HERO IMAGE
-     ========================================================= */
 
-  const CLOUDINARY_HERO_IMAGE =
-    "https://res.cloudinary.com/dkaff7r7k/image/upload/v1762068590/WhatsApp_Image_2025-11-02_at_09.26.59_cmpete.jpg";
+/* =========================================================
+   CLOUDINARY HERO IMAGE
+   ========================================================= */
 
-  document.getElementById("hero-image").style.backgroundImage =
-    `url("${CLOUDINARY_HERO_IMAGE}")`;
+const CLOUDINARY_HERO_IMAGE =
+"https://res.cloudinary.com/dkaff7r7k/image/upload/v1762068590/WhatsApp_Image_2025-11-02_at_09.26.59_cmpete.jpg";
+
+document.getElementById("hero-image").style.backgroundImage =
+`url("${CLOUDINARY_HERO_IMAGE}")`;
 
 
-  /* =========================================================
-     MOBILE MENU
-     ========================================================= */
+/* =========================================================
+   MOBILE MENU
+   ========================================================= */
 
-  const burger = document.getElementById('burger');
-  const navLinks = document.getElementById('nav-links');
+const burger = document.getElementById('burger');
 
-  function toggleMenu() {
+const navLinks = document.getElementById('nav-links');
 
-    const isOpen =
-      navLinks.classList.toggle('open');
+function toggleMenu() {
 
-    burger.setAttribute(
-      'aria-expanded',
-      isOpen ? 'true' : 'false'
-    );
-  }
+  const isOpen =
+    navLinks.classList.toggle('open');
 
-  burger.addEventListener(
-    'click',
-    toggleMenu
+  burger.setAttribute(
+    'aria-expanded',
+    isOpen ? 'true' : 'false'
   );
 
-  burger.addEventListener(
-    'keydown',
-    (event) => {
+}
 
-      if (
-        event.key === 'Enter' ||
-        event.key === ' '
-      ) {
+burger.addEventListener(
+  'click',
+  toggleMenu
+);
 
-        event.preventDefault();
+burger.addEventListener(
+  'keydown',
+  (event) => {
 
-        toggleMenu();
-      }
+    if (
+      event.key === 'Enter' ||
+      event.key === ' '
+    ) {
+
+      event.preventDefault();
+
+      toggleMenu();
 
     }
-  );
 
-  document
-    .querySelectorAll('#nav-links a')
-    .forEach(link => {
-
-      link.addEventListener(
-        'click',
-        () => {
-
-          navLinks.classList.remove('open');
-
-          burger.setAttribute(
-            'aria-expanded',
-            'false'
-          );
-
-        }
-      );
-
-    });
-
-
-  /* =========================================================
-     HOME MAP PREVIEW
-     ========================================================= */
-
-  const homeMap =
-    L.map('home-map', {
-      scrollWheelZoom: false
-    }).setView([0, 0], 2);
-
-  L.tileLayer(
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    {
-      maxZoom: 18,
-      attribution: '&copy; OpenStreetMap contributors'
-    }
-  ).addTo(homeMap);
-
-
-  function getColor(pollutionLevel) {
-
-    const colorMap = {
-      1: '#10A200',
-      2: '#3EB401',
-      3: '#6DC602',
-      4: '#9BD803',
-      5: '#CDCF3A',
-      6: '#F8FC05',
-      7: '#FABD04',
-      8: '#FC7E03',
-      9: '#FD3F01',
-      10: '#FF0000'
-    };
-
-    const level =
-      Math.round(pollutionLevel);
-
-    return colorMap[
-      Math.max(1, Math.min(10, level))
-    ] || '#888';
   }
+);
 
+document
+  .querySelectorAll('#nav-links a')
+  .forEach(link => {
 
-  fetch('/api/observations')
-    .then(res => res.json())
-    .then(data => {
+    link.addEventListener(
+      'click',
+      () => {
 
-      const markers = [];
+        navLinks.classList.remove('open');
 
-      data.forEach(obs => {
-
-        if (
-          obs.latitude &&
-          obs.longitude &&
-          obs.pollution_level
-        ) {
-
-          const color =
-            getColor(obs.pollution_level);
-
-          const marker =
-            L.circleMarker(
-              [obs.latitude, obs.longitude],
-              {
-                radius: 7,
-
-                color: color,
-
-                fillColor: color,
-
-                fillOpacity: 0.8,
-
-                weight: 2
-              }
-            ).addTo(homeMap);
-
-
-          marker.bindPopup(`
-            <div style="text-align: center;">
-              ${
-                obs.image_filename
-                  ? `<img
-                      src="${obs.image_filename}"
-                      alt="Lichen"
-                      style="max-width: 130px; border-radius: 6px;"
-                    ><br>`
-                  : ''
-              }
-
-              <strong>Date:</strong>
-              ${obs.date_time}<br>
-
-              <strong>Location:</strong>
-              ${obs.location}<br>
-
-              <strong>Species:</strong>
-              ${obs.species ?? 'Not provided'}<br>
-
-              <strong>Pollution Level:</strong>
-              ${obs.pollution_level}
-            </div>
-          `);
-
-          markers.push(marker);
-        }
-
-      });
-
-
-      if (markers.length > 0) {
-
-        const group =
-          L.featureGroup(markers);
-
-        homeMap.fitBounds(
-          group.getBounds().pad(0.15)
+        burger.setAttribute(
+          'aria-expanded',
+          'false'
         );
 
       }
-
-    })
-    .catch(error => {
-
-      console.error(
-        'Could not load observations:',
-        error
-      );
-
-    });
-
-
-  /* =========================================================
-     SCROLL REVEAL
-     ========================================================= */
-
-  const animatedElements =
-    document.querySelectorAll(
-      '.section, .hero-content, .hero-visual, ' +
-      '.stats-section, .award-section, .how-section, ' +
-      '.ai-section, .map-preview-section, .matters-section, ' +
-      '.press-section, .help-section, .final-cta'
     );
 
-
-  if ('IntersectionObserver' in window) {
-
-    const observer =
-      new IntersectionObserver(
-        (entries, observerInstance) => {
-
-          entries.forEach(entry => {
-
-            if (entry.isIntersecting) {
-
-              entry.target.classList.add(
-                'visible'
-              );
-
-              observerInstance.unobserve(
-                entry.target
-              );
-
-            }
-
-          });
-
-        },
-        {
-          threshold: 0.12
-        }
-      );
+  });
 
 
-    animatedElements.forEach(element => {
+/* =========================================================
+   HOME MAP PREVIEW
+   ========================================================= */
 
-      observer.observe(element);
+const homeMap =
+L.map('home-map', {
 
-    });
+  scrollWheelZoom: false
 
-  } else {
+}).setView([0, 0], 2);
 
-    animatedElements.forEach(element => {
+L.tileLayer(
+  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  {
 
-      element.classList.add('visible');
+    maxZoom: 18,
 
-    });
+    attribution: '&copy; OpenStreetMap contributors'
 
   }
+).addTo(homeMap);
+
+function getColor(pollutionLevel) {
+
+  const colorMap = {
+
+    1: '#10A200',
+    2: '#3EB401',
+    3: '#6DC602',
+    4: '#9BD803',
+    5: '#CDCF3A',
+    6: '#F8FC05',
+    7: '#FABD04',
+    8: '#FC7E03',
+    9: '#FD3F01',
+    10: '#FF0000'
+
+  };
+
+  const level =
+    Math.round(pollutionLevel);
+
+  return colorMap[
+    Math.max(1, Math.min(10, level))
+  ] || '#888';
+
+}
+
+fetch('/api/observations')
+
+  .then(res => res.json())
+
+  .then(data => {
+
+    const markers = [];
+
+    data.forEach(obs => {
+
+      if (
+        obs.latitude &&
+        obs.longitude &&
+        obs.pollution_level
+      ) {
+
+        const color =
+          getColor(obs.pollution_level);
+
+        const marker =
+          L.circleMarker(
+            [obs.latitude, obs.longitude],
+            {
+
+              radius: 7,
+
+              color: color,
+
+              fillColor: color,
+
+              fillOpacity: 0.8,
+
+              weight: 2
+
+            }
+          ).addTo(homeMap);
+
+        marker.bindPopup(`
+
+          <div style="text-align: center;">
+
+            ${
+              obs.image_filename
+                ? `<img
+                    src="${obs.image_filename}"
+                    alt="Lichen"
+                    style="max-width: 130px; border-radius: 6px;"
+                  ><br>`
+                : ''
+            }
+
+            <strong>Date:</strong>
+            ${obs.date_time}<br>
+
+            <strong>Location:</strong>
+            ${obs.location}<br>
+
+            <strong>Species:</strong>
+            ${obs.species ?? 'Not provided'}<br>
+
+            <strong>Pollution Level:</strong>
+            ${obs.pollution_level}
+
+          </div>
+
+        `);
+
+        markers.push(marker);
+
+      }
+
+    });
+
+    if (markers.length > 0) {
+
+      const group =
+        L.featureGroup(markers);
+
+      homeMap.fitBounds(
+        group.getBounds().pad(0.15)
+      );
+
+    }
+
+  })
+
+  .catch(error => {
+
+    console.error(
+      'Could not load observations:',
+      error
+    );
+
+  });
+
+
+/* =========================================================
+   SCROLL REVEAL
+   ========================================================= */
+
+const animatedElements =
+  document.querySelectorAll(
+    '.section, .hero-content, .hero-visual, ' +
+    '.stats-section, .award-section, .how-section, ' +
+    '.ai-section, .map-preview-section, .matters-section, ' +
+    '.press-section, .help-section, .final-cta'
+  );
+
+if ('IntersectionObserver' in window) {
+
+  const observer =
+    new IntersectionObserver(
+
+      (entries, observerInstance) => {
+
+        entries.forEach(entry => {
+
+          if (entry.isIntersecting) {
+
+            entry.target.classList.add(
+              'visible'
+            );
+
+            observerInstance.unobserve(
+              entry.target
+            );
+
+          }
+
+        });
+
+      },
+
+      {
+        threshold: 0.12
+      }
+
+    );
+
+  animatedElements.forEach(element => {
+
+    observer.observe(element);
+
+  });
+
+} else {
+
+  animatedElements.forEach(element => {
+
+    element.classList.add('visible');
+
+  });
+
+}
+
 </script>
 
 </body>
+
 </html>
