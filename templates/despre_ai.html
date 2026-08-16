@@ -1,0 +1,3239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  />
+
+  <title>AI & Observation System – Lichenary</title>
+
+  <style>
+
+    /* =========================================================
+       LICHENARY — AI EXPLANATION PAGE
+       ORGANIC / EDITORIAL / CITIZEN SCIENCE
+       ========================================================= */
+
+    :root {
+
+      --cream: #f5f3ea;
+      --cream-light: #fbfaf5;
+      --paper: #eeece1;
+
+      --forest: #173f35;
+      --forest-dark: #102f28;
+      --forest-soft: #315c4d;
+
+      --moss: #718d57;
+      --sage: #a8b89a;
+      --lichen: #d9e4bb;
+
+      --ink: #18231f;
+      --muted: #65716a;
+
+      --white: #ffffff;
+
+      --success-bg: #edf5e9;
+      --success-border: #c8dbbc;
+      --success-text: #315c3c;
+
+      --warning-bg: #fff7df;
+      --warning-border: #ead79a;
+      --warning-text: #755f1c;
+
+      --radius-xl: 42px;
+      --radius-lg: 28px;
+      --radius-md: 18px;
+
+      --shadow-soft:
+        0 20px 60px rgba(23, 63, 53, 0.10);
+
+      --shadow-medium:
+        0 25px 65px rgba(23, 63, 53, 0.14);
+    }
+
+
+    /* =========================================================
+       RESET
+       ========================================================= */
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+
+      min-height: 100vh;
+
+      font-family:
+        "Segoe UI",
+        Tahoma,
+        Geneva,
+        Verdana,
+        sans-serif;
+
+      background: var(--cream);
+
+      color: var(--ink);
+
+      overflow-x: hidden;
+
+      position: relative;
+    }
+
+    a {
+      color: inherit;
+    }
+
+
+    /* =========================================================
+       BACKGROUND CANVAS
+       ========================================================= */
+
+    #cloud-canvas {
+      position: fixed;
+
+      top: 0;
+      left: 0;
+
+      width: 100vw;
+      height: 100vh;
+
+      z-index: 0;
+
+      pointer-events: none;
+
+      opacity: 0.25;
+    }
+
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    header {
+      position: sticky;
+
+      top: 0;
+
+      z-index: 100;
+
+      width: 100%;
+
+      padding: 20px 5vw;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 30px;
+
+      background:
+        rgba(245, 243, 234, 0.88);
+
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+
+      border-bottom:
+        1px solid rgba(23, 63, 53, 0.08);
+    }
+
+
+    /* =========================================================
+       LOGO
+       ========================================================= */
+
+    .logo {
+      color: var(--forest);
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      font-size: 1.7rem;
+
+      font-weight: bold;
+
+      letter-spacing: -0.04em;
+
+      cursor: pointer;
+
+      transition:
+        transform 0.25s ease,
+        color 0.25s ease;
+    }
+
+    .logo:hover {
+      color: var(--moss);
+
+      transform:
+        translateY(-1px);
+    }
+
+
+    /* =========================================================
+       BURGER
+       ========================================================= */
+
+    .burger {
+      display: none;
+
+      flex-direction: column;
+
+      justify-content: center;
+
+      gap: 5px;
+
+      width: 42px;
+      height: 42px;
+
+      padding: 8px;
+
+      cursor: pointer;
+
+      border-radius: 50%;
+
+      background: var(--forest);
+
+      z-index: 30;
+    }
+
+    .burger div {
+      width: 100%;
+      height: 2px;
+
+      background: white;
+
+      border-radius: 10px;
+
+      transition:
+        transform 0.25s ease,
+        opacity 0.25s ease;
+    }
+
+
+    /* =========================================================
+       NAVIGATION
+       ========================================================= */
+
+    nav#nav-links {
+      display: flex;
+
+      align-items: center;
+      justify-content: flex-end;
+
+      gap: 5px;
+
+      z-index: 20;
+
+      flex-wrap: wrap;
+
+      transition:
+        max-height 0.4s ease,
+        padding 0.4s ease;
+    }
+
+    nav#nav-links a {
+      position: relative;
+
+      color: var(--forest);
+
+      text-decoration: none;
+
+      padding: 9px 12px;
+
+      font-size: 0.92rem;
+
+      font-weight: 500;
+
+      border-radius: 999px;
+
+      white-space: nowrap;
+
+      transition:
+        color 0.25s ease,
+        background 0.25s ease,
+        transform 0.25s ease;
+    }
+
+    nav#nav-links a:hover {
+      color: var(--forest);
+
+      background:
+        rgba(113, 141, 87, 0.14);
+
+      transform:
+        translateY(-1px);
+    }
+
+
+    /* =========================================================
+       ORGANIC DIVIDER
+       ========================================================= */
+
+    .organic-divider {
+      width: 100%;
+
+      height: 75px;
+
+      margin: 55px auto 35px;
+
+      display: flex;
+
+      justify-content: center;
+
+      overflow: hidden;
+
+      position: relative;
+
+      z-index: 5;
+    }
+
+    .organic-divider svg {
+      width: min(700px, 80%);
+
+      height: 75px;
+
+      overflow: visible;
+    }
+
+    .organic-divider path {
+      fill: none;
+
+      stroke: var(--sage);
+
+      stroke-width: 2;
+
+      stroke-linecap: round;
+
+      stroke-dasharray: 4 9;
+    }
+
+
+    /* =========================================================
+       MAIN CONTENT
+       ========================================================= */
+
+    main {
+      position: relative;
+
+      z-index: 10;
+
+      width: calc(100% - 40px);
+
+      max-width: 1100px;
+
+      margin: 0 auto 80px;
+
+      padding: 70px 80px 90px;
+
+      background: var(--cream-light);
+
+      border-radius:
+        38px 95px 38px 75px;
+
+      border:
+        1px solid rgba(23, 63, 53, 0.08);
+
+      box-shadow: var(--shadow-soft);
+
+      overflow: hidden;
+    }
+
+    main::before {
+      content: "";
+
+      position: absolute;
+
+      width: 380px;
+      height: 380px;
+
+      top: -180px;
+      right: -140px;
+
+      background: var(--lichen);
+
+      border-radius:
+        62% 38% 65% 35% /
+        40% 57% 43% 60%;
+
+      opacity: 0.45;
+
+      z-index: -1;
+    }
+
+    main::after {
+      content: "";
+
+      position: absolute;
+
+      width: 250px;
+      height: 250px;
+
+      left: -120px;
+      bottom: -120px;
+
+      background: var(--sage);
+
+      border-radius:
+        45% 55% 62% 38% /
+        60% 42% 58% 40%;
+
+      opacity: 0.22;
+
+      z-index: -1;
+    }
+
+
+    /* =========================================================
+       HERO
+       ========================================================= */
+
+    .hero {
+      position: relative;
+
+      z-index: 2;
+
+      max-width: 850px;
+
+      margin-bottom: 70px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+
+      margin-bottom: 18px;
+
+      padding: 8px 14px;
+
+      border-radius: 999px;
+
+      background:
+        rgba(113, 141, 87, 0.13);
+
+      color: var(--forest-soft);
+
+      font-size: 0.76rem;
+
+      font-weight: 700;
+
+      letter-spacing: 0.10em;
+
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0 0 22px;
+
+      color: var(--forest);
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      font-size:
+        clamp(3rem, 7vw, 5.8rem);
+
+      font-weight: normal;
+
+      line-height: 0.94;
+
+      letter-spacing: -0.06em;
+    }
+
+    .hero-description {
+      margin: 0;
+
+      max-width: 780px;
+
+      color: var(--muted);
+
+      font-size: 1.08rem;
+
+      line-height: 1.8;
+    }
+
+
+    /* =========================================================
+       INTRODUCTION CARD
+       ========================================================= */
+
+    .intro-card {
+      position: relative;
+
+      z-index: 2;
+
+      display: grid;
+
+      grid-template-columns: 90px 1fr;
+
+      gap: 25px;
+
+      padding: 28px;
+
+      margin-bottom: 75px;
+
+      background:
+        rgba(217, 228, 187, 0.38);
+
+      border:
+        1px solid rgba(113, 141, 87, 0.22);
+
+      border-radius:
+        28px 12px 28px 12px;
+    }
+
+    .intro-number {
+      width: 72px;
+      height: 72px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      border-radius:
+        50%;
+
+      background: var(--forest);
+
+      color: white;
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      font-size: 1.45rem;
+    }
+
+    .intro-card h2 {
+      margin: 0 0 7px;
+
+      color: var(--forest);
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      font-size: 1.65rem;
+
+      font-weight: normal;
+    }
+
+    .intro-card p {
+      margin: 0;
+
+      color: var(--forest-soft);
+
+      line-height: 1.7;
+
+      font-size: 0.96rem;
+    }
+
+
+    /* =========================================================
+       SECTION
+       ========================================================= */
+
+    .section {
+      position: relative;
+
+      z-index: 2;
+
+      margin-bottom: 85px;
+    }
+
+    .section:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-heading {
+      display: grid;
+
+      grid-template-columns: 65px 1fr;
+
+      gap: 20px;
+
+      align-items: start;
+
+      margin-bottom: 30px;
+    }
+
+    .section-number {
+      width: 52px;
+      height: 52px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      border-radius:
+        17px 7px 17px 7px;
+
+      background: var(--forest);
+
+      color: white;
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      font-size: 1.1rem;
+    }
+
+    .section-heading h2 {
+      margin: 0 0 8px;
+
+      color: var(--forest);
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      font-size:
+        clamp(2rem, 4vw, 3rem);
+
+      font-weight: normal;
+
+      line-height: 1;
+
+      letter-spacing: -0.04em;
+    }
+
+    .section-heading p {
+      margin: 0;
+
+      color: var(--muted);
+
+      line-height: 1.65;
+
+      max-width: 720px;
+    }
+
+
+    /* =========================================================
+       TEXT
+       ========================================================= */
+
+    .text-content {
+      max-width: 900px;
+
+      color: var(--ink);
+
+      font-size: 0.98rem;
+
+      line-height: 1.85;
+    }
+
+    .text-content p {
+      margin:
+        0 0 18px;
+    }
+
+    .text-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    .text-content strong {
+      color: var(--forest);
+    }
+
+
+    /* =========================================================
+       PROCESS FLOW
+       ========================================================= */
+
+    .process {
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+      gap: 18px;
+
+      margin-top: 35px;
+    }
+
+    .process-card {
+      position: relative;
+
+      padding: 26px;
+
+      min-height: 190px;
+
+      background:
+        rgba(255, 255, 255, 0.68);
+
+      border:
+        1px solid rgba(23, 63, 53, 0.10);
+
+      border-radius:
+        24px 10px 24px 10px;
+
+      box-shadow:
+        0 10px 30px rgba(23, 63, 53, 0.045);
+
+      transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+    }
+
+    .process-card:hover {
+      transform:
+        translateY(-4px);
+
+      box-shadow:
+        0 18px 40px rgba(23, 63, 53, 0.10);
+
+      border-color:
+        rgba(113, 141, 87, 0.30);
+    }
+
+    .process-card-number {
+      display: inline-flex;
+
+      width: 36px;
+      height: 36px;
+
+      align-items: center;
+      justify-content: center;
+
+      margin-bottom: 17px;
+
+      border-radius: 50%;
+
+      background:
+        var(--lichen);
+
+      color: var(--forest);
+
+      font-weight: 800;
+
+      font-size: 0.82rem;
+    }
+
+    .process-card h3 {
+      margin:
+        0 0 10px;
+
+      color: var(--forest);
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      font-size: 1.35rem;
+
+      font-weight: normal;
+    }
+
+    .process-card p {
+      margin: 0;
+
+      color: var(--muted);
+
+      line-height: 1.65;
+
+      font-size: 0.91rem;
+    }
+
+
+    /* =========================================================
+       LARGE FLOW
+       ========================================================= */
+
+    .flow {
+      display: flex;
+
+      align-items: stretch;
+
+      gap: 0;
+
+      margin-top: 38px;
+
+      padding: 10px 0;
+    }
+
+    .flow-step {
+      flex: 1;
+
+      position: relative;
+
+      padding: 22px 18px;
+
+      background:
+        rgba(245, 243, 234, 0.75);
+
+      border-top:
+        1px solid rgba(23, 63, 53, 0.10);
+
+      border-bottom:
+        1px solid rgba(23, 63, 53, 0.10);
+    }
+
+    .flow-step:first-child {
+      border-left:
+        1px solid rgba(23, 63, 53, 0.10);
+
+      border-radius:
+        18px 0 0 18px;
+    }
+
+    .flow-step:last-child {
+      border-right:
+        1px solid rgba(23, 63, 53, 0.10);
+
+      border-radius:
+        0 18px 18px 0;
+    }
+
+    .flow-step:not(:last-child)::after {
+      content: "";
+
+      position: absolute;
+
+      right: -8px;
+
+      top: 50%;
+
+      width: 15px;
+      height: 15px;
+
+      transform:
+        translateY(-50%)
+        rotate(45deg);
+
+      background:
+        var(--lichen);
+
+      border-top:
+        1px solid rgba(23, 63, 53, 0.10);
+
+      border-right:
+        1px solid rgba(23, 63, 53, 0.10);
+
+      z-index: 3;
+    }
+
+    .flow-label {
+      display: block;
+
+      margin-bottom: 8px;
+
+      color: var(--moss);
+
+      font-size: 0.70rem;
+
+      font-weight: 800;
+
+      text-transform: uppercase;
+
+      letter-spacing: 0.09em;
+    }
+
+    .flow-step strong {
+      display: block;
+
+      color: var(--forest);
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      font-size: 1.05rem;
+
+      font-weight: normal;
+
+      line-height: 1.25;
+    }
+
+
+    /* =========================================================
+       AI / PYTHON SPLIT
+       ========================================================= */
+
+    .split-system {
+      display: grid;
+
+      grid-template-columns:
+        1fr 1fr;
+
+      gap: 20px;
+
+      margin-top: 35px;
+    }
+
+    .system-card {
+      padding: 30px;
+
+      border-radius:
+        28px 12px 28px 12px;
+
+      border:
+        1px solid rgba(23, 63, 53, 0.10);
+
+      background:
+        rgba(255, 255, 255, 0.66);
+    }
+
+    .system-card.ai {
+      background:
+        linear-gradient(
+          135deg,
+          rgba(217, 228, 187, 0.55),
+          rgba(255, 255, 255, 0.70)
+        );
+    }
+
+    .system-card.backend {
+      background:
+        linear-gradient(
+          135deg,
+          rgba(168, 184, 154, 0.25),
+          rgba(255, 255, 255, 0.72)
+        );
+    }
+
+    .system-tag {
+      display: inline-block;
+
+      margin-bottom: 18px;
+
+      padding: 7px 11px;
+
+      border-radius: 999px;
+
+      background:
+        var(--forest);
+
+      color: white;
+
+      font-size: 0.70rem;
+
+      font-weight: 800;
+
+      text-transform: uppercase;
+
+      letter-spacing: 0.08em;
+    }
+
+    .system-card h3 {
+      margin:
+        0 0 14px;
+
+      color: var(--forest);
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      font-size: 1.8rem;
+
+      font-weight: normal;
+    }
+
+    .system-card p {
+      margin:
+        0 0 16px;
+
+      color: var(--muted);
+
+      line-height: 1.7;
+
+      font-size: 0.94rem;
+    }
+
+    .system-card p:last-child {
+      margin-bottom: 0;
+    }
+
+
+    /* =========================================================
+       SPECIES DATABASE
+       ========================================================= */
+
+    .database-box {
+      margin-top: 35px;
+
+      padding: 32px;
+
+      background:
+        var(--forest);
+
+      color: white;
+
+      border-radius:
+        30px 12px 30px 12px;
+
+      box-shadow:
+        0 20px 45px rgba(23, 63, 53, 0.16);
+    }
+
+    .database-box h3 {
+      margin:
+        0 0 12px;
+
+      color: white;
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      font-size: 1.8rem;
+
+      font-weight: normal;
+    }
+
+    .database-box p {
+      margin: 0;
+
+      max-width: 850px;
+
+      color:
+        rgba(255, 255, 255, 0.76);
+
+      line-height: 1.75;
+
+      font-size: 0.94rem;
+    }
+
+    .database-points {
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 15px;
+
+      margin-top: 25px;
+    }
+
+    .database-point {
+      padding: 18px;
+
+      background:
+        rgba(255, 255, 255, 0.08);
+
+      border:
+        1px solid rgba(255, 255, 255, 0.12);
+
+      border-radius:
+        17px 8px 17px 8px;
+    }
+
+    .database-point strong {
+      display: block;
+
+      margin-bottom: 6px;
+
+      color: white;
+
+      font-size: 0.90rem;
+    }
+
+    .database-point span {
+      display: block;
+
+      color:
+        rgba(255, 255, 255, 0.65);
+
+      font-size: 0.82rem;
+
+      line-height: 1.5;
+    }
+
+
+    /* =========================================================
+       POLLUTION SCALE
+       ========================================================= */
+
+    .scale {
+      margin-top: 35px;
+
+      padding: 28px;
+
+      background:
+        rgba(255, 255, 255, 0.68);
+
+      border:
+        1px solid rgba(23, 63, 53, 0.10);
+
+      border-radius:
+        25px 10px 25px 10px;
+    }
+
+    .scale-title {
+      margin:
+        0 0 20px;
+
+      color: var(--forest);
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      font-size: 1.4rem;
+    }
+
+    .scale-bar {
+      height: 18px;
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(10, 1fr);
+
+      overflow: hidden;
+
+      border-radius: 999px;
+
+      box-shadow:
+        inset 0 0 0 1px
+        rgba(23, 63, 53, 0.10);
+    }
+
+    .scale-bar span:nth-child(1) {
+      background: #274f3f;
+    }
+
+    .scale-bar span:nth-child(2) {
+      background: #3d664b;
+    }
+
+    .scale-bar span:nth-child(3) {
+      background: #547653;
+    }
+
+    .scale-bar span:nth-child(4) {
+      background: #68885a;
+    }
+
+    .scale-bar span:nth-child(5) {
+      background: #7c985f;
+    }
+
+    .scale-bar span:nth-child(6) {
+      background: #91a667;
+    }
+
+    .scale-bar span:nth-child(7) {
+      background: #a6b36f;
+    }
+
+    .scale-bar span:nth-child(8) {
+      background: #bdc77d;
+    }
+
+    .scale-bar span:nth-child(9) {
+      background: #d1d89a;
+    }
+
+    .scale-bar span:nth-child(10) {
+      background: #e2e5b8;
+    }
+
+    .scale-labels {
+      display: flex;
+
+      justify-content: space-between;
+
+      margin-top: 12px;
+
+      color: var(--muted);
+
+      font-size: 0.78rem;
+
+      font-weight: 700;
+    }
+
+    .scale-note {
+      margin:
+        18px 0 0;
+
+      color: var(--muted);
+
+      font-size: 0.84rem;
+
+      line-height: 1.6;
+    }
+
+
+    /* =========================================================
+       GPS / TIME
+       ========================================================= */
+
+    .data-grid {
+      display: grid;
+
+      grid-template-columns:
+        1fr 1fr;
+
+      gap: 18px;
+
+      margin-top: 35px;
+    }
+
+    .data-card {
+      padding: 27px;
+
+      background:
+        rgba(255, 255, 255, 0.68);
+
+      border:
+        1px solid rgba(23, 63, 53, 0.10);
+
+      border-radius:
+        24px 10px 24px 10px;
+    }
+
+    .data-card h3 {
+      margin:
+        0 0 10px;
+
+      color: var(--forest);
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      font-size: 1.45rem;
+
+      font-weight: normal;
+    }
+
+    .data-card p {
+      margin: 0;
+
+      color: var(--muted);
+
+      font-size: 0.91rem;
+
+      line-height: 1.7;
+    }
+
+
+    /* =========================================================
+       SECURITY
+       ========================================================= */
+
+    .security-list {
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+      gap: 15px;
+
+      margin-top: 35px;
+    }
+
+    .security-item {
+      padding: 22px;
+
+      background:
+        rgba(245, 243, 234, 0.80);
+
+      border-left:
+        3px solid var(--moss);
+
+      border-radius:
+        3px 16px 16px 3px;
+    }
+
+    .security-item h3 {
+      margin:
+        0 0 8px;
+
+      color: var(--forest);
+
+      font-size: 1rem;
+    }
+
+    .security-item p {
+      margin: 0;
+
+      color: var(--muted);
+
+      font-size: 0.87rem;
+
+      line-height: 1.6;
+    }
+
+
+    /* =========================================================
+       REVIEW
+       ========================================================= */
+
+    .review-card {
+      margin-top: 35px;
+
+      padding: 32px;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(217, 228, 187, 0.40),
+          rgba(255, 255, 255, 0.68)
+        );
+
+      border:
+        1px solid rgba(113, 141, 87, 0.20);
+
+      border-radius:
+        30px 12px 30px 12px;
+    }
+
+    .review-card h3 {
+      margin:
+        0 0 13px;
+
+      color: var(--forest);
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      font-size: 1.8rem;
+
+      font-weight: normal;
+    }
+
+    .review-card p {
+      margin:
+        0 0 16px;
+
+      color: var(--forest-soft);
+
+      line-height: 1.75;
+
+      font-size: 0.94rem;
+    }
+
+    .review-card p:last-child {
+      margin-bottom: 0;
+    }
+
+
+    /* =========================================================
+       LIMITATIONS
+       ========================================================= */
+
+    .limitations {
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 16px;
+
+      margin-top: 35px;
+    }
+
+    .limitation {
+      padding: 23px;
+
+      background:
+        rgba(255, 255, 255, 0.65);
+
+      border:
+        1px solid rgba(23, 63, 53, 0.10);
+
+      border-radius:
+        20px 9px 20px 9px;
+    }
+
+    .limitation h3 {
+      margin:
+        0 0 9px;
+
+      color: var(--forest);
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      font-size: 1.18rem;
+
+      font-weight: normal;
+    }
+
+    .limitation p {
+      margin: 0;
+
+      color: var(--muted);
+
+      font-size: 0.86rem;
+
+      line-height: 1.6;
+    }
+
+
+    /* =========================================================
+       FINAL MESSAGE
+       ========================================================= */
+
+    .final-card {
+      position: relative;
+
+      z-index: 2;
+
+      padding: 45px;
+
+      margin-top: 20px;
+
+      background:
+        var(--forest);
+
+      color: white;
+
+      border-radius:
+        38px 14px 38px 14px;
+
+      text-align: center;
+
+      overflow: hidden;
+    }
+
+    .final-card::before {
+      content: "";
+
+      position: absolute;
+
+      width: 230px;
+      height: 230px;
+
+      right: -80px;
+      top: -100px;
+
+      background:
+        rgba(217, 228, 187, 0.10);
+
+      border-radius: 50%;
+    }
+
+    .final-card h2 {
+      position: relative;
+
+      margin:
+        0 0 15px;
+
+      color: white;
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      font-size:
+        clamp(2rem, 4vw, 3.2rem);
+
+      font-weight: normal;
+
+      letter-spacing: -0.04em;
+    }
+
+    .final-card p {
+      position: relative;
+
+      max-width: 720px;
+
+      margin:
+        0 auto;
+
+      color:
+        rgba(255, 255, 255, 0.72);
+
+      line-height: 1.75;
+
+      font-size: 0.95rem;
+    }
+
+
+    /* =========================================================
+       FOOTER
+       ========================================================= */
+
+    footer {
+      position: relative;
+
+      width: 100%;
+
+      margin-top: 75px;
+
+      padding: 50px 20px;
+
+      background: var(--forest);
+
+      color:
+        rgba(255, 255, 255, 0.72);
+
+      text-align: center;
+
+      font-size: 0.85rem;
+
+      letter-spacing: 0.03em;
+
+      z-index: 10;
+    }
+
+    footer::before {
+      content: "";
+
+      position: absolute;
+
+      top: -35px;
+      left: 0;
+
+      width: 100%;
+      height: 70px;
+
+      background: var(--forest);
+
+      clip-path:
+        ellipse(55% 45% at 50% 100%);
+    }
+
+
+    /* =========================================================
+       RESPONSIVE — 1100px
+       ========================================================= */
+
+    @media (max-width: 1100px) {
+
+      header {
+        padding:
+          18px 4vw;
+      }
+
+      main {
+        padding:
+          60px;
+      }
+    }
+
+
+    /* =========================================================
+       RESPONSIVE — 900px
+       ========================================================= */
+
+    @media (max-width: 900px) {
+
+      .flow {
+        display: grid;
+
+        grid-template-columns:
+          1fr 1fr;
+
+        gap: 10px;
+      }
+
+      .flow-step,
+      .flow-step:first-child,
+      .flow-step:last-child {
+        border:
+          1px solid rgba(23, 63, 53, 0.10);
+
+        border-radius:
+          16px;
+      }
+
+      .flow-step:not(:last-child)::after {
+        display: none;
+      }
+
+      .limitations {
+        grid-template-columns:
+          1fr;
+      }
+
+      .database-points {
+        grid-template-columns:
+          1fr;
+      }
+    }
+
+
+    /* =========================================================
+       RESPONSIVE — 850px
+       ========================================================= */
+
+    @media (max-width: 850px) {
+
+      header {
+        position: sticky;
+
+        flex-wrap: wrap;
+      }
+
+      .burger {
+        display: flex;
+      }
+
+      nav#nav-links {
+        position: absolute;
+
+        top: 100%;
+        left: 0;
+
+        width: 100%;
+
+        max-height: 0;
+
+        overflow: hidden;
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 4px;
+
+        padding: 0 5vw;
+
+        background:
+          rgba(245, 243, 234, 0.97);
+
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+
+        border-bottom:
+          1px solid rgba(23, 63, 53, 0.08);
+
+        transition:
+          max-height 0.45s ease,
+          padding 0.45s ease;
+      }
+
+      nav#nav-links.open {
+        max-height: 600px;
+
+        padding-top: 15px;
+        padding-bottom: 18px;
+      }
+
+      nav#nav-links a {
+        width: 100%;
+
+        padding: 13px 15px;
+
+        border-radius: 14px;
+      }
+
+      body.menu-open main {
+        margin-top: 250px;
+      }
+
+      main {
+        padding:
+          55px;
+      }
+
+      .split-system {
+        grid-template-columns:
+          1fr;
+      }
+
+      .security-list {
+        grid-template-columns:
+          1fr;
+      }
+    }
+
+
+    /* =========================================================
+       RESPONSIVE — 600px
+       ========================================================= */
+
+    @media (max-width: 600px) {
+
+      header {
+        padding:
+          15px 20px;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+      }
+
+      main {
+        width:
+          calc(100% - 40px);
+
+        padding:
+          50px 30px 60px;
+
+        border-radius:
+          28px 55px 28px 55px;
+      }
+
+      body.menu-open main {
+        margin-top: 250px;
+      }
+
+      main::before {
+        width: 220px;
+        height: 220px;
+
+        right: -100px;
+        top: -100px;
+      }
+
+      main::after {
+        width: 150px;
+        height: 150px;
+
+        left: -70px;
+        bottom: -70px;
+      }
+
+      .organic-divider {
+        height: 50px;
+
+        margin:
+          40px 0 30px;
+      }
+
+      .organic-divider svg {
+        width: 100%;
+        height: 50px;
+      }
+
+      h1 {
+        font-size: 3.1rem;
+      }
+
+      .intro-card {
+        grid-template-columns:
+          1fr;
+
+        gap: 15px;
+      }
+
+      .section-heading {
+        grid-template-columns:
+          1fr;
+
+        gap: 12px;
+      }
+
+      .process {
+        grid-template-columns:
+          1fr;
+      }
+
+      .flow {
+        grid-template-columns:
+          1fr;
+      }
+
+      .data-grid {
+        grid-template-columns:
+          1fr;
+      }
+
+      .database-box {
+        padding: 25px;
+      }
+
+      .scale {
+        padding: 22px;
+      }
+
+      .scale-bar {
+        height: 15px;
+      }
+
+      .final-card {
+        padding:
+          35px 24px;
+      }
+
+      footer {
+        margin-top: 60px;
+
+        padding:
+          45px 20px;
+      }
+    }
+
+
+    /* =========================================================
+       REDUCED MOTION
+       ========================================================= */
+
+    @media (prefers-reduced-motion: reduce) {
+
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        transition-duration:
+          0.01ms !important;
+
+        animation-duration:
+          0.01ms !important;
+      }
+    }
+
+  </style>
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     BACKGROUND CANVAS
+     ========================================================= -->
+
+<canvas id="cloud-canvas"></canvas>
+
+
+<!-- =========================================================
+     HEADER
+     ========================================================= -->
+
+<header>
+
+  <div
+    class="logo"
+    onclick="window.location='/'"
+  >
+    Lichenary
+  </div>
+
+
+  <div
+    id="burger"
+    class="burger"
+    aria-label="Menu"
+    tabindex="0"
+  >
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+
+  <nav id="nav-links">
+
+    <a href="{{ url_for('home') }}">
+      Home
+    </a>
+
+    <a href="{{ url_for('despre') }}">
+      About
+    </a>
+
+    <a href="{{ url_for('participa') }}">
+      How to Participate
+    </a>
+
+    <a href="{{ url_for('galerie') }}">
+      Gallery
+    </a>
+
+    <a href="{{ url_for('harta') }}">
+      Map
+    </a>
+
+    <a href="{{ url_for('contact') }}">
+      Contact
+    </a>
+
+    {% if current_user.is_authenticated %}
+
+      <a href="{{ url_for('dashboard') }}">
+        Dashboard
+      </a>
+
+      <a href="{{ url_for('logout') }}">
+        Logout
+      </a>
+
+    {% else %}
+
+      <a href="{{ url_for('login') }}">
+        Login
+      </a>
+
+    {% endif %}
+
+  </nav>
+
+</header>
+
+
+<!-- =========================================================
+     ORGANIC DIVIDER
+     ========================================================= -->
+
+<div class="organic-divider">
+
+  <svg
+    viewBox="0 0 700 75"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+
+    <path
+      d="
+        M 5 38
+        C 70 10, 105 68, 170 38
+        S 270 8, 330 40
+        S 440 70, 500 35
+        S 620 10, 695 42
+      "
+    />
+
+  </svg>
+
+</div>
+
+
+<!-- =========================================================
+     MAIN
+     ========================================================= -->
+
+<main>
+
+
+  <!-- =======================================================
+       HERO
+       ======================================================= -->
+
+  <section class="hero">
+
+    <span class="eyebrow">
+      Lichenary Technology
+    </span>
+
+    <h1>
+      How the AI observation system works
+    </h1>
+
+    <p class="hero-description">
+      Lichenary combines citizen science, image analysis,
+      geographical data and a controlled biological reference
+      database to transform a photograph of a lichen into a
+      structured scientific observation.
+    </p>
+
+  </section>
+
+
+  <!-- =======================================================
+       INTRODUCTION
+       ======================================================= -->
+
+  <div class="intro-card">
+
+    <div class="intro-number">
+      AI
+    </div>
+
+    <div>
+
+      <h2>
+        AI assists identification. It does not decide the pollution level.
+      </h2>
+
+      <p>
+        This distinction is central to the Lichenary system.
+        The artificial intelligence model is responsible for
+        analyzing the photograph and proposing a lichen species.
+        The pollution-indicator value is then obtained separately
+        by the Lichenary backend from a predefined species database.
+        This creates a clear separation between image recognition
+        and scientific data processing.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- =======================================================
+       SECTION 01
+       ======================================================= -->
+
+  <section class="section">
+
+    <div class="section-heading">
+
+      <div class="section-number">
+        01
+      </div>
+
+      <div>
+
+        <h2>
+          The observation begins with a photograph
+        </h2>
+
+        <p>
+          A participant starts the process by documenting a
+          lichen in the field.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="text-content">
+
+      <p>
+        The AI observation page is designed to make scientific
+        data collection as simple as possible while preserving
+        the information required for a useful observation.
+        The participant can either take a new photograph with
+        the device camera or select an existing photograph
+        from the phone or computer.
+      </p>
+
+      <p>
+        The selected image is previewed directly in the browser.
+        Before the AI analysis can begin, the system also requires
+        the observation to have a geographical position. This
+        ensures that the biological information can later be
+        connected to a real location on the Lichenary map.
+      </p>
+
+    </div>
+
+
+    <div class="process">
+
+      <div class="process-card">
+
+        <span class="process-card-number">
+          1
+        </span>
+
+        <h3>
+          Photograph
+        </h3>
+
+        <p>
+          The participant captures or uploads a clear image
+          of the lichen. The browser checks that the selected
+          file is an image.
+        </p>
+
+      </div>
+
+
+      <div class="process-card">
+
+        <span class="process-card-number">
+          2
+        </span>
+
+        <h3>
+          Preview
+        </h3>
+
+        <p>
+          The photograph is displayed locally in the browser
+          so the participant can confirm that the subject is
+          visible before analysis.
+        </p>
+
+      </div>
+
+
+      <div class="process-card">
+
+        <span class="process-card-number">
+          3
+        </span>
+
+        <h3>
+          Location
+        </h3>
+
+        <p>
+          The participant enables browser-based geolocation.
+          Latitude and longitude are collected for the observation.
+        </p>
+
+      </div>
+
+
+      <div class="process-card">
+
+        <span class="process-card-number">
+          4
+        </span>
+
+        <h3>
+          Description
+        </h3>
+
+        <p>
+          A specific-place field allows the participant to add
+          a human-readable description such as a park, street,
+          building or nearby landmark.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =======================================================
+       SECTION 02
+       ======================================================= -->
+
+  <section class="section">
+
+    <div class="section-heading">
+
+      <div class="section-number">
+        02
+      </div>
+
+      <div>
+
+        <h2>
+          Automatic observation data
+        </h2>
+
+        <p>
+          Some information is collected automatically so that
+          each observation has a consistent structure.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="text-content">
+
+      <p>
+        The browser automatically creates the observation date
+        and time using the participant's device clock. The
+        geographical coordinates are obtained through the
+        browser's Geolocation API after the participant gives
+        permission.
+      </p>
+
+      <p>
+        These values are placed into hidden form fields and
+        displayed to the participant through the interface.
+        Before being accepted by the server, the coordinates
+        are validated by the Python backend to make sure that
+        latitude and longitude fall within their valid geographic
+        ranges.
+      </p>
+
+    </div>
+
+
+    <div class="data-grid">
+
+      <div class="data-card">
+
+        <h3>
+          Date & time
+        </h3>
+
+        <p>
+          The browser generates a timestamp in the format
+          required by the observation database. The time is
+          associated with the moment at which the observation
+          is prepared for submission.
+        </p>
+
+      </div>
+
+
+      <div class="data-card">
+
+        <h3>
+          GPS coordinates
+        </h3>
+
+        <p>
+          The browser requests the device's current location.
+          The server subsequently checks that the submitted
+          latitude and longitude are valid geographic values.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =======================================================
+       SECTION 03
+       ======================================================= -->
+
+  <section class="section">
+
+    <div class="section-heading">
+
+      <div class="section-number">
+        03
+      </div>
+
+      <div>
+
+        <h2>
+          The AI identification stage
+        </h2>
+
+        <p>
+          The photograph is sent to the Lichenary backend,
+          which passes it to the Gemini image-analysis model.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="text-content">
+
+      <p>
+        When the participant selects
+        <strong>Analyze Lichen with AI</strong>, the browser
+        creates a multipart request containing the photograph
+        and the observation's geographical information.
+      </p>
+
+      <p>
+        The Flask application receives the photograph and reads
+        its image data. The server verifies that an image was
+        actually uploaded and that the MIME type represents an
+        image before sending the photograph to the AI system.
+      </p>
+
+      <p>
+        Gemini is given a carefully defined instruction: its
+        responsibility is to identify the lichen species visible
+        in the photograph. It is explicitly instructed not to
+        calculate the pollution indicator and not to invent
+        species outside Lichenary's reference list.
+      </p>
+
+    </div>
+
+
+    <div class="split-system">
+
+      <div class="system-card ai">
+
+        <span class="system-tag">
+          Artificial intelligence
+        </span>
+
+        <h3>
+          Gemini
+        </h3>
+
+        <p>
+          Gemini receives the photograph and analyzes its visual
+          characteristics to propose a species.
+        </p>
+
+        <p>
+          The model is restricted to the species contained in
+          Lichenary's reference database. If the photograph is
+          not sufficiently clear, the system can return
+          <strong>UNKNOWN</strong> instead of forcing an
+          identification.
+        </p>
+
+      </div>
+
+
+      <div class="system-card backend">
+
+        <span class="system-tag">
+          Lichenary backend
+        </span>
+
+        <h3>
+          Python
+        </h3>
+
+        <p>
+          Flask receives the AI result and normalizes the
+          returned species name so that small formatting
+          differences do not prevent a database match.
+        </p>
+
+        <p>
+          Python then performs the pollution-indicator lookup
+          using Lichenary's fixed reference database.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =======================================================
+       SECTION 04
+       ======================================================= -->
+
+  <section class="section">
+
+    <div class="section-heading">
+
+      <div class="section-number">
+        04
+      </div>
+
+      <div>
+
+        <h2>
+          A controlled species database
+        </h2>
+
+        <p>
+          The pollution indicator comes from a predefined
+          scientific reference table rather than from the AI.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="text-content">
+
+      <p>
+        Lichenary contains a structured database of lichen species
+        and their associated pollution-indicator values. Each
+        species in this dictionary has a fixed numerical value
+        between 1 and 10.
+      </p>
+
+      <p>
+        Once Gemini proposes a species, the backend searches for
+        that exact species in the Lichenary database. If a match
+        is found, the corresponding indicator value is returned.
+        If the species cannot be matched to the reference data,
+        the observation is rejected rather than being assigned
+        an arbitrary value.
+      </p>
+
+    </div>
+
+
+    <div class="database-box">
+
+      <h3>
+        Why separate AI from the pollution calculation?
+      </h3>
+
+      <p>
+        Separating these two operations makes the system easier
+        to understand, inspect and control. The AI performs visual
+        identification, while the numerical interpretation comes
+        from a predefined Lichenary dataset. The model therefore
+        cannot independently invent a pollution score.
+      </p>
+
+
+      <div class="database-points">
+
+        <div class="database-point">
+
+          <strong>
+            Controlled species list
+          </strong>
+
+          <span>
+            The AI is asked to choose from Lichenary's predefined
+            reference species.
+          </span>
+
+        </div>
+
+
+        <div class="database-point">
+
+          <strong>
+            Fixed indicator values
+          </strong>
+
+          <span>
+            Each recognized species has a predefined value in
+            the backend database.
+          </span>
+
+        </div>
+
+
+        <div class="database-point">
+
+          <strong>
+            Server-side verification
+          </strong>
+
+          <span>
+            The backend checks the species again before an
+            observation can be stored.
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SCALE
+         ===================================================== -->
+
+    <div class="scale">
+
+      <h3 class="scale-title">
+        Lichen pollution-indicator scale
+      </h3>
+
+      <div class="scale-bar">
+
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+
+      </div>
+
+
+      <div class="scale-labels">
+
+        <span>
+          1 — more pollution-sensitive
+        </span>
+
+        <span>
+          10 — more pollution-tolerant
+        </span>
+
+      </div>
+
+
+      <p class="scale-note">
+        The value is a biological indicator associated with the
+        identified species. It should not be interpreted as a
+        direct measurement of the concentration of a particular
+        pollutant in the air. Lichen observations are useful for
+        understanding environmental patterns, but they do not
+        replace professional air-quality monitoring instruments.
+      </p>
+
+    </div>
+
+  </section>
+
+
+  <!-- =======================================================
+       SECTION 05
+       ======================================================= -->
+
+  <section class="section">
+
+    <div class="section-heading">
+
+      <div class="section-number">
+        05
+      </div>
+
+      <div>
+
+        <h2>
+          The complete digital pipeline
+        </h2>
+
+        <p>
+          From a photograph in the field to a structured
+          observation in the Lichenary database.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="text-content">
+
+      <p>
+        The entire process is composed of several connected
+        stages. Each stage has a specific responsibility and
+        passes only the necessary information to the next one.
+      </p>
+
+    </div>
+
+
+    <div class="flow">
+
+      <div class="flow-step">
+
+        <span class="flow-label">
+          Step 1
+        </span>
+
+        <strong>
+          Photograph
+        </strong>
+
+      </div>
+
+
+      <div class="flow-step">
+
+        <span class="flow-label">
+          Step 2
+        </span>
+
+        <strong>
+          GPS & time
+        </strong>
+
+      </div>
+
+
+      <div class="flow-step">
+
+        <span class="flow-label">
+          Step 3
+        </span>
+
+        <strong>
+          Flask server
+        </strong>
+
+      </div>
+
+
+      <div class="flow-step">
+
+        <span class="flow-label">
+          Step 4
+        </span>
+
+        <strong>
+          Gemini identification
+        </strong>
+
+      </div>
+
+
+      <div class="flow-step">
+
+        <span class="flow-label">
+          Step 5
+        </span>
+
+        <strong>
+          Database lookup
+        </strong>
+
+      </div>
+
+
+      <div class="flow-step">
+
+        <span class="flow-label">
+          Step 6
+        </span>
+
+        <strong>
+          Observation review
+        </strong>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =======================================================
+       SECTION 06
+       ======================================================= -->
+
+  <section class="section">
+
+    <div class="section-heading">
+
+      <div class="section-number">
+        06
+      </div>
+
+      <div>
+
+        <h2>
+          What happens after AI analysis?
+        </h2>
+
+        <p>
+          A successful AI result is not immediately published
+          as scientific data.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="text-content">
+
+      <p>
+        After the AI successfully identifies a species and the
+        backend finds its corresponding indicator value, the
+        result is returned to the participant's browser. The
+        identified species and pollution indicator are displayed
+        in the observation form.
+      </p>
+
+      <p>
+        The participant can then submit the completed observation.
+        At this stage the photograph, date and time, location,
+        coordinates, species and indicator value are sent to the
+        final upload endpoint.
+      </p>
+
+      <p>
+        Before the observation is stored, the server performs
+        another species lookup. This second validation is
+        important because information displayed in a browser
+        cannot be considered trustworthy simply because it was
+        originally produced by the application.
+      </p>
+
+    </div>
+
+
+    <div class="review-card">
+
+      <h3>
+        Human review remains part of the system
+      </h3>
+
+      <p>
+        Every submitted observation is initially marked as
+        unapproved. An administrator can inspect submitted
+        observations before they become part of the approved
+        public dataset.
+      </p>
+
+      <p>
+        This creates an additional layer of quality control:
+        artificial intelligence assists the participant, automated
+        validation protects the database structure, and human
+        review provides a final opportunity to evaluate the
+        observation before publication.
+      </p>
+
+    </div>
+
+  </section>
+
+
+  <!-- =======================================================
+       SECTION 07
+       ======================================================= -->
+
+  <section class="section">
+
+    <div class="section-heading">
+
+      <div class="section-number">
+        07
+      </div>
+
+      <div>
+
+        <h2>
+          Where the observation is stored
+        </h2>
+
+        <p>
+          Approved observations become structured geographical
+          records that can be used by the Lichenary map.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="text-content">
+
+      <p>
+        Lichenary stores observations in a relational database.
+        Each observation has its own record containing information
+        such as the photograph URL, date and time, location,
+        latitude, longitude, identified species, pollution
+        indicator, approval status and the user who submitted it.
+      </p>
+
+      <p>
+        Photographs are uploaded to Cloudinary rather than being
+        stored directly inside the database. The database stores
+        the secure image URL associated with the observation.
+      </p>
+
+      <p>
+        Approved observations containing valid geographical data
+        can then be requested through Lichenary's observations API.
+        The map uses this structured information to display
+        observations according to their geographic position and
+        pollution-indicator value.
+      </p>
+
+    </div>
+
+  </section>
+
+
+  <!-- =======================================================
+       SECTION 08
+       ======================================================= -->
+
+  <section class="section">
+
+    <div class="section-heading">
+
+      <div class="section-number">
+        08
+      </div>
+
+      <div>
+
+        <h2>
+          Validation and protection
+        </h2>
+
+        <p>
+          Several checks are performed before information enters
+          the observation database.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="security-list">
+
+      <div class="security-item">
+
+        <h3>
+          Image validation
+        </h3>
+
+        <p>
+          The server checks that a photograph exists and that
+          the uploaded file identifies as an image.
+        </p>
+
+      </div>
+
+
+      <div class="security-item">
+
+        <h3>
+          GPS validation
+        </h3>
+
+        <p>
+          Latitude and longitude are converted to numerical
+          values and checked against their valid geographic ranges.
+        </p>
+
+      </div>
+
+
+      <div class="security-item">
+
+        <h3>
+          Species validation
+        </h3>
+
+        <p>
+          Species names are normalized and checked against the
+          Lichenary reference database.
+        </p>
+
+      </div>
+
+
+      <div class="security-item">
+
+        <h3>
+          Indicator validation
+        </h3>
+
+        <p>
+          The submitted pollution value is not trusted directly
+          from the browser. It is recalculated from the server's
+          species database.
+        </p>
+
+      </div>
+
+
+      <div class="security-item">
+
+        <h3>
+          Authentication
+        </h3>
+
+        <p>
+          The observation-upload routes require an authenticated
+          Lichenary account.
+        </p>
+
+      </div>
+
+
+      <div class="security-item">
+
+        <h3>
+          Approval system
+        </h3>
+
+        <p>
+          New observations remain unapproved until an administrator
+          reviews them.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =======================================================
+       SECTION 09
+       ======================================================= -->
+
+  <section class="section">
+
+    <div class="section-heading">
+
+      <div class="section-number">
+        09
+      </div>
+
+      <div>
+
+        <h2>
+          Why the system is designed this way
+        </h2>
+
+        <p>
+          The architecture is intended to balance accessibility,
+          automation and scientific control.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="process">
+
+      <div class="process-card">
+
+        <span class="process-card-number">
+          A
+        </span>
+
+        <h3>
+          Accessible
+        </h3>
+
+        <p>
+          Participants can contribute using an ordinary phone
+          without needing specialist equipment or taxonomic
+          expertise.
+        </p>
+
+      </div>
+
+
+      <div class="process-card">
+
+        <span class="process-card-number">
+          B
+        </span>
+
+        <h3>
+          Structured
+        </h3>
+
+        <p>
+          Every observation follows the same basic data structure:
+          image, time, location, species and indicator value.
+        </p>
+
+      </div>
+
+
+      <div class="process-card">
+
+        <span class="process-card-number">
+          C
+        </span>
+
+        <h3>
+          Controlled
+        </h3>
+
+        <p>
+          The AI does not independently create pollution scores.
+          Numerical values come from the predefined database.
+        </p>
+
+      </div>
+
+
+      <div class="process-card">
+
+        <span class="process-card-number">
+          D
+        </span>
+
+        <h3>
+          Reviewable
+        </h3>
+
+        <p>
+          Submitted observations can be reviewed by an
+          administrator before they become part of the approved
+          public dataset.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =======================================================
+       SECTION 10
+       ======================================================= -->
+
+  <section class="section">
+
+    <div class="section-heading">
+
+      <div class="section-number">
+        10
+      </div>
+
+      <div>
+
+        <h2>
+          Understanding the limitations
+        </h2>
+
+        <p>
+          AI-assisted citizen science is powerful, but it should
+          always be interpreted carefully.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="text-content">
+
+      <p>
+        A photograph does not always contain enough information
+        for reliable species-level identification. Lighting,
+        focus, image quality, the angle of the photograph,
+        overlapping organisms and environmental conditions can
+        all affect visual identification.
+      </p>
+
+      <p>
+        For this reason, an AI identification should be understood
+        as an automated suggestion rather than an infallible
+        taxonomic determination. Lichenary's review process adds
+        an additional layer of quality control.
+      </p>
+
+      <p>
+        The pollution indicator also has an important limitation.
+        It represents the known relationship between the lichen
+        species and pollution tolerance in the Lichenary reference
+        system. It is not a direct sensor reading and should not
+        be interpreted as an exact concentration of air pollutants.
+      </p>
+
+    </div>
+
+
+    <div class="limitations">
+
+      <div class="limitation">
+
+        <h3>
+          Image quality matters
+        </h3>
+
+        <p>
+          Clear, focused photographs give the identification
+          system more useful visual information.
+        </p>
+
+      </div>
+
+
+      <div class="limitation">
+
+        <h3>
+          AI can be uncertain
+        </h3>
+
+        <p>
+          A model can make mistakes, which is why the system
+          allows uncertain photographs to be rejected.
+        </p>
+
+      </div>
+
+
+      <div class="limitation">
+
+        <h3>
+          Indicators are not sensors
+        </h3>
+
+        <p>
+          Lichen-based indicators provide ecological information,
+          but they do not replace professional monitoring stations.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =======================================================
+       FINAL
+       ======================================================= -->
+
+  <div class="final-card">
+
+    <h2>
+      From one photograph to a larger environmental picture.
+    </h2>
+
+    <p>
+      Lichenary brings together people, biology and technology.
+      Each carefully documented observation contributes a small
+      piece of geographical and ecological information. When many
+      observations are collected and reviewed, these individual
+      records can help reveal broader environmental patterns.
+    </p>
+
+  </div>
+
+
+</main>
+
+
+<!-- =========================================================
+     FOOTER
+     ========================================================= -->
+
+<footer>
+
+  &copy; 2025 Lichenary. All rights reserved.
+
+</footer>
+
+
+<!-- =========================================================
+     NAVIGATION SCRIPT
+     ========================================================= -->
+
+<script>
+
+  const burger =
+    document.getElementById('burger');
+
+  const navLinks =
+    document.getElementById('nav-links');
+
+
+  burger.addEventListener(
+    'click',
+    () => {
+
+      const isOpen =
+        navLinks.classList.toggle('open');
+
+      document.body.classList.toggle(
+        'menu-open',
+        isOpen
+      );
+
+    }
+  );
+
+
+  burger.addEventListener(
+    'keydown',
+    (event) => {
+
+      if (
+        event.key === 'Enter' ||
+        event.key === ' '
+      ) {
+
+        event.preventDefault();
+
+        burger.click();
+
+      }
+
+    }
+  );
+
+
+  document
+    .querySelectorAll('#nav-links a')
+    .forEach(
+      link => {
+
+        link.addEventListener(
+          'click',
+          () => {
+
+            navLinks.classList.remove('open');
+
+            document.body.classList.remove(
+              'menu-open'
+            );
+
+          }
+        );
+
+      }
+    );
+
+</script>
+
+
+<!-- =========================================================
+     BACKGROUND CANVAS
+     ========================================================= -->
+
+<script>
+
+  const canvas =
+    document.getElementById(
+      'cloud-canvas'
+    );
+
+  const ctx =
+    canvas.getContext('2d');
+
+  let width;
+  let height;
+
+
+  function resize() {
+
+    width =
+      window.innerWidth;
+
+    height =
+      window.innerHeight;
+
+
+    canvas.width =
+      width;
+
+    canvas.height =
+      height;
+
+  }
+
+
+  window.addEventListener(
+    'resize',
+    resize
+  );
+
+
+  resize();
+
+
+  /*
+    Canvas kept consistent with
+    the AI upload page.
+  */
+
+  ctx.clearRect(
+    0,
+    0,
+    width,
+    height
+  );
+
+</script>
+
+
+</body>
+</html>

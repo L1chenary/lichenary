@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Upload Lichen Observation</title>
+  <title>How to Upload a Manual Observation — Lichenary</title>
 
   <style>
     /* =========================================================
        LICHENARY — ORGANIC / EDITORIAL / CITIZEN SCIENCE
-       UPLOAD OBSERVATION
+       MANUAL OBSERVATION GUIDE
        ========================================================= */
 
     :root {
@@ -70,7 +70,7 @@
     }
 
     /* =========================================================
-       CANVAS KEPT — CLOUD ANIMATION REMOVED
+       CANVAS
        ========================================================= */
 
     #cloud-canvas {
@@ -227,84 +227,44 @@
     }
 
     /* =========================================================
-       MANUAL UPLOAD GUIDE BUTTON
+       ORGANIC DIVIDER
        ========================================================= */
 
-    .upload-guide {
-      position: relative;
-      z-index: 10;
+    .organic-divider {
+      width: 100%;
 
-      width: calc(100% - 40px);
-      max-width: 900px;
+      height: 75px;
 
-      margin: 28px auto 0;
+      margin: 55px auto 35px;
 
       display: flex;
-      justify-content: flex-end;
-    }
 
-    .upload-guide a {
-      display: inline-flex;
-
-      align-items: center;
       justify-content: center;
 
-      padding: 11px 18px;
+      overflow: hidden;
 
-      border-radius: 999px;
-
-      background: rgba(255, 255, 255, 0.78);
-
-      border: 1px solid rgba(23, 63, 53, 0.12);
-
-      color: var(--forest);
-
-      text-decoration: none;
-
-      font-size: 0.9rem;
-      font-weight: 600;
-
-      box-shadow:
-        0 8px 25px rgba(23, 63, 53, 0.07);
-
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-
-      transition:
-        background 0.25s ease,
-        color 0.25s ease,
-        transform 0.25s ease,
-        box-shadow 0.25s ease;
+      position: relative;
+      z-index: 5;
     }
 
-    .upload-guide a:hover {
-      background: var(--forest);
+    .organic-divider svg {
+      width: min(700px, 80%);
 
-      color: white;
+      height: 75px;
 
-      transform: translateY(-2px);
-
-      box-shadow:
-        0 12px 30px rgba(23, 63, 53, 0.15);
+      overflow: visible;
     }
 
-    @media (max-width: 600px) {
+    .organic-divider path {
+      fill: none;
 
-      .upload-guide {
-        width: calc(100% - 40px);
+      stroke: var(--sage);
 
-        margin-top: 20px;
+      stroke-width: 2;
 
-        justify-content: center;
-      }
+      stroke-linecap: round;
 
-      .upload-guide a {
-        width: 100%;
-
-        padding: 12px 16px;
-
-        text-align: center;
-      }
+      stroke-dasharray: 4 9;
     }
 
     /* =========================================================
@@ -316,7 +276,7 @@
       z-index: 10;
 
       width: calc(100% - 40px);
-      max-width: 900px;
+      max-width: 950px;
 
       margin: 0 auto;
 
@@ -381,63 +341,20 @@
     }
 
     /* =========================================================
-       ORGANIC TOP DIVIDER
-       ========================================================= */
-
-    .organic-divider {
-      width: 100%;
-
-      height: 75px;
-
-      margin: 55px auto 35px;
-
-      display: flex;
-
-      justify-content: center;
-
-      overflow: hidden;
-
-      position: relative;
-      z-index: 5;
-    }
-
-    .organic-divider svg {
-      width: min(700px, 80%);
-
-      height: 75px;
-
-      overflow: visible;
-    }
-
-    .organic-divider path {
-      fill: none;
-
-      stroke: var(--sage);
-
-      stroke-width: 2;
-
-      stroke-linecap: round;
-
-      stroke-dasharray: 4 9;
-    }
-
-    /* =========================================================
        HEADING
        ========================================================= */
 
-    h2 {
+    h1 {
       position: relative;
       z-index: 2;
 
-      margin: 0 0 35px;
-
-      text-align: left;
+      margin: 0 0 22px;
 
       color: var(--forest);
 
       font-family: Georgia, "Times New Roman", serif;
 
-      font-size: clamp(2.6rem, 5vw, 4.2rem);
+      font-size: clamp(2.7rem, 5vw, 4.5rem);
 
       font-weight: normal;
 
@@ -446,221 +363,267 @@
       letter-spacing: -0.05em;
     }
 
-    /* =========================================================
-       FORM
-       ========================================================= */
-
-    form {
+    .intro {
       position: relative;
       z-index: 2;
+
+      max-width: 750px;
+
+      margin: 0 0 50px;
+
+      color: var(--muted);
+
+      font-size: 1.08rem;
+
+      line-height: 1.75;
     }
 
-    label {
-      display: block;
+    /* =========================================================
+       STEP CARDS
+       ========================================================= */
 
-      margin-top: 1.35rem;
-      margin-bottom: 0.45rem;
+    .step {
+      position: relative;
+      z-index: 2;
+
+      margin-top: 30px;
+
+      padding: 30px 32px;
+
+      background: rgba(255, 255, 255, 0.72);
+
+      border: 1px solid rgba(23, 63, 53, 0.09);
+
+      border-radius:
+        24px 14px 24px 14px;
+
+      box-shadow:
+        0 12px 35px rgba(23, 63, 53, 0.055);
+    }
+
+    .step-header {
+      display: flex;
+
+      align-items: center;
+
+      gap: 17px;
+
+      margin-bottom: 15px;
+    }
+
+    .step-number {
+      flex-shrink: 0;
+
+      width: 44px;
+      height: 44px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 50%;
+
+      background: var(--forest);
+
+      color: white;
+
+      font-family: Georgia, "Times New Roman", serif;
+
+      font-size: 1.2rem;
+
+      font-weight: bold;
+    }
+
+    .step h2 {
+      margin: 0;
 
       color: var(--forest);
 
-      font-size: 0.92rem;
+      font-family: Georgia, "Times New Roman", serif;
 
-      font-weight: 700;
+      font-size: 1.75rem;
 
-      letter-spacing: 0.01em;
+      font-weight: normal;
+
+      letter-spacing: -0.025em;
     }
 
-    input[type="text"],
-    input[type="file"],
-    input[type="datetime-local"],
-    input[type="number"] {
-      width: 100%;
-
-      padding: 0.9rem 1rem;
-
-      margin-top: 0;
-
-      border: 1px solid rgba(23, 63, 53, 0.15);
-
-      border-radius: 15px;
-
-      background: rgba(255, 255, 255, 0.78);
+    .step p {
+      margin: 10px 0 0;
 
       color: var(--ink);
 
-      box-sizing: border-box;
-
-      font-family:
-        "Segoe UI",
-        Tahoma,
-        Geneva,
-        Verdana,
-        sans-serif;
-
       font-size: 1rem;
 
-      box-shadow:
-        0 8px 25px rgba(23, 63, 53, 0.045);
-
-      transition:
-        border-color 0.25s ease,
-        box-shadow 0.25s ease,
-        background 0.25s ease,
-        transform 0.25s ease;
+      line-height: 1.7;
     }
 
-    input[type="file"] {
-      padding: 0.72rem 0.9rem;
+    .step ul {
+      margin: 15px 0 0;
 
-      cursor: pointer;
+      padding-left: 22px;
+
+      color: var(--ink);
+
+      line-height: 1.75;
     }
 
-    input::placeholder {
+    .step li {
+      margin-bottom: 7px;
+    }
+
+    /* =========================================================
+       HIGHLIGHT BOX
+       ========================================================= */
+
+    .tip {
+      position: relative;
+
+      margin-top: 22px;
+
+      padding: 20px 22px;
+
+      background: var(--lichen);
+
+      border-left: 4px solid var(--moss);
+
+      border-radius:
+        15px 8px 15px 8px;
+
+      color: var(--forest-dark);
+
+      line-height: 1.65;
+    }
+
+    .tip strong {
+      color: var(--forest);
+    }
+
+    /* =========================================================
+       COORDINATE EXAMPLE
+       ========================================================= */
+
+    .coordinate-example {
+      display: grid;
+
+      grid-template-columns: 1fr 1fr;
+
+      gap: 15px;
+
+      margin-top: 20px;
+    }
+
+    .coordinate-box {
+      padding: 18px 20px;
+
+      background: var(--cream);
+
+      border: 1px solid rgba(23, 63, 53, 0.1);
+
+      border-radius: 16px;
+    }
+
+    .coordinate-box span {
+      display: block;
+
+      margin-bottom: 5px;
+
       color: var(--muted);
 
-      opacity: 0.8;
-    }
-
-    input:focus {
-      outline: none;
-
-      border-color: var(--moss);
-
-      background: var(--white);
-
-      box-shadow:
-        0 0 0 4px rgba(113, 141, 87, 0.12),
-        0 10px 30px rgba(23, 63, 53, 0.07);
-    }
-
-    input:hover {
-      border-color: rgba(113, 141, 87, 0.55);
-    }
-
-    /* =========================================================
-       FILE INPUT
-       ========================================================= */
-
-    input[type="file"]::file-selector-button {
-      margin-right: 12px;
-
-      padding: 8px 13px;
-
-      border: none;
-
-      border-radius: 999px;
-
-      background: var(--forest);
-
-      color: white;
-
-      font-family:
-        "Segoe UI",
-        Tahoma,
-        Geneva,
-        Verdana,
-        sans-serif;
-
-      font-weight: 600;
-
-      cursor: pointer;
-
-      transition:
-        background 0.25s ease,
-        transform 0.25s ease;
-    }
-
-    input[type="file"]::file-selector-button:hover {
-      background: var(--moss);
-
-      transform: translateY(-1px);
-    }
-
-    /* =========================================================
-       SUBMIT BUTTON
-       ========================================================= */
-
-    button {
-      position: relative;
-      z-index: 2;
-
-      width: 100%;
-
-      margin-top: 2rem;
-
-      background: var(--forest);
-
-      color: white;
-
-      border: none;
-
-      padding: 1rem 1.2rem;
-
-      font-family:
-        "Segoe UI",
-        Tahoma,
-        Geneva,
-        Verdana,
-        sans-serif;
-
-      font-size: 1.05rem;
+      font-size: 0.82rem;
 
       font-weight: 700;
 
-      letter-spacing: 0.01em;
+      text-transform: uppercase;
 
-      cursor: pointer;
-
-      border-radius:
-        16px 8px 16px 8px;
-
-      box-shadow:
-        0 14px 35px rgba(23, 63, 53, 0.18);
-
-      transition:
-        background 0.3s ease,
-        transform 0.25s ease,
-        box-shadow 0.25s ease;
+      letter-spacing: 0.08em;
     }
 
-    button:hover {
-      background: var(--forest-dark);
+    .coordinate-box strong {
+      color: var(--forest);
 
-      transform: translateY(-2px);
+      font-family:
+        "Courier New",
+        monospace;
 
-      box-shadow:
-        0 18px 40px rgba(23, 63, 53, 0.23);
-    }
-
-    button:active {
-      transform: translateY(0);
+      font-size: 1.15rem;
     }
 
     /* =========================================================
-       FLASH MESSAGE
+       IMPORTANT NOTE
        ========================================================= */
 
-    .flash-message {
+    .important {
+      margin-top: 24px;
+
+      padding: 21px 23px;
+
+      background: #edf1e4;
+
+      border: 1px solid rgba(113, 141, 87, 0.25);
+
+      border-radius:
+        18px 9px 18px 9px;
+
+      color: var(--forest-dark);
+
+      line-height: 1.7;
+    }
+
+    .important-title {
+      margin-bottom: 7px;
+
+      color: var(--forest);
+
+      font-weight: 800;
+    }
+
+    /* =========================================================
+       FINAL CHECKLIST
+       ========================================================= */
+
+    .checklist {
       position: relative;
       z-index: 2;
 
-      background: #f8d7da;
+      margin-top: 42px;
 
-      color: #721c24;
+      padding: 30px 32px;
+
+      background: var(--forest);
+
+      color: white;
 
       border-radius:
-        18px 8px 18px 8px;
-
-      padding: 14px 18px;
-
-      margin-bottom: 20px;
-
-      border: 1px solid #f5c2c7;
-
-      font-weight: 600;
+        25px 12px 25px 12px;
 
       box-shadow:
-        0 10px 25px rgba(114, 28, 36, 0.06);
+        0 18px 40px rgba(23, 63, 53, 0.16);
+    }
+
+    .checklist h2 {
+      margin: 0 0 18px;
+
+      font-family: Georgia, "Times New Roman", serif;
+
+      font-size: 1.8rem;
+
+      font-weight: normal;
+    }
+
+    .checklist ul {
+      margin: 0;
+
+      padding-left: 22px;
+
+      color: rgba(255, 255, 255, 0.88);
+
+      line-height: 1.8;
+    }
+
+    .checklist li {
+      margin-bottom: 7px;
     }
 
     /* =========================================================
@@ -857,32 +820,32 @@
         height: 50px;
       }
 
-      h2 {
-        font-size: 2.7rem;
-
-        line-height: 0.98;
-
-        margin-bottom: 28px;
+      h1 {
+        font-size: 2.8rem;
       }
 
-      label {
-        margin-top: 1.2rem;
+      .intro {
+        font-size: 1rem;
       }
 
-      input[type="text"],
-      input[type="file"],
-      input[type="datetime-local"],
-      input[type="number"] {
-        padding: 0.85rem 0.9rem;
-
-        font-size: 0.98rem;
+      .step {
+        padding: 25px 22px;
       }
 
-      button {
-        padding: 0.95rem 1rem;
+      .step-header {
+        align-items: flex-start;
+      }
 
-        border-radius:
-          14px 7px 14px 7px;
+      .step h2 {
+        font-size: 1.55rem;
+      }
+
+      .coordinate-example {
+        grid-template-columns: 1fr;
+      }
+
+      .checklist {
+        padding: 27px 24px;
       }
 
       footer {
@@ -932,6 +895,7 @@
     <a href="{{ url_for('galerie') }}">Gallery</a>
     <a href="{{ url_for('harta') }}">Map</a>
     <a href="{{ url_for('contact') }}">Contact</a>
+
     {% if current_user.is_authenticated %}
       <a href="{{ url_for('dashboard') }}">Dashboard</a>
       <a href="{{ url_for('logout') }}">Logout</a>
@@ -941,13 +905,8 @@
   </nav>
 </header>
 
-<div class="upload-guide">
-  <a href="{{ url_for('despre_how_to_upload_manual') }}">
-    How to Upload Manually →
-  </a>
-</div>
-
-<div class="organic-divider">  <svg
+<div class="organic-divider">
+  <svg
     viewBox="0 0 700 75"
     xmlns="http://www.w3.org/2000/svg"
     aria-hidden="true"
@@ -965,45 +924,280 @@
 </div>
 
 <main>
-  <h2>Upload Lichen Observation</h2>
 
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      {% for category, message in messages %}
-        <div class="flash-message">{{ message }}</div>
-      {% endfor %}
-    {% endif %}
-  {% endwith %}
+  <h1>How to Upload a Manual Observation</h1>
 
-  <form method="POST" enctype="multipart/form-data">
-    <label for="photo">Lichen Photo:</label>
-    <input type="file" id="photo" name="photo" accept="image/*" required>
+  <p class="intro">
+    Manual observations allow you to record a lichen you have identified
+    yourself and contribute it to the Lichenary database. You do not need
+    any special equipment beyond a way to photograph the lichen, identify
+    it using the official guide, and determine where the observation was made.
+  </p>
 
-    <label for="date_time">Date and Time:</label>
-    <input type="datetime-local" id="date_time" name="date_time" required>
+  <!-- STEP 1 -->
 
-    <label for="location">Location:</label>
-    <input type="text" id="location" name="location" required>
+  <section class="step">
 
-    <label for="latitude">Latitude:</label>
-    <input type="text" id="latitude" name="latitude" required>
+    <div class="step-header">
+      <div class="step-number">1</div>
+      <h2>Find a lichen to observe</h2>
+    </div>
 
-    <label for="longitude">Longitude:</label>
-    <input type="text" id="longitude" name="longitude" required>
+    <p>
+      Start by finding a lichen growing in a suitable outdoor location.
+      Look carefully at the lichen and take a clear photograph of it.
+      Try to make sure that the lichen is visible enough in the photograph
+      for the observation to be useful.
+    </p>
 
-    <label for="species">Lichen Species:</label>
-    <input type="text" id="species" name="species" placeholder="Enter species (e.g., Xanthoria parietina)">
+    <p>
+      You can photograph the lichen using a phone or any other camera.
+      If possible, take the photograph in good natural light and avoid
+      covering the organism with your hand or other objects.
+    </p>
 
-    <label for="pollution_level">Pollution Level (1-10):</label>
-    <input type="number" id="pollution_level" name="pollution_level" min="1" max="10" placeholder="1-10">
+  </section>
 
-    <button type="submit">Upload</button>
-  </form>
+
+  <!-- STEP 2 -->
+
+  <section class="step">
+
+    <div class="step-header">
+      <div class="step-number">2</div>
+      <h2>Identify the lichen</h2>
+    </div>
+
+    <p>
+      Before uploading your observation, identify the lichen as accurately
+      as possible. You can use the <strong>official lichen identification
+      guide</strong> to compare the characteristics of the lichen you found
+      with the species shown in the guide. You can find the guide on our resource page, in the About section.
+    </p>
+
+    <p>
+      Once you have identified the lichen, enter its species name in the
+      <strong>Lichen Species</strong> field on the upload page.
+    </p>
+
+    <div class="tip">
+      <strong>Tip:</strong>
+      Take your time when identifying the species. If you are unsure,
+      check the identification guide again and compare the visible
+      characteristics of your specimen with the examples provided.
+    </div>
+
+  </section>
+
+
+  <!-- STEP 3 -->
+
+  <section class="step">
+
+    <div class="step-header">
+      <div class="step-number">3</div>
+      <h2>Determine the pollution score</h2>
+    </div>
+
+    <p>
+      After identifying the lichen, find its corresponding
+      <strong>pollution score</strong> in the official lichen
+      identification guide.
+    </p>
+
+    <p>
+      The score should be entered in the
+      <strong>Pollution Level (1–10)</strong> field on the upload page.
+      Make sure that you enter the score associated with the identified
+      lichen rather than estimating the value yourself.
+    </p>
+
+    <div class="tip">
+      <strong>Important:</strong>
+      The pollution score should come from the official identification
+      guide. Check the guide before entering the value so that the
+      observation remains consistent with the other observations in
+      the Lichenary database.
+    </div>
+
+  </section>
+
+
+  <!-- STEP 4 -->
+
+  <section class="step">
+
+    <div class="step-header">
+      <div class="step-number">4</div>
+      <h2>Find the location</h2>
+    </div>
+
+    <p>
+      Next, record where you found the lichen. Enter the name of the
+      location in the <strong>Location</strong> field. This can be the
+      name of a town, village, park, forest, street, or another useful
+      description of the place.
+    </p>
+
+    <p>
+      You will also need the exact <strong>latitude</strong> and
+      <strong>longitude</strong> of the observation. You can obtain these
+      coordinates using tools such as <strong>Google Maps</strong>,
+      your phone's <strong>GPS/location services</strong>, or another
+      reliable mapping application.
+    </p>
+
+    <div class="tip">
+      <strong>For example:</strong>
+      if your latitude is 46.732917, enter it exactly as
+      <strong>46.732917</strong>.
+    </div>
+
+  </section>
+
+
+  <!-- STEP 5 -->
+
+  <section class="step">
+
+    <div class="step-header">
+      <div class="step-number">5</div>
+      <h2>Enter the coordinates correctly</h2>
+    </div>
+
+    <p>
+      Coordinates must be entered as decimal numbers. Use a
+      <strong>dot</strong> as the decimal separator, not a comma.
+      Do not add degree symbols or write the coordinates using degrees,
+      minutes, and seconds.
+    </p>
+
+    <div class="coordinate-example">
+
+      <div class="coordinate-box">
+        <span>Correct</span>
+        <strong>46.732917</strong>
+      </div>
+
+      <div class="coordinate-box">
+        <span>Not correct</span>
+        <strong>46,732917°</strong>
+      </div>
+
+    </div>
+
+    <div class="important">
+
+      <div class="important-title">
+        Remember the hemisphere!
+      </div>
+
+      <div>
+        Coordinates in the <strong>Western Hemisphere</strong> and
+        <strong>Southern Hemisphere</strong> should have a minus sign
+        before the number.
+      </div>
+
+      <ul>
+        <li>
+          Western Hemisphere → negative longitude
+        </li>
+        <li>
+          Southern Hemisphere → negative latitude
+        </li>
+      </ul>
+
+      <p>
+        For example, a southern latitude should be written as
+        <strong>-46.732917</strong>, rather than
+        <strong>46.732917</strong>.
+      </p>
+
+    </div>
+
+  </section>
+
+
+  <!-- STEP 6 -->
+
+  <section class="step">
+
+    <div class="step-header">
+      <div class="step-number">6</div>
+      <h2>Record the date and time</h2>
+    </div>
+
+    <p>
+      Enter the date and time when you made the observation.
+      This helps keep the observation connected to the correct
+      moment and makes the information more useful for later analysis.
+    </p>
+
+    <p>
+      Try to enter the actual date and time when you photographed
+      or observed the lichen rather than the date when you upload it.
+    </p>
+
+  </section>
+
+
+  <!-- STEP 7 -->
+
+  <section class="step">
+
+    <div class="step-header">
+      <div class="step-number">7</div>
+      <h2>Upload your observation</h2>
+    </div>
+
+    <p>
+      Once you have collected all the information, return to the
+      manual observation upload form and enter each value into its
+      corresponding field.
+    </p>
+
+    <p>
+      Before pressing <strong>Upload</strong>, check that your photograph,
+      date and time, location, coordinates, species, and pollution score
+      are all correct.
+    </p>
+
+    <p>
+      When everything looks good, submit the observation. Your contribution
+      can then become part of the Lichenary collection and help build a
+      clearer picture of lichen distribution and pollution.
+    </p>
+
+  </section>
+
+
+  <!-- FINAL CHECKLIST -->
+
+  <section class="checklist">
+
+    <h2>Before you upload</h2>
+
+    <ul>
+      <li>I have taken a clear photograph of the lichen.</li>
+      <li>I have identified the lichen using the official identification guide.</li>
+      <li>I have checked the correct pollution score in the guide.</li>
+      <li>I have recorded the location where I found the lichen.</li>
+      <li>I have found the latitude and longitude using a map, GPS, or similar tool.</li>
+      <li>I have written coordinates with a <strong>dot</strong>, not a comma.</li>
+      <li>I have not added degree symbols to my coordinates.</li>
+      <li>I have added a minus sign for Western or Southern Hemisphere coordinates when necessary.</li>
+      <li>I have entered the date and time of the observation.</li>
+      <li>Everything is ready to submit.</li>
+    </ul>
+
+  </section>
+
 </main>
 
 <footer>
   &copy; 2025 Lichenary. All rights reserved.
 </footer>
+
 
 <script>
   const burger = document.getElementById('burger');
@@ -1014,7 +1208,6 @@
     document.body.classList.toggle('menu-open', isOpen);
   });
 
-  // Închide meniul când se apasă un link (pe mobil)
   document.querySelectorAll('#nav-links a').forEach(link => {
     link.addEventListener('click', () => {
       navLinks.classList.remove('open');
@@ -1023,19 +1216,23 @@
   });
 </script>
 
+
 <script>
   const canvas = document.getElementById('cloud-canvas');
   const ctx = canvas.getContext('2d');
+
   let width, height;
 
   function resize() {
     width = window.innerWidth;
     height = window.innerHeight;
+
     canvas.width = width;
     canvas.height = height;
   }
 
   window.addEventListener('resize', resize);
+
   resize();
 
   /*

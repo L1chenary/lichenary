@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  />
+
+  <title>How to Upload with AI – Lichenary</title>
+
+  <style>
+    /* =========================================================
+       LICHENARY — ORGANIC / EDITORIAL / CITIZEN SCIENCE
+       SIMPLE AI UPLOAD GUIDE
+       ========================================================= */
+
+    :root {
+      --cream: #f5f3ea;
+      --cream-light: #fbfaf5;
+      --paper: #eeece1;
+
+      --forest: #173f35;
+      --forest-dark: #102f28;
+      --forest-soft: #315c4d;
+
+      --moss: #718d57;
+      --sage: #a8b89a;
+      --lichen: #d9e4bb;
+
+      --ink: #18231f;
+      --muted: #65716a;
+
+      --white: #ffffff;
+
+      --success-bg: #edf5e9;
+      --success-border: #c8dbbc;
+      --success-text: #315c3c;
+
+      --warning-bg: #fff7df;
+      --warning-border: #ead79a;
+      --warning-text: #755f1c;
+
+      --radius-xl: 42px;
+      --radius-lg: 28px;
+      --radius-md: 18px;
+
+      --shadow-soft:
+        0 20px 60px rgba(23, 63, 53, 0.10);
+
+      --shadow-medium:
+        0 25px 65px rgba(23, 63, 53, 0.14);
+    }
+
+
+    /* =========================================================
+       RESET
+       ========================================================= */
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+
+      font-family:
+        "Segoe UI",
+        Tahoma,
+        Geneva,
+        Verdana,
+        sans-serif;
+
+      background: var(--cream);
+      color: var(--ink);
+
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    a {
+      color: inherit;
+    }
+
+
+    /* =========================================================
+       BACKGROUND
+       ========================================================= */
+
+    #cloud-canvas {
+      position: fixed;
+      inset: 0;
+
+      width: 100vw;
+      height: 100vh;
+
+      z-index: 0;
+      pointer-events: none;
+
+      opacity: 0.25;
+    }
+
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+
+      width: 100%;
+
+      padding: 20px 5vw;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 30px;
+
+      background:
+        rgba(245, 243, 234, 0.88);
+
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+
+      border-bottom:
+        1px solid rgba(23, 63, 53, 0.08);
+    }
+
+
+    /* =========================================================
+       LOGO
+       ========================================================= */
+
+    .logo {
+      color: var(--forest);
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      font-size: 1.7rem;
+      font-weight: bold;
+
+      letter-spacing: -0.04em;
+
+      cursor: pointer;
+
+      transition:
+        transform 0.25s ease,
+        color 0.25s ease;
+    }
+
+    .logo:hover {
+      color: var(--moss);
+      transform: translateY(-1px);
+    }
+
+
+    /* =========================================================
+       BURGER
+       ========================================================= */
+
+    .burger {
+      display: none;
+
+      flex-direction: column;
+      justify-content: center;
+
+      gap: 5px;
+
+      width: 42px;
+      height: 42px;
+
+      padding: 8px;
+
+      cursor: pointer;
+
+      border-radius: 50%;
+
+      background: var(--forest);
+
+      z-index: 30;
+    }
+
+    .burger div {
+      width: 100%;
+      height: 2px;
+
+      background: white;
+
+      border-radius: 10px;
+    }
+
+
+    /* =========================================================
+       NAVIGATION
+       ========================================================= */
+
+    nav#nav-links {
+      display: flex;
+
+      align-items: center;
+      justify-content: flex-end;
+
+      gap: 5px;
+
+      z-index: 20;
+
+      flex-wrap: wrap;
+    }
+
+    nav#nav-links a {
+      color: var(--forest);
+
+      text-decoration: none;
+
+      padding: 9px 12px;
+
+      font-size: 0.92rem;
+      font-weight: 500;
+
+      border-radius: 999px;
+
+      white-space: nowrap;
+
+      transition:
+        color 0.25s ease,
+        background 0.25s ease,
+        transform 0.25s ease;
+    }
+
+    nav#nav-links a:hover {
+      background:
+        rgba(113, 141, 87, 0.14);
+
+      transform: translateY(-1px);
+    }
+
+
+    /* =========================================================
+       ORGANIC DIVIDER
+       ========================================================= */
+
+    .organic-divider {
+      width: 100%;
+      height: 75px;
+
+      margin: 55px auto 35px;
+
+      display: flex;
+      justify-content: center;
+
+      overflow: hidden;
+
+      position: relative;
+      z-index: 5;
+    }
+
+    .organic-divider svg {
+      width: min(700px, 80%);
+      height: 75px;
+
+      overflow: visible;
+    }
+
+    .organic-divider path {
+      fill: none;
+
+      stroke: var(--sage);
+
+      stroke-width: 2;
+
+      stroke-linecap: round;
+
+      stroke-dasharray: 4 9;
+    }
+
+
+    /* =========================================================
+       MAIN CARD
+       ========================================================= */
+
+    main {
+      position: relative;
+      z-index: 10;
+
+      width: calc(100% - 40px);
+      max-width: 900px;
+
+      margin: 0 auto;
+
+      padding: 65px 75px 80px;
+
+      background: var(--cream-light);
+
+      border-radius:
+        38px 95px 38px 75px;
+
+      border:
+        1px solid rgba(23, 63, 53, 0.08);
+
+      box-shadow: var(--shadow-soft);
+
+      overflow: hidden;
+    }
+
+    main::before {
+      content: "";
+
+      position: absolute;
+
+      width: 330px;
+      height: 330px;
+
+      top: -150px;
+      right: -120px;
+
+      background: var(--lichen);
+
+      border-radius:
+        62% 38% 65% 35% /
+        40% 57% 43% 60%;
+
+      opacity: 0.45;
+
+      z-index: -1;
+    }
+
+    main::after {
+      content: "";
+
+      position: absolute;
+
+      width: 210px;
+      height: 210px;
+
+      left: -100px;
+      bottom: -100px;
+
+      background: var(--sage);
+
+      border-radius:
+        45% 55% 62% 38% /
+        60% 42% 58% 40%;
+
+      opacity: 0.22;
+
+      z-index: -1;
+    }
+
+
+    /* =========================================================
+       HEADING
+       ========================================================= */
+
+    h1 {
+      margin: 0 0 15px;
+
+      color: var(--forest);
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      font-size:
+        clamp(2.7rem, 5vw, 4.4rem);
+
+      font-weight: normal;
+
+      line-height: 0.98;
+
+      letter-spacing: -0.05em;
+    }
+
+    .intro {
+      max-width: 700px;
+
+      margin: 0 0 35px;
+
+      color: var(--muted);
+
+      font-size: 1rem;
+
+      line-height: 1.7;
+    }
+
+
+    /* =========================================================
+       BIG SIMPLE MESSAGE
+       ========================================================= */
+
+    .simple-message {
+      display: flex;
+      align-items: flex-start;
+
+      gap: 15px;
+
+      margin-bottom: 35px;
+
+      padding: 20px;
+
+      background:
+        rgba(217, 228, 187, 0.38);
+
+      border:
+        1px solid rgba(113, 141, 87, 0.22);
+
+      border-radius:
+        22px 11px 22px 11px;
+
+      color: var(--forest-soft);
+
+      line-height: 1.55;
+    }
+
+    .simple-icon {
+      flex: 0 0 auto;
+
+      width: 40px;
+      height: 40px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: var(--forest);
+
+      color: white;
+
+      border-radius: 50%;
+
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .simple-message strong {
+      display: block;
+
+      margin-bottom: 4px;
+
+      color: var(--forest);
+    }
+
+
+    /* =========================================================
+       STEP CARDS
+       ========================================================= */
+
+    .steps {
+      display: grid;
+
+      gap: 18px;
+    }
+
+    .step {
+      position: relative;
+
+      display: grid;
+
+      grid-template-columns: 62px 1fr;
+
+      gap: 20px;
+
+      padding: 23px;
+
+      background:
+        rgba(255, 255, 255, 0.68);
+
+      border:
+        1px solid rgba(23, 63, 53, 0.10);
+
+      border-radius:
+        24px 12px 24px 12px;
+
+      box-shadow:
+        0 10px 30px rgba(23, 63, 53, 0.045);
+    }
+
+    .step-number {
+      width: 58px;
+      height: 58px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: var(--forest);
+
+      color: white;
+
+      border-radius:
+        50% 50% 45% 55%;
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      font-size: 1.45rem;
+    }
+
+    .step h2 {
+      margin: 0 0 7px;
+
+      color: var(--forest);
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      font-size: 1.65rem;
+
+      font-weight: normal;
+    }
+
+    .step p {
+      margin: 0;
+
+      color: var(--muted);
+
+      line-height: 1.6;
+
+      font-size: 0.94rem;
+    }
+
+    .step strong {
+      color: var(--forest);
+    }
+
+
+    /* =========================================================
+       PHONE INSTRUCTIONS
+       ========================================================= */
+
+    .phone-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+      gap: 14px;
+
+      margin-top: 16px;
+    }
+
+    .phone-box {
+      padding: 17px;
+
+      background:
+        rgba(245, 243, 234, 0.72);
+
+      border:
+        1px solid rgba(23, 63, 53, 0.10);
+
+      border-radius:
+        17px 9px 17px 9px;
+    }
+
+    .phone-box h3 {
+      margin: 0 0 9px;
+
+      color: var(--forest);
+
+      font-size: 0.98rem;
+    }
+
+    .phone-box ol {
+      margin: 0;
+
+      padding-left: 20px;
+
+      color: var(--muted);
+
+      font-size: 0.88rem;
+
+      line-height: 1.6;
+    }
+
+
+    /* =========================================================
+       GPS WARNING / EXPLANATION
+       ========================================================= */
+
+    .gps-box {
+      margin-top: 18px;
+
+      padding: 18px 20px;
+
+      background:
+        var(--warning-bg);
+
+      border:
+        1px solid var(--warning-border);
+
+      border-radius:
+        18px 9px 18px 9px;
+
+      color: var(--warning-text);
+
+      font-size: 0.9rem;
+
+      line-height: 1.6;
+    }
+
+    .gps-box strong {
+      display: block;
+
+      margin-bottom: 5px;
+
+      color: var(--warning-text);
+    }
+
+
+    /* =========================================================
+       AI FLOW
+       ========================================================= */
+
+    .ai-flow {
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      flex-wrap: wrap;
+
+      gap: 8px;
+
+      margin-top: 18px;
+    }
+
+    .flow-item {
+      padding: 10px 14px;
+
+      background: var(--lichen);
+
+      color: var(--forest);
+
+      border-radius: 999px;
+
+      font-size: 0.82rem;
+
+      font-weight: 700;
+    }
+
+    .flow-arrow {
+      color: var(--sage);
+
+      font-weight: bold;
+    }
+
+
+    /* =========================================================
+       FINAL CHECKLIST
+       ========================================================= */
+
+    .checklist {
+      margin-top: 35px;
+
+      padding: 25px;
+
+      background:
+        rgba(255, 255, 255, 0.65);
+
+      border:
+        1px solid rgba(23, 63, 53, 0.10);
+
+      border-radius:
+        24px 12px 24px 12px;
+    }
+
+    .checklist h2 {
+      margin: 0 0 15px;
+
+      color: var(--forest);
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      font-size: 1.7rem;
+
+      font-weight: normal;
+    }
+
+    .check {
+      display: flex;
+
+      align-items: flex-start;
+
+      gap: 10px;
+
+      margin: 10px 0;
+
+      color: var(--muted);
+
+      font-size: 0.92rem;
+
+      line-height: 1.5;
+    }
+
+    .check span {
+      flex: 0 0 auto;
+
+      width: 23px;
+      height: 23px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: var(--moss);
+
+      color: white;
+
+      border-radius: 50%;
+
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+
+
+    /* =========================================================
+       CTA
+       ========================================================= */
+
+    .cta {
+      display: inline-block;
+
+      margin-top: 28px;
+
+      padding: 14px 22px;
+
+      background: var(--forest);
+
+      color: white;
+
+      text-decoration: none;
+
+      border-radius:
+        16px 8px 16px 8px;
+
+      font-weight: 700;
+
+      box-shadow:
+        0 12px 30px rgba(23, 63, 53, 0.16);
+
+      transition:
+        background 0.25s ease,
+        transform 0.25s ease;
+    }
+
+    .cta:hover {
+      background: var(--forest-dark);
+
+      transform: translateY(-2px);
+    }
+
+
+    /* =========================================================
+       FOOTER
+       ========================================================= */
+
+    footer {
+      position: relative;
+
+      width: 100%;
+
+      margin-top: 75px;
+
+      padding: 50px 20px;
+
+      background: var(--forest);
+
+      color:
+        rgba(255, 255, 255, 0.72);
+
+      text-align: center;
+
+      font-size: 0.85rem;
+
+      letter-spacing: 0.03em;
+
+      z-index: 10;
+    }
+
+    footer::before {
+      content: "";
+
+      position: absolute;
+
+      top: -35px;
+      left: 0;
+
+      width: 100%;
+      height: 70px;
+
+      background: var(--forest);
+
+      clip-path:
+        ellipse(55% 45% at 50% 100%);
+    }
+
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @media (max-width: 850px) {
+
+      header {
+        position: sticky;
+        flex-wrap: wrap;
+      }
+
+      .burger {
+        display: flex;
+      }
+
+      nav#nav-links {
+        position: absolute;
+
+        top: 100%;
+        left: 0;
+
+        width: 100%;
+
+        max-height: 0;
+
+        overflow: hidden;
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 4px;
+
+        padding: 0 5vw;
+
+        background:
+          rgba(245, 243, 234, 0.97);
+
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+
+        border-bottom:
+          1px solid rgba(23, 63, 53, 0.08);
+
+        transition:
+          max-height 0.45s ease,
+          padding 0.45s ease;
+      }
+
+      nav#nav-links.open {
+        max-height: 600px;
+
+        padding-top: 15px;
+        padding-bottom: 18px;
+      }
+
+      nav#nav-links a {
+        width: 100%;
+        padding: 13px 15px;
+        border-radius: 14px;
+      }
+
+      main {
+        padding: 55px;
+      }
+    }
+
+
+    @media (max-width: 600px) {
+
+      header {
+        padding: 15px 20px;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+      }
+
+      main {
+        width: calc(100% - 40px);
+
+        padding:
+          50px 30px 55px;
+
+        border-radius:
+          28px 55px 28px 55px;
+      }
+
+      h1 {
+        font-size: 2.7rem;
+      }
+
+      .organic-divider {
+        height: 50px;
+
+        margin:
+          40px 0 30px;
+      }
+
+      .organic-divider svg {
+        width: 100%;
+        height: 50px;
+      }
+
+      .step {
+        grid-template-columns: 1fr;
+
+        gap: 14px;
+
+        padding: 20px;
+      }
+
+      .step-number {
+        width: 48px;
+        height: 48px;
+
+        font-size: 1.15rem;
+      }
+
+      .phone-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .ai-flow {
+        justify-content: flex-start;
+      }
+
+      .flow-arrow {
+        display: none;
+      }
+
+      footer {
+        margin-top: 60px;
+
+        padding: 45px 20px;
+      }
+    }
+
+
+    @media (prefers-reduced-motion: reduce) {
+
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        transition-duration:
+          0.01ms !important;
+
+        animation-duration:
+          0.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+
+<body>
+
+<canvas id="cloud-canvas"></canvas>
+
+
+<!-- =========================================================
+     HEADER
+     ========================================================= -->
+
+<header>
+
+  <div
+    class="logo"
+    onclick="window.location='/'"
+  >
+    Lichenary
+  </div>
+
+
+  <div
+    id="burger"
+    class="burger"
+    aria-label="Menu"
+    tabindex="0"
+  >
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+
+  <nav id="nav-links">
+
+    <a href="{{ url_for('home') }}">
+      Home
+    </a>
+
+    <a href="{{ url_for('despre') }}">
+      About
+    </a>
+
+    <a href="{{ url_for('participa') }}">
+      How to Participate
+    </a>
+
+    <a href="{{ url_for('galerie') }}">
+      Gallery
+    </a>
+
+    <a href="{{ url_for('harta') }}">
+      Map
+    </a>
+
+    <a href="{{ url_for('contact') }}">
+      Contact
+    </a>
+
+    {% if current_user.is_authenticated %}
+
+      <a href="{{ url_for('dashboard') }}">
+        Dashboard
+      </a>
+
+      <a href="{{ url_for('logout') }}">
+        Logout
+      </a>
+
+    {% else %}
+
+      <a href="{{ url_for('login') }}">
+        Login
+      </a>
+
+    {% endif %}
+
+  </nav>
+
+</header>
+
+
+<!-- =========================================================
+     ORGANIC DIVIDER
+     ========================================================= -->
+
+<div class="organic-divider">
+
+  <svg
+    viewBox="0 0 700 75"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+
+    <path
+      d="
+        M 5 38
+        C 70 10, 105 68, 170 38
+        S 270 8, 330 40
+        S 440 70, 500 35
+        S 620 10, 695 42
+      "
+    />
+
+  </svg>
+
+</div>
+
+
+<!-- =========================================================
+     MAIN
+     ========================================================= -->
+
+<main>
+
+  <h1>
+    Upload with AI
+  </h1>
+
+
+  <p class="intro">
+    Follow these simple steps to send a lichen observation
+    to Lichenary. You do not need to identify the lichen
+    yourself — the AI will help you.
+  </p>
+
+
+  <!-- =======================================================
+       SIMPLE INTRO
+       ======================================================= -->
+
+  <div class="simple-message">
+
+    <div class="simple-icon">
+      AI
+    </div>
+
+    <div>
+
+      <strong>
+        You only need three things
+      </strong>
+
+      A clear photograph of the lichen, your location,
+      and a short description of the place. Lichenary
+      will take care of the AI identification.
+
+    </div>
+
+  </div>
+
+
+  <!-- =======================================================
+       STEPS
+       ======================================================= -->
+
+  <section class="steps">
+
+
+    <!-- STEP 1 -->
+
+    <article class="step">
+
+      <div class="step-number">
+        1
+      </div>
+
+      <div>
+
+        <h2>
+          Take a good photo
+        </h2>
+
+        <p>
+          Find the lichen and take a clear, close photograph.
+          Make sure the lichen is <strong>visible, in focus,
+          and not covered by your hand or another object.</strong>
+        </p>
+
+        <p style="margin-top:10px;">
+          You can tap <strong>Take Photo</strong> to use your
+          phone camera, or <strong>Upload from Phone</strong>
+          if you already have the photograph.
+        </p>
+
+      </div>
+
+    </article>
+
+
+    <!-- STEP 2 -->
+
+    <article class="step">
+
+      <div class="step-number">
+        2
+      </div>
+
+      <div>
+
+        <h2>
+          Turn on your location
+        </h2>
+
+        <p>
+          Lichenary needs your GPS location so the observation
+          can be placed on the map. When the website asks for
+          permission, choose <strong>Allow</strong>.
+        </p>
+
+
+        <div class="phone-grid">
+
+          <div class="phone-box">
+
+            <h3>
+              Android
+            </h3>
+
+            <ol>
+              <li>Open <strong>Settings</strong>.</li>
+              <li>Tap <strong>Location</strong>.</li>
+              <li>Turn <strong>Use location</strong> on.</li>
+              <li>Return to Lichenary.</li>
+              <li>Press <strong>Enable GPS Tracking</strong>.</li>
+              <li>If your browser asks for permission, choose <strong>Allow</strong>.</li>
+            </ol>
+
+          </div>
+
+
+          <div class="phone-box">
+
+            <h3>
+              iPhone / iOS
+            </h3>
+
+            <ol>
+              <li>Open <strong>Settings</strong>.</li>
+              <li>Tap <strong>Privacy & Security</strong>.</li>
+              <li>Tap <strong>Location Services</strong>.</li>
+              <li>Turn <strong>Location Services</strong> on.</li>
+              <li>Find your browser, such as Safari or Chrome.</li>
+              <li>Choose <strong>While Using the App</strong> and allow precise location if available.</li>
+            </ol>
+
+          </div>
+
+        </div>
+
+
+        <div class="gps-box">
+
+          <strong>
+            Important: GPS does NOT track you continuously.
+          </strong>
+
+          Lichenary only requests your location for the
+          observation when you enable GPS. The coordinates
+          recorded are the location detected at that time.
+          Lichenary does not receive a history of where you
+          have travelled.
+
+          <br><br>
+
+          <strong>
+            Take the photo at the observation site whenever possible.
+          </strong>
+
+          If you take the photograph in one place and upload
+          it later somewhere else, the browser's GPS location
+          will normally be the place where you are when GPS
+          is requested — not automatically the place where
+          the photograph was taken.
+
+        </div>
+
+      </div>
+
+    </article>
+
+
+    <!-- STEP 3 -->
+
+    <article class="step">
+
+      <div class="step-number">
+        3
+      </div>
+
+      <div>
+
+        <h2>
+          Tell us exactly where you are
+        </h2>
+
+        <p>
+          Write a short description in the
+          <strong>Specific Place</strong> box.
+          You can write something simple such as:
+        </p>
+
+        <p style="margin-top:10px;">
+          <strong>
+            “Tineretului Park, near the old church”
+          </strong>
+        </p>
+
+        <p style="margin-top:10px;">
+          GPS gives the coordinates. This text gives other
+          people a useful description of the exact spot.
+        </p>
+
+      </div>
+
+    </article>
+
+
+    <!-- STEP 4 -->
+
+    <article class="step">
+
+      <div class="step-number">
+        4
+      </div>
+
+      <div>
+
+        <h2>
+          Let AI identify the lichen
+        </h2>
+
+        <p>
+          Once your photo and GPS are ready, press
+          <strong>Analyze Lichen with AI</strong>.
+        </p>
+
+        <div class="ai-flow">
+
+          <span class="flow-item">
+            Your photo
+          </span>
+
+          <span class="flow-arrow">
+            →
+          </span>
+
+          <span class="flow-item">
+            AI analysis
+          </span>
+
+          <span class="flow-arrow">
+            →
+          </span>
+
+          <span class="flow-item">
+            Species
+          </span>
+
+          <span class="flow-arrow">
+            →
+          </span>
+
+          <span class="flow-item">
+            Pollution indicator
+          </span>
+
+        </div>
+
+        <p style="margin-top:16px;">
+          The AI will suggest the lichen species and
+          Lichenary will use its database to find the
+          corresponding pollution indicator.
+        </p>
+
+      </div>
+
+    </article>
+
+
+    <!-- STEP 5 -->
+
+    <article class="step">
+
+      <div class="step-number">
+        5
+      </div>
+
+      <div>
+
+        <h2>
+          Check it and submit
+        </h2>
+
+        <p>
+          Look at the AI result. If everything looks correct,
+          press <strong>Submit Observation</strong>.
+        </p>
+
+        <p style="margin-top:10px;">
+          The AI identification is a suggestion, not a
+          guarantee. Your observation can still be reviewed
+          before it is approved.
+        </p>
+
+      </div>
+
+    </article>
+
+  </section>
+
+
+  <!-- =======================================================
+       FINAL CHECKLIST
+       ======================================================= -->
+
+  <section class="checklist">
+
+    <h2>
+      Before you press Submit
+    </h2>
+
+
+    <div class="check">
+      <span>✓</span>
+      <div>
+        I have a clear photograph of the lichen.
+      </div>
+    </div>
+
+
+    <div class="check">
+      <span>✓</span>
+      <div>
+        Location services are turned on.
+      </div>
+    </div>
+
+
+    <div class="check">
+      <span>✓</span>
+      <div>
+        I allowed the browser to access my location.
+      </div>
+    </div>
+
+
+    <div class="check">
+      <span>✓</span>
+      <div>
+        I entered the specific place where I found the lichen.
+      </div>
+    </div>
+
+
+    <div class="check">
+      <span>✓</span>
+      <div>
+        I pressed Analyze Lichen with AI.
+      </div>
+    </div>
+
+
+    <div class="check">
+      <span>✓</span>
+      <div>
+        I checked the AI result and am ready to submit.
+      </div>
+    </div>
+
+
+    <a
+      href="{{ url_for('upload_observation_ai') }}"
+      class="cta"
+    >
+      Start an AI Observation
+    </a>
+
+  </section>
+
+</main>
+
+
+<!-- =========================================================
+     FOOTER
+     ========================================================= -->
+
+<footer>
+
+  &copy; 2025 Lichenary. All rights reserved.
+
+</footer>
+
+
+<!-- =========================================================
+     NAVIGATION
+     ========================================================= -->
+
+<script>
+
+  const burger =
+    document.getElementById('burger');
+
+  const navLinks =
+    document.getElementById('nav-links');
+
+
+  burger.addEventListener(
+    'click',
+    () => {
+
+      navLinks.classList.toggle('open');
+
+    }
+  );
+
+
+  burger.addEventListener(
+    'keydown',
+    (event) => {
+
+      if (
+        event.key === 'Enter' ||
+        event.key === ' '
+      ) {
+
+        event.preventDefault();
+
+        burger.click();
+
+      }
+
+    }
+  );
+
+
+  document
+    .querySelectorAll('#nav-links a')
+    .forEach(
+      link => {
+
+        link.addEventListener(
+          'click',
+          () => {
+
+            navLinks.classList.remove('open');
+
+          }
+        );
+
+      }
+    );
+
+</script>
+
+
+<!-- =========================================================
+     BACKGROUND CANVAS
+     ========================================================= -->
+
+<script>
+
+  const canvas =
+    document.getElementById(
+      'cloud-canvas'
+    );
+
+  const ctx =
+    canvas.getContext('2d');
+
+
+  function resize() {
+
+    canvas.width =
+      window.innerWidth;
+
+    canvas.height =
+      window.innerHeight;
+
+  }
+
+
+  window.addEventListener(
+    'resize',
+    resize
+  );
+
+
+  resize();
+
+  ctx.clearRect(
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+</script>
+
+
+</body>
+</html>

@@ -616,6 +616,21 @@ def despre_parteneri():
     return render_template('despre_parteneri.html')
 
 
+@app.route('/despre/ai')
+def despre_ai():
+    return render_template('despre_ai.html')
+
+
+@app.route('/despre/how-to-upload-ai')
+def despre_how_to_upload_ai():
+    return render_template('despre_how_to_upload_ai.html')
+
+
+@app.route('/despre/how-to-upload-manual')
+def despre_how_to_upload_manual():
+    return render_template('despre_how_to_upload_manual.html')
+
+
 @app.route('/participa/voluntariezi')
 def participa_voluntariez():
     return render_template('participa_voluntariez.html')

@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Welcome – Lichenary</title>
 
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
   <style>
     /* =========================================================
        LICHENARY — ORGANIC / EDITORIAL / CITIZEN SCIENCE
@@ -541,7 +547,7 @@
        WHAT IS LICHENARY
        ========================================================= */
 
-    .section:nth-of-type(1) {
+    .what-section {
       min-height: 580px;
 
       display: grid;
@@ -559,7 +565,7 @@
         35px 110px 35px 90px;
     }
 
-    .section:nth-of-type(1)::before {
+    .what-section::before {
       content: "";
 
       position: absolute;
@@ -577,7 +583,7 @@
       opacity: 0.22;
     }
 
-    .section:nth-of-type(1)::after {
+    .what-section::after {
       content: "";
 
       position: absolute;
@@ -595,18 +601,18 @@
       opacity: 0.10;
     }
 
-    .section:nth-of-type(1) h3,
-    .section:nth-of-type(1) p,
-    .section:nth-of-type(1) strong {
+    .what-section h3,
+    .what-section p,
+    .what-section strong {
       color: white;
     }
 
-    .section:nth-of-type(1) h3 {
+    .what-section h3 {
       position: relative;
       z-index: 2;
     }
 
-    .section:nth-of-type(1) p {
+    .what-section p {
       position: relative;
       z-index: 2;
 
@@ -614,10 +620,776 @@
     }
 
     /* =========================================================
+       IMPACT STATS
+       ========================================================= */
+
+    .stats-section {
+      position: relative;
+
+      margin: 0 0 120px;
+
+      padding: 0;
+
+      overflow: visible;
+    }
+
+    .stats-intro {
+      margin: 0 0 35px;
+
+      text-align: center;
+
+      color: var(--forest-soft);
+
+      font-family: Georgia, "Times New Roman", serif;
+
+      font-size: clamp(1.6rem, 3vw, 2.3rem);
+
+      letter-spacing: -0.03em;
+    }
+
+    .stats-grid {
+      display: grid;
+
+      grid-template-columns: repeat(3, 1fr);
+
+      gap: 20px;
+    }
+
+    .stat-card {
+      position: relative;
+
+      min-height: 220px;
+
+      padding: 38px 28px;
+
+      display: flex;
+
+      flex-direction: column;
+
+      justify-content: center;
+
+      text-align: center;
+
+      background: var(--cream-light);
+
+      border:
+        1px solid rgba(23, 63, 53, 0.09);
+
+      border-radius:
+        28px 60px 28px 45px;
+
+      box-shadow: var(--shadow-soft);
+
+      overflow: hidden;
+
+      transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+    }
+
+    .stat-card:nth-child(2) {
+      border-radius:
+        60px 28px 45px 28px;
+
+      background: var(--paper);
+    }
+
+    .stat-card:nth-child(3) {
+      border-radius:
+        28px 45px 60px 28px;
+    }
+
+    .stat-card::before {
+      content: "";
+
+      position: absolute;
+
+      width: 120px;
+      height: 120px;
+
+      right: -45px;
+      top: -45px;
+
+      background: var(--lichen);
+
+      border-radius: 50%;
+
+      opacity: 0.65;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-6px);
+
+      box-shadow:
+        0 25px 60px rgba(23, 63, 53, 0.14);
+    }
+
+    .stat-number {
+      position: relative;
+      z-index: 2;
+
+      color: var(--forest);
+
+      font-family: Georgia, "Times New Roman", serif;
+
+      font-size: clamp(3rem, 5vw, 4.8rem);
+
+      line-height: 0.9;
+
+      letter-spacing: -0.06em;
+
+      margin-bottom: 15px;
+    }
+
+    .stat-label {
+      position: relative;
+      z-index: 2;
+
+      color: var(--forest-soft);
+
+      font-size: 0.95rem;
+
+      line-height: 1.55;
+
+      max-width: 220px;
+
+      margin: 0 auto;
+    }
+
+    /* =========================================================
+       NATIONAL GEOGRAPHIC AWARD
+       ========================================================= */
+
+    .award-section {
+      position: relative;
+
+      margin: 0 0 120px;
+
+      padding: 75px 85px;
+
+      display: grid;
+
+      grid-template-columns: 0.75fr 1.25fr;
+
+      align-items: center;
+
+      gap: 70px;
+
+      background: var(--forest);
+
+      color: white;
+
+      border-radius:
+        110px 35px 90px 35px;
+
+      overflow: hidden;
+
+      box-shadow:
+        0 25px 70px rgba(23, 63, 53, 0.18);
+    }
+
+    .award-section::before {
+      content: "";
+
+      position: absolute;
+
+      width: 390px;
+      height: 390px;
+
+      left: -170px;
+      top: -170px;
+
+      border-radius: 50%;
+
+      background: var(--moss);
+
+      opacity: 0.20;
+    }
+
+    .award-section::after {
+      content: "";
+
+      position: absolute;
+
+      width: 260px;
+      height: 260px;
+
+      right: -100px;
+      bottom: -110px;
+
+      background: var(--sage);
+
+      border-radius:
+        55% 45% 35% 65% / 
+        45% 58% 42% 55%;
+
+      opacity: 0.13;
+    }
+
+    .award-badge {
+      position: relative;
+      z-index: 2;
+
+      min-height: 240px;
+
+      display: flex;
+
+      flex-direction: column;
+
+      align-items: center;
+      justify-content: center;
+
+      padding: 30px;
+
+      text-align: center;
+
+      background: rgba(251, 250, 245, 0.10);
+
+      border:
+        1px solid rgba(255, 255, 255, 0.16);
+
+      border-radius:
+        50% 42% 55% 45% / 
+        45% 55% 42% 58%;
+
+      transform: rotate(-2deg);
+    }
+
+    .award-badge-small {
+      margin-bottom: 12px;
+
+      color: var(--lichen);
+
+      font-size: 0.8rem;
+
+      font-weight: 700;
+
+      letter-spacing: 0.16em;
+
+      text-transform: uppercase;
+    }
+
+    .award-badge-title {
+      color: white;
+
+      font-family: Georgia, "Times New Roman", serif;
+
+      font-size: clamp(1.8rem, 3vw, 2.7rem);
+
+      line-height: 1;
+
+      letter-spacing: -0.04em;
+    }
+
+    .award-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .award-content h3 {
+      margin: 0 0 25px;
+
+      color: white;
+
+      font-family: Georgia, "Times New Roman", serif;
+
+      font-size: clamp(2.4rem, 4vw, 4rem);
+
+      font-weight: normal;
+
+      line-height: 0.98;
+
+      letter-spacing: -0.05em;
+    }
+
+    .award-content p {
+      margin: 0 0 22px;
+
+      color: rgba(255, 255, 255, 0.84);
+
+      font-size: 1.06rem;
+
+      line-height: 1.75;
+    }
+
+    .award-content strong {
+      color: white;
+    }
+
+    .award-btn {
+      display: inline-flex;
+
+      align-items: center;
+
+      margin-top: 10px;
+
+      padding: 13px 20px;
+
+      border-radius: 999px;
+
+      background: var(--lichen);
+
+      color: var(--forest);
+
+      text-decoration: none;
+
+      font-size: 0.92rem;
+
+      font-weight: 700;
+
+      transition:
+        transform 0.3s ease,
+        background 0.3s ease;
+    }
+
+    .award-btn::after {
+      content: "→";
+
+      margin-left: 9px;
+
+      transition: transform 0.3s ease;
+    }
+
+    .award-btn:hover {
+      transform: translateY(-3px);
+
+      background: white;
+    }
+
+    .award-btn:hover::after {
+      transform: translateX(4px);
+    }
+
+    /* =========================================================
+       HOW IT WORKS
+       ========================================================= */
+
+    .how-section {
+      position: relative;
+
+      margin: 0 0 120px;
+
+      padding: 75px 0;
+
+      text-align: center;
+    }
+
+    .how-section h3 {
+      margin: 0 0 18px;
+
+      color: var(--forest);
+
+      font-family: Georgia, "Times New Roman", serif;
+
+      font-size: clamp(2.7rem, 5vw, 4.5rem);
+
+      font-weight: normal;
+
+      line-height: 0.98;
+
+      letter-spacing: -0.05em;
+    }
+
+    .how-intro {
+      max-width: 650px;
+
+      margin: 0 auto 50px;
+
+      color: var(--muted);
+
+      font-size: 1.05rem;
+
+      line-height: 1.7;
+    }
+
+    .how-grid {
+      display: grid;
+
+      grid-template-columns: repeat(3, 1fr);
+
+      gap: 22px;
+
+      text-align: left;
+    }
+
+    .how-card {
+      position: relative;
+
+      padding: 40px 32px 35px;
+
+      background: var(--cream-light);
+
+      border:
+        1px solid rgba(23, 63, 53, 0.08);
+
+      border-radius:
+        45px 22px 45px 22px;
+
+      box-shadow: var(--shadow-soft);
+
+      overflow: hidden;
+    }
+
+    .how-card:nth-child(2) {
+      border-radius:
+        22px 45px 22px 45px;
+
+      background: var(--paper);
+    }
+
+    .how-card:nth-child(3) {
+      border-radius:
+        45px 22px 22px 45px;
+    }
+
+    .how-number {
+      color: var(--moss);
+
+      font-family: Georgia, "Times New Roman", serif;
+
+      font-size: 1.1rem;
+
+      font-weight: bold;
+
+      margin-bottom: 25px;
+    }
+
+    .how-card h4 {
+      margin: 0 0 15px;
+
+      color: var(--forest);
+
+      font-family: Georgia, "Times New Roman", serif;
+
+      font-size: 2rem;
+
+      font-weight: normal;
+
+      letter-spacing: -0.04em;
+    }
+
+    .how-card p {
+      margin: 0;
+
+      color: var(--muted);
+
+      font-size: 0.98rem;
+
+      line-height: 1.7;
+    }
+
+    /* =========================================================
+       LICHENARY AI
+       ========================================================= */
+
+    .ai-section {
+      position: relative;
+
+      margin: 0 0 120px;
+
+      padding: 80px;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--paper),
+          #e5e8d8
+        );
+
+      border-radius:
+        35px 110px 35px 90px;
+
+      overflow: hidden;
+
+      text-align: center;
+    }
+
+    .ai-section::before {
+      content: "";
+
+      position: absolute;
+
+      width: 260px;
+      height: 260px;
+
+      right: -100px;
+      top: -100px;
+
+      background: var(--sage);
+
+      opacity: 0.18;
+
+      border-radius: 50%;
+    }
+
+    .ai-section::after {
+      content: "";
+
+      position: absolute;
+
+      width: 180px;
+      height: 180px;
+
+      left: -80px;
+      bottom: -90px;
+
+      background: var(--lichen);
+
+      opacity: 0.50;
+
+      border-radius:
+        55% 45% 35% 65% /
+        45% 58% 42% 55%;
+    }
+
+    .ai-section h3,
+    .ai-section p,
+    .ai-section a {
+      position: relative;
+
+      z-index: 2;
+    }
+
+    .ai-section h3 {
+      margin: 0 0 25px;
+
+      color: var(--forest);
+
+      font-family: Georgia, "Times New Roman", serif;
+
+      font-size: clamp(2.7rem, 5vw, 4.5rem);
+
+      font-weight: normal;
+
+      line-height: 0.98;
+
+      letter-spacing: -0.05em;
+    }
+
+    .ai-section p {
+      max-width: 720px;
+
+      margin: 0 auto 30px;
+
+      color: var(--forest-soft);
+
+      font-size: 1.08rem;
+
+      line-height: 1.75;
+    }
+
+    /* =========================================================
+       MAP PREVIEW
+       ========================================================= */
+
+    .map-preview-section {
+      position: relative;
+
+      margin: 0 0 120px;
+
+      padding: 65px 75px;
+
+      background: var(--cream-light);
+
+      border-radius:
+        38px 95px 38px 75px;
+
+      border:
+        1px solid rgba(23, 63, 53, 0.08);
+
+      box-shadow: var(--shadow-soft);
+
+      overflow: hidden;
+    }
+
+    .map-preview-section::before {
+      content: "";
+
+      position: absolute;
+
+      width: 220px;
+      height: 220px;
+
+      right: -100px;
+      top: -105px;
+
+      background: var(--lichen);
+
+      border-radius:
+        55% 45% 35% 65% /
+        45% 58% 42% 55%;
+
+      opacity: 0.58;
+    }
+
+    .map-preview-heading {
+      position: relative;
+
+      z-index: 2;
+
+      display: flex;
+
+      align-items: flex-end;
+
+      justify-content: space-between;
+
+      gap: 30px;
+
+      margin-bottom: 35px;
+    }
+
+    .map-preview-heading h3 {
+      margin: 0;
+
+      color: var(--forest);
+
+      font-family: Georgia, "Times New Roman", serif;
+
+      font-size: clamp(2.5rem, 4.5vw, 4.2rem);
+
+      font-weight: normal;
+
+      line-height: 0.98;
+
+      letter-spacing: -0.05em;
+    }
+
+    .map-preview-heading p {
+      max-width: 430px;
+
+      margin: 0;
+
+      color: var(--muted);
+
+      font-size: 0.98rem;
+
+      line-height: 1.65;
+    }
+
+    #home-map {
+      position: relative;
+
+      z-index: 2;
+
+      width: 100%;
+
+      height: 420px;
+
+      border-radius:
+        28px 12px 28px 12px;
+
+      background: var(--paper);
+
+      border:
+        1px solid rgba(23, 63, 53, 0.10);
+
+      box-shadow:
+        0 20px 50px rgba(23, 63, 53, 0.12),
+        inset 0 1px 0 rgba(255,255,255,0.6);
+
+      overflow: hidden;
+    }
+
+    .map-preview-action {
+      position: relative;
+
+      z-index: 2;
+
+      margin-top: 25px;
+
+      display: flex;
+
+      justify-content: center;
+    }
+
+    .leaflet-container {
+      font-family:
+        "Segoe UI",
+        Tahoma,
+        Geneva,
+        Verdana,
+        sans-serif;
+    }
+
+    .leaflet-control-zoom {
+      border: none !important;
+
+      box-shadow:
+        0 8px 25px rgba(23, 63, 53, 0.16) !important;
+
+      overflow: hidden;
+
+      border-radius: 14px !important;
+    }
+
+    .leaflet-control-zoom a {
+      color: var(--forest) !important;
+
+      background: rgba(251, 250, 245, 0.95) !important;
+
+      border: none !important;
+
+      width: 38px !important;
+      height: 38px !important;
+
+      line-height: 38px !important;
+
+      font-weight: 600;
+
+      transition:
+        background 0.2s ease,
+        color 0.2s ease;
+    }
+
+    .leaflet-control-zoom a:hover {
+      background: var(--lichen) !important;
+
+      color: var(--forest-dark) !important;
+    }
+
+    .leaflet-control-attribution {
+      background: rgba(251, 250, 245, 0.90) !important;
+
+      color: var(--muted) !important;
+
+      border-radius: 8px 0 0 0;
+
+      font-size: 10px;
+    }
+
+    .leaflet-control-attribution a {
+      color: var(--forest-soft) !important;
+    }
+
+    .leaflet-popup-content-wrapper {
+      background: var(--cream-light);
+
+      color: var(--ink);
+
+      border-radius:
+        18px 7px 18px 7px;
+
+      box-shadow:
+        0 15px 40px rgba(23, 63, 53, 0.18);
+    }
+
+    .leaflet-popup-tip {
+      background: var(--cream-light);
+    }
+
+    .leaflet-popup-content {
+      margin: 15px 17px;
+
+      font-size: 0.92rem;
+
+      line-height: 1.55;
+    }
+
+    /* =========================================================
        WHY DO WE DO THIS
        ========================================================= */
 
-    .section:nth-of-type(2) {
+    .why-section {
       max-width: 1120px;
 
       margin-left: auto;
@@ -636,7 +1408,7 @@
       box-shadow: var(--shadow-soft);
     }
 
-    .section:nth-of-type(2)::before {
+    .why-section::before {
       content: "";
 
       position: absolute;
@@ -658,7 +1430,7 @@
       opacity: 0.6;
     }
 
-    .section:nth-of-type(2)::after {
+    .why-section::after {
       content: "";
 
       position: absolute;
@@ -678,18 +1450,509 @@
       z-index: 0;
     }
 
-    .section:nth-of-type(2) h3,
-    .section:nth-of-type(2) p,
-    .section:nth-of-type(2) ul {
+    .why-section h3,
+    .why-section p,
+    .why-section ul {
       position: relative;
       z-index: 2;
+    }
+
+    /* =========================================================
+       EVERY OBSERVATION MATTERS
+       ========================================================= */
+
+    .matters-section {
+      position: relative;
+
+      margin: 0 0 120px;
+
+      padding: 85px 10%;
+
+      text-align: center;
+
+      background: var(--forest);
+
+      color: white;
+
+      border-radius:
+        30px 100px 30px 120px;
+
+      overflow: hidden;
+    }
+
+    .matters-section::before {
+      content: "";
+
+      position: absolute;
+
+      width: 280px;
+      height: 280px;
+
+      right: -100px;
+      top: -110px;
+
+      background: var(--moss);
+
+      opacity: 0.20;
+
+      border-radius: 50%;
+    }
+
+    .matters-section::after {
+      content: "";
+
+      position: absolute;
+
+      width: 200px;
+      height: 200px;
+
+      left: -90px;
+      bottom: -90px;
+
+      background: var(--sage);
+
+      opacity: 0.10;
+
+      border-radius:
+        55% 45% 35% 65%;
+    }
+
+    .matters-section h3,
+    .matters-section p,
+    .matters-section a {
+      position: relative;
+
+      z-index: 2;
+    }
+
+    .matters-section h3 {
+      margin: 0 0 22px;
+
+      color: white;
+
+      font-family: Georgia, "Times New Roman", serif;
+
+      font-size: clamp(2.8rem, 5vw, 4.7rem);
+
+      font-weight: normal;
+
+      line-height: 0.98;
+
+      letter-spacing: -0.05em;
+    }
+
+    .matters-section p {
+      max-width: 720px;
+
+      margin: 0 auto 30px;
+
+      color: rgba(255, 255, 255, 0.82);
+
+      font-size: 1.12rem;
+
+      line-height: 1.75;
+    }
+
+    .matters-section .btn {
+      background: var(--lichen);
+
+      color: var(--forest);
+
+      box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.12);
+    }
+
+    .matters-section .btn:hover {
+      background: white;
+    }
+
+    /* =========================================================
+       PRESS
+       ========================================================= */
+
+    .press-section {
+      position: relative;
+
+      margin: 0 0 120px;
+
+      padding: 0;
+    }
+
+    .press-heading {
+      margin-bottom: 40px;
+
+      text-align: center;
+    }
+
+    .press-heading h3 {
+      margin: 0 0 18px;
+
+      color: var(--forest);
+
+      font-family: Georgia, "Times New Roman", serif;
+
+      font-size: clamp(2.7rem, 5vw, 4.5rem);
+
+      font-weight: normal;
+
+      line-height: 0.98;
+
+      letter-spacing: -0.05em;
+    }
+
+    .press-heading p {
+      margin: 0 auto;
+
+      max-width: 620px;
+
+      color: var(--muted);
+
+      font-size: 1rem;
+
+      line-height: 1.7;
+    }
+
+    .press-grid {
+      display: grid;
+
+      grid-template-columns: repeat(3, 1fr);
+
+      gap: 20px;
+    }
+
+    .press-card {
+      position: relative;
+
+      min-height: 330px;
+
+      padding: 35px 30px;
+
+      display: flex;
+
+      flex-direction: column;
+
+      background: var(--cream-light);
+
+      border:
+        1px solid rgba(23, 63, 53, 0.09);
+
+      box-shadow: var(--shadow-soft);
+
+      overflow: hidden;
+
+      transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+    }
+
+    .press-card:nth-child(1) {
+      border-radius:
+        45px 22px 45px 22px;
+    }
+
+    .press-card:nth-child(2) {
+      border-radius:
+        22px 45px 22px 45px;
+
+      background: var(--paper);
+    }
+
+    .press-card:nth-child(3) {
+      border-radius:
+        45px 22px 22px 45px;
+    }
+
+    .press-card::before {
+      content: "";
+
+      position: absolute;
+
+      width: 130px;
+      height: 130px;
+
+      right: -55px;
+      top: -55px;
+
+      background: var(--lichen);
+
+      border-radius: 50%;
+
+      opacity: 0.6;
+    }
+
+    .press-card:hover {
+      transform: translateY(-6px);
+
+      box-shadow:
+        0 25px 60px rgba(23, 63, 53, 0.14);
+    }
+
+    .press-source {
+      position: relative;
+
+      z-index: 2;
+
+      margin-bottom: 20px;
+
+      color: var(--moss);
+
+      font-size: 0.78rem;
+
+      font-weight: 800;
+
+      letter-spacing: 0.12em;
+
+      text-transform: uppercase;
+    }
+
+    .press-card h4 {
+      position: relative;
+
+      z-index: 2;
+
+      margin: 0 0 18px;
+
+      color: var(--forest);
+
+      font-family: Georgia, "Times New Roman", serif;
+
+      font-size: 1.75rem;
+
+      font-weight: normal;
+
+      line-height: 1.05;
+
+      letter-spacing: -0.035em;
+    }
+
+    .press-card p {
+      position: relative;
+
+      z-index: 2;
+
+      margin: 0 0 25px;
+
+      color: var(--muted);
+
+      font-size: 0.94rem;
+
+      line-height: 1.65;
+    }
+
+    .press-link {
+      position: relative;
+
+      z-index: 2;
+
+      margin-top: auto;
+
+      color: var(--forest);
+
+      text-decoration: none;
+
+      font-size: 0.9rem;
+
+      font-weight: 700;
+    }
+
+    .press-link::after {
+      content: " →";
+
+      transition: margin-left 0.25s ease;
+    }
+
+    .press-link:hover::after {
+      margin-left: 5px;
+    }
+
+    /* =========================================================
+       NEED HELP
+       ========================================================= */
+
+    .help-section {
+      position: relative;
+
+      margin: 0 0 120px;
+
+      padding: 0;
+    }
+
+    .help-heading {
+      margin-bottom: 40px;
+
+      text-align: center;
+    }
+
+    .help-heading h3 {
+      margin: 0 0 18px;
+
+      color: var(--forest);
+
+      font-family: Georgia, "Times New Roman", serif;
+
+      font-size: clamp(2.7rem, 5vw, 4.5rem);
+
+      font-weight: normal;
+
+      line-height: 0.98;
+
+      letter-spacing: -0.05em;
+    }
+
+    .help-heading p {
+      margin: 0 auto;
+
+      max-width: 650px;
+
+      color: var(--muted);
+
+      font-size: 1rem;
+
+      line-height: 1.7;
+    }
+
+    .help-grid {
+      display: grid;
+
+      grid-template-columns: repeat(3, 1fr);
+
+      gap: 20px;
+    }
+
+    .help-card {
+      position: relative;
+
+      min-height: 245px;
+
+      padding: 35px 30px;
+
+      display: flex;
+
+      flex-direction: column;
+
+      justify-content: space-between;
+
+      background: var(--cream-light);
+
+      border:
+        1px solid rgba(23, 63, 53, 0.09);
+
+      box-shadow: var(--shadow-soft);
+
+      overflow: hidden;
+
+      text-decoration: none;
+
+      transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+    }
+
+    .help-card:nth-child(1) {
+      border-radius:
+        45px 22px 45px 22px;
+    }
+
+    .help-card:nth-child(2) {
+      border-radius:
+        22px 45px 22px 45px;
+
+      background: var(--paper);
+    }
+
+    .help-card:nth-child(3) {
+      border-radius:
+        45px 22px 22px 45px;
+    }
+
+    .help-card::before {
+      content: "";
+
+      position: absolute;
+
+      width: 120px;
+      height: 120px;
+
+      right: -50px;
+      bottom: -50px;
+
+      background: var(--lichen);
+
+      border-radius: 50%;
+
+      opacity: 0.65;
+    }
+
+    .help-card:hover {
+      transform: translateY(-6px);
+
+      box-shadow:
+        0 25px 60px rgba(23, 63, 53, 0.14);
+    }
+
+    .help-icon {
+      position: relative;
+
+      z-index: 2;
+
+      color: var(--moss);
+
+      font-size: 1.8rem;
+
+      margin-bottom: 20px;
+    }
+
+    .help-card h4 {
+      position: relative;
+
+      z-index: 2;
+
+      margin: 0 0 12px;
+
+      color: var(--forest);
+
+      font-family: Georgia, "Times New Roman", serif;
+
+      font-size: 1.75rem;
+
+      font-weight: normal;
+
+      line-height: 1.05;
+
+      letter-spacing: -0.035em;
+    }
+
+    .help-card p {
+      position: relative;
+
+      z-index: 2;
+
+      margin: 0 0 20px;
+
+      color: var(--muted);
+
+      font-size: 0.92rem;
+
+      line-height: 1.6;
+    }
+
+    .help-arrow {
+      position: relative;
+
+      z-index: 2;
+
+      color: var(--forest);
+
+      font-size: 0.9rem;
+
+      font-weight: 700;
     }
 
     /* =========================================================
        VISION
        ========================================================= */
 
-    .section:nth-of-type(3) {
+    .vision-section {
       min-height: 550px;
 
       display: flex;
@@ -713,7 +1976,7 @@
       text-align: center;
     }
 
-    .section:nth-of-type(3)::before {
+    .vision-section::before {
       content: "";
 
       position: absolute;
@@ -733,7 +1996,7 @@
         54% 40% 60% 46%;
     }
 
-    .section:nth-of-type(3)::after {
+    .vision-section::after {
       content: "";
 
       position: absolute;
@@ -753,20 +2016,20 @@
         45% 58% 42% 55%;
     }
 
-    .section:nth-of-type(3) h3,
-    .section:nth-of-type(3) p {
+    .vision-section h3,
+    .vision-section p {
       position: relative;
       z-index: 2;
     }
 
-    .section:nth-of-type(3) h3 {
+    .vision-section h3 {
       max-width: 800px;
 
       margin-left: auto;
       margin-right: auto;
     }
 
-    .section:nth-of-type(3) p {
+    .vision-section p {
       max-width: 780px;
 
       margin-left: auto;
@@ -779,7 +2042,7 @@
        FINAL MESSAGE
        ========================================================= */
 
-    .section:nth-of-type(3) p:last-child {
+    .vision-section p:last-child {
       margin-top: 30px;
 
       font-family: Georgia, "Times New Roman", serif;
@@ -787,6 +2050,50 @@
       font-size: 1.4rem;
 
       color: var(--forest);
+    }
+
+    /* =========================================================
+       FINAL CTA
+       ========================================================= */
+
+    .final-cta {
+      position: relative;
+
+      margin: 0 0 80px;
+
+      padding: 80px 40px;
+
+      text-align: center;
+    }
+
+    .final-cta h3 {
+      margin: 0 0 15px;
+
+      color: var(--forest);
+
+      font-family: Georgia, "Times New Roman", serif;
+
+      font-size: clamp(2.8rem, 5vw, 5rem);
+
+      font-weight: normal;
+
+      line-height: 0.95;
+
+      letter-spacing: -0.06em;
+    }
+
+    .final-cta p {
+      margin: 0 auto 30px;
+
+      color: var(--muted);
+
+      font-size: 1.05rem;
+
+      line-height: 1.7;
+    }
+
+    .final-cta .btn-group {
+      justify-content: center;
     }
 
     /* =========================================================
@@ -834,7 +2141,16 @@
 
     .section,
     .hero-content,
-    .hero-visual {
+    .hero-visual,
+    .stats-section,
+    .award-section,
+    .how-section,
+    .ai-section,
+    .map-preview-section,
+    .matters-section,
+    .press-section,
+    .help-section,
+    .final-cta {
       opacity: 0;
 
       transform: translateY(35px);
@@ -873,14 +2189,22 @@
         height: 560px;
       }
 
-      .section:nth-of-type(1) {
+      .what-section {
         gap: 50px;
 
         padding: 65px;
       }
 
-      .section:nth-of-type(2) {
+      .why-section {
         padding: 70px 70px 70px 110px;
+      }
+
+      .award-section {
+        padding: 65px;
+      }
+
+      .map-preview-section {
+        padding: 60px;
       }
     }
 
@@ -990,7 +2314,7 @@
         margin-bottom: 80px;
       }
 
-      .section:nth-of-type(1) {
+      .what-section {
         grid-template-columns: 1fr;
 
         gap: 20px;
@@ -1001,7 +2325,7 @@
           35px 70px 35px 70px;
       }
 
-      .section:nth-of-type(2) {
+      .why-section {
         margin-left: 0;
 
         padding-left: 80px;
@@ -1010,8 +2334,42 @@
           80px 25px 80px 25px;
       }
 
-      .section:nth-of-type(3) {
+      .vision-section {
         min-height: auto;
+      }
+
+      .stats-grid,
+      .how-grid,
+      .press-grid,
+      .help-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stat-card {
+        min-height: 190px;
+      }
+
+      .award-section {
+        grid-template-columns: 1fr;
+
+        gap: 45px;
+
+        border-radius:
+          70px 30px 70px 30px;
+      }
+
+      .award-badge {
+        max-width: 330px;
+
+        width: 100%;
+
+        margin: 0 auto;
+      }
+
+      .map-preview-heading {
+        flex-direction: column;
+
+        align-items: flex-start;
       }
 
       .organic-divider {
@@ -1099,17 +2457,17 @@
         line-height: 1.7;
       }
 
-      .section:nth-of-type(1) {
+      .what-section {
         border-radius:
           28px 55px 28px 55px;
       }
 
-      .section:nth-of-type(2) {
+      .why-section {
         border-radius:
           55px 22px 55px 22px;
       }
 
-      .section:nth-of-type(2)::before {
+      .why-section::before {
         width: 100px;
         height: 100px;
 
@@ -1117,7 +2475,7 @@
         top: 35px;
       }
 
-      .section:nth-of-type(2)::after {
+      .why-section::after {
         width: 60px;
         height: 60px;
 
@@ -1125,12 +2483,12 @@
         top: 95px;
       }
 
-      .section:nth-of-type(3) {
+      .vision-section {
         border-radius:
           25px 70px 25px 80px;
       }
 
-      .section:nth-of-type(3) p:last-child {
+      .vision-section p:last-child {
         font-size: 1.2rem;
       }
 
@@ -1142,6 +2500,110 @@
         width: 100%;
 
         height: 50px;
+      }
+
+      .stats-section,
+      .award-section,
+      .how-section,
+      .ai-section,
+      .map-preview-section,
+      .matters-section,
+      .press-section,
+      .help-section {
+        margin-bottom: 65px;
+      }
+
+      .stats-intro {
+        font-size: 1.45rem;
+
+        margin-bottom: 25px;
+      }
+
+      .stat-card {
+        min-height: 180px;
+
+        padding: 32px 25px;
+      }
+
+      .stat-number {
+        font-size: 3.6rem;
+      }
+
+      .award-section {
+        padding: 50px 30px;
+
+        border-radius:
+          55px 25px 55px 25px;
+      }
+
+      .award-content h3 {
+        font-size: 2.6rem;
+      }
+
+      .award-content p {
+        font-size: 1rem;
+      }
+
+      .how-section {
+        padding: 30px 0;
+      }
+
+      .how-section h3,
+      .ai-section h3,
+      .press-heading h3,
+      .help-heading h3 {
+        font-size: 2.8rem;
+      }
+
+      .ai-section {
+        padding: 55px 30px;
+
+        border-radius:
+          28px 70px 28px 70px;
+      }
+
+      .map-preview-section {
+        padding: 50px 25px;
+
+        border-radius:
+          28px 55px 28px 55px;
+      }
+
+      .map-preview-heading h3 {
+        font-size: 2.6rem;
+      }
+
+      #home-map {
+        height: 380px;
+
+        border-radius:
+          22px 9px 22px 9px;
+      }
+
+      .matters-section {
+        padding: 60px 30px;
+
+        border-radius:
+          25px 70px 25px 80px;
+      }
+
+      .matters-section h3 {
+        font-size: 2.8rem;
+      }
+
+      .press-card,
+      .help-card {
+        min-height: 280px;
+      }
+
+      .final-cta {
+        padding: 45px 10px;
+
+        margin-bottom: 50px;
+      }
+
+      .final-cta h3 {
+        font-size: 3rem;
       }
 
       footer {
@@ -1168,7 +2630,16 @@
 
       .section,
       .hero-content,
-      .hero-visual {
+      .hero-visual,
+      .stats-section,
+      .award-section,
+      .how-section,
+      .ai-section,
+      .map-preview-section,
+      .matters-section,
+      .press-section,
+      .help-section,
+      .final-cta {
         opacity: 1;
 
         transform: none;
@@ -1344,10 +2815,117 @@
 
 
   <!-- =======================================================
+       IMPACT / STATS
+       ======================================================= -->
+
+  <div class="stats-section">
+
+    <div class="stats-intro">
+      A growing community. A growing picture of our air.
+    </div>
+
+    <div class="stats-grid">
+
+      <div class="stat-card">
+
+        <div class="stat-number">
+          1,000+
+        </div>
+
+        <div class="stat-label">
+          lichen observations collected over the past year
+        </div>
+
+      </div>
+
+
+      <div class="stat-card">
+
+        <div class="stat-number">
+          15+
+        </div>
+
+        <div class="stat-label">
+          countries involved in the Lichenary community
+        </div>
+
+      </div>
+
+
+      <div class="stat-card">
+
+        <div class="stat-number">
+          100+
+        </div>
+
+        <div class="stat-label">
+          people of all ages taking action for citizen science
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =======================================================
+       NATIONAL GEOGRAPHIC AWARD
+       ======================================================= -->
+
+  <div class="award-section">
+
+    <div class="award-badge">
+
+      <div class="award-badge-small">
+        National Geographic
+      </div>
+
+      <div class="award-badge-title">
+        2026<br>
+        Distinguished<br>
+        Achievement
+      </div>
+
+    </div>
+
+
+    <div class="award-content">
+
+      <h3>
+        Recognized by National Geographic
+      </h3>
+
+      <p>
+        Lichenary was selected as a
+        <strong>2026 Distinguished Achievement Award</strong>
+        recipient in the National Geographic Society's Slingshot Challenge.
+      </p>
+
+      <p>
+        The recognition celebrates young people using creative ideas and
+        environmental action to better understand and protect the world around us.
+      </p>
+
+      <a
+        href="https://www.nationalgeographic.org/explore/programs/slingshot/award-recipients"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="award-btn"
+      >
+        View Lichenary on National Geographic
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <!-- =======================================================
        WHAT IS LICHENARY?
        ======================================================= -->
 
-  <div class="section">
+  <div class="section what-section">
 
     <div>
 
@@ -1373,10 +2951,151 @@
 
 
   <!-- =======================================================
+       HOW IT WORKS
+       ======================================================= -->
+
+  <div class="how-section">
+
+    <h3>
+      From a simple photo to a living map
+    </h3>
+
+    <p class="how-intro">
+      Lichenary turns a simple observation into useful citizen science data.
+      You don't need to be a scientist to take part.
+    </p>
+
+
+    <div class="how-grid">
+
+      <div class="how-card">
+
+        <div class="how-number">
+          01 — OBSERVE
+        </div>
+
+        <h4>
+          Find a lichen
+        </h4>
+
+        <p>
+          Look around your surroundings, find a lichen, and take a clear photograph of what you discover.
+        </p>
+
+      </div>
+
+
+      <div class="how-card">
+
+        <div class="how-number">
+          02 — IDENTIFY
+        </div>
+
+        <h4>
+          Discover what it is
+        </h4>
+
+        <p>
+          Use Lichenary's AI-assisted identification or identify the lichen yourself using the manual process.
+        </p>
+
+      </div>
+
+
+      <div class="how-card">
+
+        <div class="how-number">
+          03 — MAP
+        </div>
+
+        <h4>
+          Add your observation
+        </h4>
+
+        <p>
+          Submit your observation and help build a better understanding of the environment around us.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =======================================================
+       LICHENARY AI
+       ======================================================= -->
+
+  <div class="ai-section">
+
+    <h3>
+      Technology meets nature
+    </h3>
+
+    <p>
+      Not sure what lichen you're looking at?
+      Lichenary uses artificial intelligence to help participants identify
+      lichens from photographs and make contributing to citizen science easier.
+    </p>
+
+    <p>
+      You don't need to be a lichen expert to get started.
+      <strong>Take a photo. Let AI help. Learn something new.</strong>
+    </p>
+
+    <a
+      href="despre_ai.html"
+      class="btn"
+    >
+      Discover How Lichenary AI Works
+    </a>
+
+  </div>
+
+
+  <!-- =======================================================
+       MAP PREVIEW
+       ======================================================= -->
+
+  <div class="map-preview-section">
+
+    <div class="map-preview-heading">
+
+      <h3>
+        A living map<br>
+        of air health
+      </h3>
+
+      <p>
+        Every observation contributes to a growing picture of the environment
+        around us. Explore some of the observations collected by the Lichenary
+        community.
+      </p>
+
+    </div>
+
+    <div id="home-map"></div>
+
+    <div class="map-preview-action">
+
+      <a
+        href="{{ url_for('harta') }}"
+        class="btn"
+      >
+        Explore the Full Map
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <!-- =======================================================
        WHY DO WE DO THIS?
        ======================================================= -->
 
-  <div class="section">
+  <div class="section why-section">
 
     <h3>
       Why do we do this?
@@ -1389,7 +3108,8 @@
       </p>
 
       <p>
-        Lichens offer us a bridge to the unseen: they sense changes in the air before we do and speak to us through their disappearance.
+        Lichens respond to changes in the air around them, offering us a window
+        into environmental conditions that are otherwise difficult to see.
       </p>
 
       <p>
@@ -1418,10 +3138,260 @@
 
 
   <!-- =======================================================
+       EVERY OBSERVATION MATTERS
+       ======================================================= -->
+
+  <div class="matters-section">
+
+    <h3>
+      Every observation tells a story.
+    </h3>
+
+    <p>
+      One photo may seem small. But hundreds of observations can reveal
+      patterns across communities, cities, and countries.
+      Your observation becomes part of something bigger.
+    </p>
+
+    <a
+      href="{{ url_for('participa') }}"
+      class="btn"
+    >
+      Add an Observation
+    </a>
+
+  </div>
+
+
+  <!-- =======================================================
+       PRESS
+       ======================================================= -->
+
+  <div class="press-section">
+
+    <div class="press-heading">
+
+      <h3>
+        Lichenary in the Press
+      </h3>
+
+      <p>
+        A project born in Buzău, now reaching the world.
+      </p>
+
+    </div>
+
+
+    <div class="press-grid">
+
+      <!-- National Geographic -->
+
+      <div class="press-card">
+
+        <div class="press-source">
+          National Geographic
+        </div>
+
+        <h4>
+          2026 Distinguished Achievement Award Recipient
+        </h4>
+
+        <p>
+          Lichenary is recognized by the National Geographic Society for
+          using lichens as bioindicators and building a public map of air health.
+        </p>
+
+        <a
+          href="https://www.nationalgeographic.org/explore/programs/slingshot/award-recipients"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="press-link"
+        >
+          Read on National Geographic
+        </a>
+
+      </div>
+
+
+      <!-- Edupedu -->
+
+      <div class="press-card">
+
+        <div class="press-source">
+          Edupedu.ro
+        </div>
+
+        <h4>
+          Two teenagers from Buzău enter a global environmental competition — and win
+        </h4>
+
+        <p>
+          The story behind Lichenary, its founders, and the community growing
+          around the project.
+        </p>
+
+        <a
+          href="https://www.edupedu.ro/doi-adolescenti-din-buzau-au-aflat-de-la-profesoara-de-chineza-despre-o-competitie-globala-de-mediu-a-national-geographic-au-inscris-propriul-proiect-si-au-castigat-initiativa-lor-lichenary-despre/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="press-link"
+        >
+          Read the article
+        </a>
+
+      </div>
+
+
+      <!-- Libertatea -->
+
+      <div class="press-card">
+
+        <div class="press-source">
+          Libertatea
+        </div>
+
+        <h4>
+          Students from Buzău recognized by National Geographic
+        </h4>
+
+        <p>
+          How Lichenary turned lichens into a tool for understanding air
+          pollution and brought a project from Buzău onto an international stage.
+        </p>
+
+        <a
+          href="https://www.libertatea.ro/stiri/stiri-buzau-carla-rares-gheorghe-elevi-gemeni-premiu-national-geographic-proiect-ecologic-lichenary-unic-castigator-europa-5755329"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="press-link"
+        >
+          Read the article
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =======================================================
+       NEED HELP?
+       ======================================================= -->
+
+  <div class="help-section">
+
+    <div class="help-heading">
+
+      <h3>
+        Need help?
+      </h3>
+
+      <p>
+        New to Lichenary? Learn how our tools work and how to submit
+        your first observation.
+      </p>
+
+    </div>
+
+
+    <div class="help-grid">
+
+      <a
+        href="despre_ai.html"
+        class="help-card"
+      >
+
+        <div>
+
+          <div class="help-icon">
+            ✦
+          </div>
+
+          <h4>
+            How does Lichenary AI work?
+          </h4>
+
+          <p>
+            Understand how AI helps identify lichens from photographs.
+          </p>
+
+        </div>
+
+        <div class="help-arrow">
+          Learn about AI →
+        </div>
+
+      </a>
+
+
+      <a
+        href="despre_how_to_upload_ai.html"
+        class="help-card"
+      >
+
+        <div>
+
+          <div class="help-icon">
+            ✦
+          </div>
+
+          <h4>
+            How do I upload with AI?
+          </h4>
+
+          <p>
+            A step-by-step guide to taking a photo and submitting an
+            AI-assisted observation.
+          </p>
+
+        </div>
+
+        <div class="help-arrow">
+          Upload with AI →
+        </div>
+
+      </a>
+
+
+      <a
+        href="despre_how_to_upload_manual.html"
+        class="help-card"
+      >
+
+        <div>
+
+          <div class="help-icon">
+            ✦
+          </div>
+
+          <h4>
+            How do I upload manually?
+          </h4>
+
+          <p>
+            Prefer to identify the lichen yourself? Learn how to submit
+            a manual observation.
+          </p>
+
+        </div>
+
+        <div class="help-arrow">
+          Upload manually →
+        </div>
+
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <!-- =======================================================
        OUR VISION
        ======================================================= -->
 
-  <div class="section">
+  <div class="section vision-section">
 
     <h3>
       Our Vision
@@ -1438,12 +3408,52 @@
 
   </div>
 
+
+  <!-- =======================================================
+       FINAL CTA
+       ======================================================= -->
+
+  <div class="final-cta">
+
+    <h3>
+      Nature is already speaking.
+    </h3>
+
+    <p>
+      You don't need to be a scientist.<br>
+      You just need curiosity.
+    </p>
+
+    <div class="btn-group">
+
+      <a
+        href="{{ url_for('participa') }}"
+        class="btn"
+      >
+        Make an Observation
+      </a>
+
+      <a
+        href="{{ url_for('harta') }}"
+        class="btn"
+      >
+        Explore the Map
+      </a>
+
+    </div>
+
+  </div>
+
 </main>
 
 
 <footer>
-  © 2025 Lichenary • All rights reserved
+  © 2026 Lichenary • All rights reserved
 </footer>
+
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 
 <script>
@@ -1520,12 +3530,145 @@
 
 
   /* =========================================================
+     HOME MAP PREVIEW
+     ========================================================= */
+
+  const homeMap =
+    L.map('home-map', {
+      scrollWheelZoom: false
+    }).setView([0, 0], 2);
+
+  L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+      maxZoom: 18,
+      attribution: '&copy; OpenStreetMap contributors'
+    }
+  ).addTo(homeMap);
+
+
+  function getColor(pollutionLevel) {
+
+    const colorMap = {
+      1: '#10A200',
+      2: '#3EB401',
+      3: '#6DC602',
+      4: '#9BD803',
+      5: '#CDCF3A',
+      6: '#F8FC05',
+      7: '#FABD04',
+      8: '#FC7E03',
+      9: '#FD3F01',
+      10: '#FF0000'
+    };
+
+    const level =
+      Math.round(pollutionLevel);
+
+    return colorMap[
+      Math.max(1, Math.min(10, level))
+    ] || '#888';
+  }
+
+
+  fetch('/api/observations')
+    .then(res => res.json())
+    .then(data => {
+
+      const markers = [];
+
+      data.forEach(obs => {
+
+        if (
+          obs.latitude &&
+          obs.longitude &&
+          obs.pollution_level
+        ) {
+
+          const color =
+            getColor(obs.pollution_level);
+
+          const marker =
+            L.circleMarker(
+              [obs.latitude, obs.longitude],
+              {
+                radius: 7,
+
+                color: color,
+
+                fillColor: color,
+
+                fillOpacity: 0.8,
+
+                weight: 2
+              }
+            ).addTo(homeMap);
+
+
+          marker.bindPopup(`
+            <div style="text-align: center;">
+              ${
+                obs.image_filename
+                  ? `<img
+                      src="${obs.image_filename}"
+                      alt="Lichen"
+                      style="max-width: 130px; border-radius: 6px;"
+                    ><br>`
+                  : ''
+              }
+
+              <strong>Date:</strong>
+              ${obs.date_time}<br>
+
+              <strong>Location:</strong>
+              ${obs.location}<br>
+
+              <strong>Species:</strong>
+              ${obs.species ?? 'Not provided'}<br>
+
+              <strong>Pollution Level:</strong>
+              ${obs.pollution_level}
+            </div>
+          `);
+
+          markers.push(marker);
+        }
+
+      });
+
+
+      if (markers.length > 0) {
+
+        const group =
+          L.featureGroup(markers);
+
+        homeMap.fitBounds(
+          group.getBounds().pad(0.15)
+        );
+
+      }
+
+    })
+    .catch(error => {
+
+      console.error(
+        'Could not load observations:',
+        error
+      );
+
+    });
+
+
+  /* =========================================================
      SCROLL REVEAL
      ========================================================= */
 
   const animatedElements =
     document.querySelectorAll(
-      '.section, .hero-content, .hero-visual'
+      '.section, .hero-content, .hero-visual, ' +
+      '.stats-section, .award-section, .how-section, ' +
+      '.ai-section, .map-preview-section, .matters-section, ' +
+      '.press-section, .help-section, .final-cta'
     );
 
 

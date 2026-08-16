@@ -6,7 +6,10 @@
   <title>Lichenary Map</title>
 
   <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
 
   <style>
     /* =========================================================
@@ -29,7 +32,6 @@
 
       --ink: #18231f;
       --muted: #65716a;
-
       --white: #ffffff;
 
       --radius-xl: 42px;
@@ -437,7 +439,6 @@
       z-index: 2;
 
       width: 100%;
-
       height: 600px;
 
       border-radius:
@@ -881,163 +882,304 @@
 
 <body>
 
-<header>
-  <div class="logo" onclick="window.location='/'">Lichenary</div>
+  <header>
 
-  <!-- burger menu (dropdown) -->
-  <div id="burger" class="burger" aria-label="Menu">
-    <div></div>
-    <div></div>
-    <div></div>
-  </div>
+    <div class="logo" onclick="window.location='/'">
+      Lichenary
+    </div>
 
-  <nav id="nav-links">
-    <a href="{{ url_for('home') }}">Home</a>
-    <a href="{{ url_for('despre') }}">About</a>
-    <a href="{{ url_for('participa') }}">How to Participate</a>
-    <a href="{{ url_for('galerie') }}">Gallery</a>
-    <a href="{{ url_for('harta') }}">Map</a>
-    <a href="{{ url_for('contact') }}">Contact</a>
-    {% if current_user.is_authenticated %}
-      <a href="{{ url_for('dashboard') }}">Dashboard</a>
-      <a href="{{ url_for('logout') }}">Logout</a>
-    {% else %}
-      <a href="{{ url_for('login') }}">Login</a>
-      <a href="{{ url_for('register') }}">Register</a>
-    {% endif %}
-  </nav>
-</header>
+    <!-- burger menu (dropdown) -->
+    <div id="burger" class="burger" aria-label="Menu">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
 
-<main>
+    <nav id="nav-links">
 
-  <div class="organic-divider">
-    <svg
-      viewBox="0 0 700 75"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-    >
-      <path
-        d="
-          M 5 38
-          C 70 10, 105 68, 170 38
-          S 270 8, 330 40
-          S 440 70, 500 35
-          S 620 10, 695 42
-        "
-      />
-    </svg>
-  </div>
+      <a href="{{ url_for('home') }}">Home</a>
+      <a href="{{ url_for('despre') }}">About</a>
+      <a href="{{ url_for('participa') }}">How to Participate</a>
+      <a href="{{ url_for('galerie') }}">Gallery</a>
+      <a href="{{ url_for('harta') }}">Map</a>
+      <a href="{{ url_for('contact') }}">Contact</a>
 
-  <section class="map-section">
-    <h2>Observations on the Map</h2>
+      {% if current_user.is_authenticated %}
 
-    <div id="map"></div>
-  </section>
+        <a href="{{ url_for('dashboard') }}">
+          Dashboard
+        </a>
 
-</main>
+        <a href="{{ url_for('logout') }}">
+          Logout
+        </a>
 
-<footer>
-  © 2025 Lichenary • All rights reserved
-</footer>
+      {% else %}
 
-<!-- Leaflet JS -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+        <a href="{{ url_for('login') }}">
+          Login
+        </a>
 
-<script>
-  var map = L.map('map').setView([0, 0], 2);
+        <a href="{{ url_for('register') }}">
+          Register
+        </a>
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 18,
-    attribution: '&copy; OpenStreetMap contributors'
-  }).addTo(map);
+      {% endif %}
 
-  // ✅ NOUA versiune getColor
-  function getColor(pollutionLevel) {
-    const colorMap = {
-      1: '#10A200',
-      2: '#3EB401',
-      3: '#6DC602',
-      4: '#9BD803',
-      5: '#CDCF3A',
-      6: '#F8FC05',
-      7: '#FABD04',
-      8: '#FC7E03',
-      9: '#FD3F01',
-      10: '#FF0000'
+    </nav>
+
+  </header>
+
+  <main>
+
+    <div class="organic-divider">
+
+      <svg
+        viewBox="0 0 700 75"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+
+        <path
+          d="
+            M 5 38
+            C 70 10, 105 68, 170 38
+            S 270 8, 330 40
+            S 440 70, 500 35
+            S 620 10, 695 42
+          "
+        />
+
+      </svg>
+
+    </div>
+
+    <section class="map-section">
+
+      <h2>Observations on the Map</h2>
+
+      <div id="map"></div>
+
+    </section>
+
+  </main>
+
+  <footer>
+    © 2025 Lichenary • All rights reserved
+  </footer>
+
+  <!-- Leaflet JS -->
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  ></script>
+
+  <script>
+
+    var map = L.map('map').setView([0, 0], 2);
+
+    L.tileLayer(
+      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      {
+        maxZoom: 18,
+        attribution: '&copy; OpenStreetMap contributors'
+      }
+    ).addTo(map);
+
+
+    // ✅ NOUA versiune getColor
+    function getColor(pollutionLevel) {
+
+      const colorMap = {
+        1: '#10A200',
+        2: '#3EB401',
+        3: '#6DC602',
+        4: '#9BD803',
+        5: '#CDCF3A',
+        6: '#F8FC05',
+        7: '#FABD04',
+        8: '#FC7E03',
+        9: '#FD3F01',
+        10: '#FF0000'
+      };
+
+      const level = Math.round(pollutionLevel);
+
+      return colorMap[
+        Math.max(1, Math.min(10, level))
+      ] || '#888';
+    }
+
+
+    fetch('/api/observations')
+
+      .then(res => res.json())
+
+      .then(data => {
+
+        data.forEach(obs => {
+
+          if (
+            obs.latitude &&
+            obs.longitude &&
+            obs.pollution_level
+          ) {
+
+            const color = getColor(
+              obs.pollution_level
+            );
+
+            const marker = L.circleMarker(
+              [obs.latitude, obs.longitude],
+              {
+                radius: 8,
+                color: color,
+                fillColor: color,
+                fillOpacity: 0.8
+              }
+            ).addTo(map);
+
+
+            marker.bindPopup(`
+
+              <div style="text-align: center;">
+
+                <img
+                  src="${obs.image_filename}"
+                  alt="Lichen"
+                  style="max-width: 150px; border-radius: 4px;"
+                >
+
+                <br>
+
+                <strong>Date:</strong>
+                ${obs.date_time}
+
+                <br>
+
+                <strong>Location:</strong>
+                ${obs.location}
+
+                <br>
+
+                <strong>Species:</strong>
+                ${obs.species ?? 'Not provided'}
+
+                <br>
+
+                <strong>Pollution Level:</strong>
+                ${obs.pollution_level}
+
+              </div>
+
+            `);
+
+          }
+
+        });
+
+      });
+
+
+    const legend = L.control({
+      position: "bottomright"
+    });
+
+
+    legend.onAdd = function () {
+
+      const div = L.DomUtil.create(
+        "div",
+        "legend"
+      );
+
+      const levels = [
+        {
+          value: 1,
+          label: "Very clean air"
+        },
+        {
+          value: 3,
+          label: "Clean air"
+        },
+        {
+          value: 5,
+          label: "Moderate air"
+        },
+        {
+          value: 7,
+          label: "Polluted air"
+        },
+        {
+          value: 10,
+          label: "Very polluted air"
+        }
+      ];
+
+
+      let html =
+        "<strong>Air Quality</strong><br>";
+
+
+      levels.forEach(level => {
+
+        const color = getColor(level.value);
+
+        html +=
+          `<i style="background:${color}"></i> ${level.label}<br>`;
+
+      });
+
+
+      div.innerHTML = html;
+
+      return div;
     };
 
-    const level = Math.round(pollutionLevel);
-    return colorMap[Math.max(1, Math.min(10, level))] || '#888';
-  }
 
-  fetch('/api/observations')
-    .then(res => res.json())
-    .then(data => {
-      data.forEach(obs => {
-        if (obs.latitude && obs.longitude && obs.pollution_level) {
-          const color = getColor(obs.pollution_level);
-          const marker = L.circleMarker([obs.latitude, obs.longitude], {
-            radius: 8,
-            color: color,
-            fillColor: color,
-            fillOpacity: 0.8
-          }).addTo(map);
+    legend.addTo(map);
 
-          marker.bindPopup(`
-  <div style="text-align: center;">
-    <img src="${obs.image_filename}" alt="Lichen" style="max-width: 150px; border-radius: 4px;"><br>
-    <strong>Date:</strong> ${obs.date_time}<br>
-    <strong>Location:</strong> ${obs.location}<br>
-    <strong>Species:</strong> ${obs.species ?? 'Not provided'}<br>
-    <strong>Pollution Level:</strong> ${obs.pollution_level}
-  </div>
-`);
-        }
+  </script>
+
+
+  <script>
+
+    const burger =
+      document.getElementById('burger');
+
+    const navLinks =
+      document.getElementById('nav-links');
+
+
+    burger.addEventListener('click', () => {
+
+      const isOpen =
+        navLinks.classList.toggle('open');
+
+      document.body.classList.toggle(
+        'menu-open',
+        isOpen
+      );
+
+    });
+
+
+    document
+      .querySelectorAll('#nav-links a')
+      .forEach(link => {
+
+        link.addEventListener('click', () => {
+
+          navLinks.classList.remove('open');
+
+          document.body.classList.remove(
+            'menu-open'
+          );
+
+        });
+
       });
-    });
 
-  const legend = L.control({ position: "bottomright" });
-
-  legend.onAdd = function () {
-    const div = L.DomUtil.create("div", "legend");
-
-    const levels = [
-      { value: 1, label: "Very clean air" },
-      { value: 3, label: "Clean air" },
-      { value: 5, label: "Moderate air" },
-      { value: 7, label: "Polluted air" },
-      { value: 10, label: "Very polluted air" }
-    ];
-
-    let html = "<strong>Air Quality</strong><br>";
-    levels.forEach(level => {
-      const color = getColor(level.value);
-      html += `<i style="background:${color}"></i> ${level.label}<br>`;
-    });
-
-    div.innerHTML = html;
-    return div;
-  };
-
-  legend.addTo(map);
-</script>
-
-<script>
-  const burger = document.getElementById('burger');
-  const navLinks = document.getElementById('nav-links');
-
-  burger.addEventListener('click', () => {
-    const isOpen = navLinks.classList.toggle('open');
-    document.body.classList.toggle('menu-open', isOpen);
-  });
-
-  document.querySelectorAll('#nav-links a').forEach(link => {
-    link.addEventListener('click', () => {
-      navLinks.classList.remove('open');
-      document.body.classList.remove('menu-open');
-    });
-  });
-</script>
+  </script>
 
 </body>
 </html>
