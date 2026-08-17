@@ -1,4 +1,5 @@
 import os
+import time
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory, jsonify, session
 from flask_sqlalchemy import SQLAlchemy
@@ -269,7 +270,14 @@ def identify_lichen_species(image_bytes, mime_type):
     if not mime_type or not mime_type.startswith("image/"):
         raise ValueError("The uploaded file is not a valid image.")
 
-    prompt = """
+    # Build the species list automatically from the database.
+    # This prevents the database and Gemini prompt from
+    # getting out of sync.
+    species_list = "\n".join(
+        LICHEN_POLLUTION_DATABASE.keys()
+    )
+
+    prompt = f"""
 You are the lichen identification component of the Lichenary
 citizen-science project.
 
@@ -281,104 +289,7 @@ the photograph.
 The species MUST be one of the following species from the
 Lichenary reference database:
 
-Amandinea punctata
-Dirinaria picta
-Lecanora conizaeoides
-Pyxine cocoes
-Rinodina sophodes
-Xanthoria parietina
-Caloplaca citrina
-Candelariella xanthostigma
-Chrysothrix candelaris
-Gyalolechia flavorubescens
-Physcia adscendens
-Physcia biziana
-Hyperphyscia adglutinata
-Lecanora dispersa
-Phaeophyscia orbicularis
-Physcia millegrana
-Physcia stellaris
-Polycauliona candelaria
-Pyxine berteriana
-Xanthomendoza fallax
-Bacidia inquinans
-Candelaria concolor
-Dirina indica
-Dirinaria aspera
-Parmelia sulcata
-Parmotrema tinctorum
-Phaeophyscia pusilloides
-Physcia dubia
-Punctelia rudecta
-Bulbothrix coronata
-Heterodermia speciosa
-Lecanora carpinea
-Lepraria incana
-Melanelixia glabratula
-Myelochroa aurulenta
-Parmelia saxatilis
-Parmotrema crinitum
-Ramalina ecklonii
-Xanthoparmelia cumberlandia
-Cladonia coniocraea
-Flavoparmelia caperata
-Graphis scripta
-Heterodermia japonica
-Hypogymnia physodes
-Hypogymnia tubulosa
-Phlyctis argena
-Punctelia subrudecta
-Ramalina celastri
-Cladonia cristatella
-Evernia prunastri
-Melanohalea exasperatula
-Pertusaria albescens
-Physconia distorta
-Physconia perisidiosa
-Ramalina farinacea
-Ramalina linearis
-Usnea baileyi
-Usnea strigosa
-Anaptychia ciliaris
-Anaptychia crinalis
-Hypogymnia imshaugii
-Leptogium cyanescens
-Pannaria conoplea
-Pseudevernia furfuracea
-Ramalina europaea
-Ramalina sinensis
-Sticta fuliginosa
-Sticta weigelii
-Usnea ceratina
-Cladonia fimbriata
-Cladonia stellaris
-Evernia mesomorpha
-Lobaria pulmonaria
-Lobaria quercizans
-Nephroma resupinatum
-Peltigera canina
-Sphaerophorus globosus
-Teloschistes chrysophthalmus
-Teloschistes flavicans
-Usnea longissima
-Usnea subfloridana
-Anzia centripeta
-Bryoria fremontii
-Bryoria fuscescens
-Bunodophoron melanocarpum
-Cetrelia olivetorum
-Cladonia rangiferina
-Coenogonium pineti
-Degelia plumbea
-Erioderma pedicellatum
-Heterodermia leucomela
-Hypogymnia occidentalis
-Lathagrium auriforme
-Lobaria scrobiculata
-Menegazzia subsimilis
-Menegazzia terebrata
-Pannaria rubiginosa
-Pseudocyphellaria crocata
+{species_list}
 
 IMPORTANT:
 
@@ -390,38 +301,79 @@ IMPORTANT:
   return exactly: UNKNOWN
 """
 
-    response = gemini_client.models.generate_content(
-        model="gemini-3.6-flash",
-        contents=[
-            types.Part.from_bytes(
-                data=image_bytes,
-                mime_type=mime_type
-            ),
-            prompt
-        ],
-        config=types.GenerateContentConfig()
-    )
+    # Retry temporary Gemini errors such as 429 and 503.
+    # This does not retry permanent errors.
+    last_error = None
 
-    species = response.text.strip()
+    for attempt in range(3):
 
-    if not species:
-        raise RuntimeError(
-            "Gemini returned an empty identification."
-        )
+        try:
 
-    species = species.strip(" .,:;\"'")
+            response = gemini_client.models.generate_content(
+                model="gemini-3.6-flash",
+                contents=[
+                    types.Part.from_bytes(
+                        data=image_bytes,
+                        mime_type=mime_type
+                    ),
+                    prompt
+                ],
+                config=types.GenerateContentConfig()
+            )
 
-    species = normalize_species_name(species)
+            species = response.text.strip()
 
-    if not species:
-        raise RuntimeError(
-            "Gemini could not identify the species."
-        )
+            if not species:
+                raise RuntimeError(
+                    "Gemini returned an empty identification."
+                )
 
-    if species.upper() == "UNKNOWN":
-        return None
+            species = species.strip(" .,:;\"'")
 
-    return species
+            species = normalize_species_name(species)
+
+            if not species:
+                raise RuntimeError(
+                    "Gemini could not identify the species."
+                )
+
+            if species.upper() == "UNKNOWN":
+                return None
+
+            return species
+
+        except Exception as e:
+
+            last_error = e
+
+            error_text = str(e).lower()
+
+            is_temporary_error = (
+                "429" in error_text
+                or "resource_exhausted" in error_text
+                or "rate_limit" in error_text
+                or "503" in error_text
+                or "unavailable" in error_text
+            )
+
+            if not is_temporary_error or attempt == 2:
+                raise
+
+            wait_seconds = 2 ** attempt
+
+            print(
+                f"Gemini temporary error on attempt "
+                f"{attempt + 1}/3: {type(e).__name__}: {e}"
+            )
+
+            print(
+                f"Retrying Gemini in {wait_seconds} seconds..."
+            )
+
+            time.sleep(wait_seconds)
+
+    raise last_error
+
 
 # =========================================================
 # GPS VALIDATION
@@ -1074,17 +1026,71 @@ def analyze_observation_ai():
 
     except Exception as e:
 
-        print(
-            f"AI observation analysis failed: {e}"
-        )
+        # Print the REAL Gemini/application error so it
+        # can be diagnosed from the Render logs.
+        print("=" * 80)
+        print("AI OBSERVATION ANALYSIS FAILED")
+        print(f"Exception type: {type(e).__name__}")
+        print(f"Exception: {e}")
+        print("=" * 80)
+
+        error_text = str(e).lower()
+
+        # -------------------------------------------------
+        # Gemini rate limit / quota errors
+        # -------------------------------------------------
+
+        if (
+            "429" in error_text
+            or "resource_exhausted" in error_text
+            or "rate_limit" in error_text
+        ):
+
+            return jsonify({
+
+                'success': False,
+
+                'message': (
+                    'The AI service is temporarily busy '
+                    'or its request limit has been reached. '
+                    'Please wait about 30 seconds and try again.'
+                )
+
+            }), 429
+
+
+        # -------------------------------------------------
+        # Gemini temporary unavailable errors
+        # -------------------------------------------------
+
+        if (
+            "503" in error_text
+            or "unavailable" in error_text
+        ):
+
+            return jsonify({
+
+                'success': False,
+
+                'message': (
+                    'The AI service is temporarily unavailable. '
+                    'Please try again in a moment.'
+                )
+
+            }), 503
+
+
+        # -------------------------------------------------
+        # Other errors
+        # -------------------------------------------------
 
         return jsonify({
 
             'success': False,
 
             'message': (
-                'The AI analysis failed. '
-                'Please try another clear photograph.'
+                'The AI analysis failed unexpectedly. '
+                'Please try again.'
             )
 
         }), 500
