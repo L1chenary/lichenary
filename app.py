@@ -99,6 +99,7 @@ LICHEN_POLLUTION_DATABASE = {
     "Physcia biziana": 9,
 
     "Hyperphyscia adglutinata": 8,
+    "Lecanora muralis": 8,
     "Lecanora dispersa": 8,
     "Phaeophyscia orbicularis": 8,
     "Physcia millegrana": 8,
@@ -150,6 +151,8 @@ LICHEN_POLLUTION_DATABASE = {
     "Usnea strigosa": 4,
 
     "Anaptychia ciliaris": 3,
+    "Ochrolechia androgyna": 3,
+    "Ochrolechia parella": 3,
     "Anaptychia crinalis": 3,
     "Hypogymnia imshaugii": 3,
     "Leptogium cyanescens": 3,
@@ -163,6 +166,7 @@ LICHEN_POLLUTION_DATABASE = {
 
     "Cladonia fimbriata": 2,
     "Cladonia stellaris": 2,
+    "Ochrolechia pallescens": 2,
     "Evernia mesomorpha": 2,
     "Lobaria pulmonaria": 2,
     "Lobaria quercizans": 2,
